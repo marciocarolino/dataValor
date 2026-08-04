@@ -1,0 +1,49 @@
+@use '../../../../../styles/tokens' as t;
+@use '../../../../../styles/mixins' as m;
+
+.benefits__layout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: t.$space-10;
+  align-items: center;
+}
+
+.benefits__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(11, 15, 20, 0.5);
+  margin-bottom: t.$space-4;
+}
+
+.benefits__title {
+  margin: 0;
+  font-size: clamp(26px, 3.2vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.benefits__list {
+  margin-top: t.$space-7;
+  display: grid;
+  gap: t.$space-6;
+}
+
+.benefits__image {
+  border-radius: 14px;
+  border: 1px solid rgba(16, 24, 40, 0.12);
+  overflow: hidden;
+  background: #fff;
+}
+
+.benefits__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@include m.respond-max(1199px) {
+  .benefits__layout {
+    grid-template-columns: 1fr;
+  }
+}

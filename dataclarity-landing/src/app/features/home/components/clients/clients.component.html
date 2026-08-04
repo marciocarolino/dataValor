@@ -1,0 +1,13 @@
+<section class="clients section" id="solucoes">
+  <div class="container">
+    <div class="clients__eyebrow">CONFIADO POR EMPRESAS VISIONÁRIAS</div>
+
+    <div class="clients__logos" aria-label="Empresas atendidas">
+      <div class="clients__logo" *ngFor="let c of clients">{{ c.name }}</div>
+    </div>
+
+    <div class="clients__testimonial">
+      <app-testimonial-card [testimonial]="testimonial" />
+    </div>
+  </div>
+</section>

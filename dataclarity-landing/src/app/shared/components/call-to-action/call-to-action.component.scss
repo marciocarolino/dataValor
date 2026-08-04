@@ -1,0 +1,50 @@
+@use '../../../../styles/tokens' as t;
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 t.$space-6;
+  border-radius: t.$radius-sm;
+  border: 1px solid t.$color-border-strong;
+  background: t.$color-accent;
+  color: #062427;
+  font-weight: 650;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.cta:hover {
+  background: t.$color-accent-hover;
+  transform: translateY(-1px);
+}
+
+.cta:active {
+  transform: translateY(0);
+}
+
+.cta--secondary {
+  background: t.$color-surface;
+  color: t.$color-text;
+  border-color: t.$color-border-strong;
+}
+
+.cta--secondary:hover {
+  background: t.$color-surface-soft;
+}
+
+.cta--dark {
+  background: t.$color-dark;
+  border-color: t.$color-dark;
+  color: #ffffff;
+}
+
+.cta--dark:hover {
+  background: t.$color-dark-soft;
+}

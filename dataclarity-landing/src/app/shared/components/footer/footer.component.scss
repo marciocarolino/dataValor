@@ -1,0 +1,70 @@
+@use '../../../../styles/tokens' as t;
+@use '../../../../styles/mixins' as m;
+
+.site-footer {
+  background: #f6f7f8;
+  border-top: 1px solid rgba(16, 24, 40, 0.08);
+  padding-top: t.$space-10;
+  padding-bottom: t.$space-8;
+}
+
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: 1.35fr 0.8fr 0.6fr 0.6fr;
+  gap: t.$space-8;
+  align-items: start;
+}
+
+.site-footer__logo {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.site-footer__desc {
+  margin: t.$space-3 0 0;
+  color: rgba(11, 15, 20, 0.62);
+  font-size: 12px;
+  max-width: 48ch;
+}
+
+.site-footer__col-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: rgba(11, 15, 20, 0.55);
+  margin-bottom: t.$space-3;
+}
+
+.site-footer__link,
+.site-footer__social-link {
+  display: block;
+  font-size: 12px;
+  padding-block: 6px;
+  color: rgba(11, 15, 20, 0.7);
+}
+
+.site-footer__link:hover,
+.site-footer__social-link:hover {
+  color: t.$color-text;
+}
+
+.site-footer__bottom {
+  margin-top: t.$space-9;
+  padding-top: t.$space-6;
+  border-top: 1px solid rgba(16, 24, 40, 0.08);
+}
+
+.site-footer__copy {
+  font-size: 11px;
+  color: rgba(11, 15, 20, 0.55);
+}
+
+@include m.respond-max(767px) {
+  .site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer__bottom {
+    margin-top: t.$space-7;
+  }
+}

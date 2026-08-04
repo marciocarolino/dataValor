@@ -1,0 +1,70 @@
+/* Design tokens — DataClarity (B2B tech) */
+$color-bg-dark: #070b10;
+$color-bg-dark-secondary: #0d141b;
+$color-bg-page: #f4f6f8;
+$color-bg-surface: #ffffff;
+$color-bg-soft: #eaf0f3;
+
+$color-text-light: #f7fafc;
+$color-text-dark: #091017;
+$color-text-muted: #66727e;
+
+$color-accent: #18b6c9;
+$color-accent-hover: #12a1b2;
+$color-accent-soft: #d8f5f8;
+
+$color-border-dark: #26323d;
+$color-border-light: #d5dde3;
+
+/* compat / aliases (evita quebrar componentes existentes) */
+$color-page: $color-bg-page;
+$color-surface: $color-bg-surface;
+$color-surface-alt: $color-bg-soft;
+$color-surface-soft: #f7fafb;
+
+$color-text: $color-text-dark;
+$color-text-secondary: $color-text-muted;
+$color-text-muted-2: #7b8792;
+
+$color-border: $color-border-light;
+$color-border-strong: #bcc8d1;
+
+$color-dark: $color-bg-dark;
+$color-dark-soft: $color-bg-dark-secondary;
+
+$color-bg: $color-bg-page;
+$color-muted: $color-text-muted;
+$color-black: #000000;
+$color-accent-strong: $color-accent-hover;
+
+/* layout */
+$container-max: 1200px;
+
+/* radius / border / shadow */
+$radius-xs: 10px;
+$radius-sm: 12px;
+$radius-md: 16px;
+$radius-lg: 20px;
+
+$border-subtle: 1px solid $color-border-light;
+
+$shadow-1: 0 10px 22px rgba(7, 11, 16, 0.10);
+$shadow-2: 0 18px 44px rgba(7, 11, 16, 0.14);
+
+/* breakpoints */
+$bp-mobile: 768px;
+$bp-tablet: 1200px;
+
+/* spacing scale */
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+$space-8: 40px;
+$space-9: 56px;
+$space-10: 72px;
+$space-11: 88px;
+$space-12: 104px;

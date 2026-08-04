@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="980" viewBox="0 0 1600 980" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração premium de integração de sistemas conectando ERP, CRM, planilhas e APIs">
+  <defs>
+    <linearGradient id="bgSI" x1="0" y1="0" x2="1600" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FAFB"/>
+      <stop offset="1" stop-color="#EEF3F5"/>
+    </linearGradient>
+    <linearGradient id="accentSI" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#16A6B6"/>
+      <stop offset="1" stop-color="#0FB0C1"/>
+    </linearGradient>
+    <filter id="shadowSI" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#0A0F14" flood-opacity="0.10"/>
+    </filter>
+    <filter id="shadowSoftSI" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#0A0F14" flood-opacity="0.08"/>
+    </filter>
+    <pattern id="noiseSI" width="90" height="90" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="12" r="1.2" fill="#0A0F14" fill-opacity="0.03"/>
+      <circle cx="62" cy="34" r="1.2" fill="#0A0F14" fill-opacity="0.03"/>
+      <circle cx="28" cy="72" r="1.2" fill="#0A0F14" fill-opacity="0.03"/>
+      <circle cx="80" cy="78" r="1.2" fill="#0A0F14" fill-opacity="0.03"/>
+      <circle cx="44" cy="56" r="1.2" fill="#0A0F14" fill-opacity="0.03"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="980" fill="url(#bgSI)"/>
+  <rect width="1600" height="980" fill="url(#noiseSI)"/>
+
+  <!-- Central hub -->
+  <g filter="url(#shadowSI)">
+    <rect x="610" y="280" width="380" height="420" rx="24" fill="#FFFFFF" stroke="#D8E0E6"/>
+    <rect x="650" y="330" width="220" height="14" rx="7" fill="#D1DAE1"/>
+    <rect x="650" y="360" width="280" height="10" rx="5" fill="#E2E8ED"/>
+    <rect x="650" y="380" width="240" height="10" rx="5" fill="#E2E8ED"/>
+
+    <rect x="650" y="430" width="300" height="60" rx="18" fill="#F7FAFB" stroke="#D8E0E6"/>
+    <rect x="670" y="450" width="150" height="10" rx="5" fill="#D1DAE1"/>
+    <rect x="670" y="468" width="200" height="10" rx="5" fill="#E2E8ED"/>
+
+    <rect x="650" y="510" width="300" height="60" rx="18" fill="#F7FAFB" stroke="#D8E0E6"/>
+    <rect x="670" y="530" width="170" height="10" rx="5" fill="#D1DAE1"/>
+    <rect x="670" y="548" width="210" height="10" rx="5" fill="#E2E8ED"/>
+
+    <rect x="650" y="590" width="300" height="60" rx="18" fill="#F7FAFB" stroke="#D8E0E6"/>
+    <rect x="670" y="610" width="140" height="10" rx="5" fill="#D1DAE1"/>
+    <rect x="670" y="628" width="230" height="10" rx="5" fill="#E2E8ED"/>
+
+    <rect x="920" y="314" width="46" height="46" rx="16" fill="url(#accentSI)" fill-opacity="0.92"/>
+    <path d="M934 337h18" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M943 328v18" stroke="#FFFFFF" stroke-width="2.8" stroke-linecap="round"/>
+  </g>
+
+  <!-- External systems -->
+  <g filter="url(#shadowSoftSI)">
+    <!-- ERP -->
+    <rect x="210" y="240" width="320" height="140" rx="20" fill="#FFFFFF" stroke="#D8E0E6"/>
+    <rect x="250" y="280" width="120" height="12" rx="6" fill="#D1DAE1"/>
+    <rect x="250" y="306" width="220" height="10" rx="5" fill="#E2E8ED"/>
+    <rect x="456" y="262" width="56" height="56" rx="18" fill="#16A6B6" fill-opacity="0.12" stroke="#16A6B6" stroke-opacity="0.25"/>
+    <path d="M474 290h20" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M474 298h14" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+
+    <!-- CRM -->
+    <rect x="1070" y="240" width="320" height="140" rx="20" fill="#FFFFFF" stroke="#D8E0E6"/>
+    <rect x="1110" y="280" width="120" height="12" rx="6" fill="#D1DAE1"/>
+    <rect x="1110" y="306" width="220" height="10" rx="5" fill="#E2E8ED"/>
+    <rect x="1316" y="262" width="56" height="56" rx="18" fill="#16A6B6" fill-opacity="0.12" stroke="#16A6B6" stroke-opacity="0.25"/>
+    <path d="M1330 292c6-8 18-8 24 0" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="1336" cy="284" r="3" fill="#16A6B6"/>
+    <circle cx="1348" cy="284" r="3" fill="#16A6B6"/>
+
+    <!-- Sheets -->
+    <rect x="210" y="620" width="320" height="140" rx="20" fill="#FFFFFF" stroke="#D8E0E6"/>
+    <rect x="250" y="660" width="150" height="12" rx="6" fill="#D1DAE1"/>
+    <rect x="250" y="686" width="220" height="10" rx="5" fill="#E2E8ED"/>
+    <rect x="456" y="642" width="56" height="56" rx="18" fill="#16A6B6" fill-opacity="0.12" stroke="#16A6B6" stroke-opacity="0.25"/>
+    <path d="M474 660h20" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M474 672h20" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M474 684h12" stroke="#16A6B6" stroke-width="2.6" stroke-linecap="round"/>
+
+    <!-- APIs -->
+    <rect x="1070" y="620" width="320" height="140" rx="20" fill="#FFFFFF" stroke="#D8E0E6"/>
+    <rect x="1110" y="660" width="90" height="12" rx="6" fill="#D1DAE1"/>
+    <rect x="1110" y="686" width="220" height="10" rx="5" fill="#E2E8ED"/>
+    <rect x="1316" y="642" width="56" height="56" rx="18" fill="url(#accentSI)" fill-opacity="0.92"/>
+    <path d="M1330 670h28" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M1348 660l10 10-10 10" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Connectors -->
+  <g opacity="0.75">
+    <path d="M530 310C600 310 600 330 610 330" stroke="#16A6B6" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M1070 310C1000 310 1000 330 990 330" stroke="#16A6B6" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M530 690C600 690 600 650 610 650" stroke="#16A6B6" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+    <path d="M1070 690C1000 690 1000 650 990 650" stroke="#16A6B6" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+
+    <circle cx="610" cy="330" r="6" fill="#16A6B6" fill-opacity="0.18" stroke="#16A6B6" stroke-opacity="0.35"/>
+    <circle cx="990" cy="330" r="6" fill="#16A6B6" fill-opacity="0.18" stroke="#16A6B6" stroke-opacity="0.35"/>
+    <circle cx="610" cy="650" r="6" fill="#16A6B6" fill-opacity="0.18" stroke="#16A6B6" stroke-opacity="0.35"/>
+    <circle cx="990" cy="650" r="6" fill="#16A6B6" fill-opacity="0.18" stroke="#16A6B6" stroke-opacity="0.35"/>
+  </g>
+
+  <!-- Caption -->
+  <g opacity="0.55">
+    <rect x="150" y="852" width="300" height="12" rx="6" fill="#D1DAE1"/>
+    <rect x="150" y="872" width="360" height="10" rx="5" fill="#E2E8ED"/>
+  </g>
+</svg>

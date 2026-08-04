@@ -1,0 +1,81 @@
+@use '../../../../styles/tokens' as t;
+
+.service-card {
+  border: 1px solid t.$color-border;
+  background: t.$color-surface;
+  border-radius: t.$radius-sm;
+  padding: t.$space-7;
+  display: grid;
+  gap: t.$space-5;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card--large {
+  padding: t.$space-8;
+}
+
+.service-card--dark {
+  background: #000;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.service-card__icon {
+  width: 28px;
+  height: 28px;
+  border: 1px solid t.$color-border;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+
+.service-card--dark .service-card__icon {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.service-card__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: t.$color-accent;
+}
+
+.service-card__title {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.service-card--large .service-card__title {
+  font-size: 22px;
+}
+
+.service-card__description {
+  margin: t.$space-2 0 0;
+  color: rgba(11, 15, 20, 0.66);
+  font-size: 13px;
+  max-width: 56ch;
+}
+
+.service-card--dark .service-card__description {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.service-card__media {
+  border-radius: t.$radius-sm;
+  overflow: hidden;
+  border: 1px solid t.$color-border;
+  background: #fff;
+}
+
+.service-card--dark .service-card__media {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: #0b0f14;
+}
+
+.service-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+}

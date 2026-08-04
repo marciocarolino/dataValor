@@ -1,0 +1,231 @@
+@use '../../../../../styles/tokens' as t;
+@use '../../../../../styles/mixins' as m;
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(84px, 8vw, 122px);
+  color: t.$color-text-light;
+  background: t.$color-bg-dark;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 460px at 70% 32%, rgba(24, 182, 201, 0.18), transparent 55%),
+    radial-gradient(900px 520px at 30% 68%, rgba(24, 182, 201, 0.08), transparent 62%),
+    linear-gradient(180deg, rgba(13, 20, 27, 0.92), rgba(7, 11, 16, 0.98));
+}
+
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.22;
+  mask-image: radial-gradient(closest-side at 50% 40%, rgba(0, 0, 0, 0.9), transparent 78%);
+}
+
+.hero__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(13, 20, 27, 0.7);
+  color: rgba(247, 250, 252, 0.76);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: t.$space-6;
+}
+
+.hero__title {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(38px, 4.6vw, 62px);
+  line-height: 1.03;
+  letter-spacing: -0.035em;
+}
+
+.hero__title-accent {
+  color: t.$color-accent;
+}
+
+.hero__lead {
+  margin-top: t.$space-6;
+  max-width: 58ch;
+  font-size: clamp(14px, 1.2vw, 16px);
+  color: rgba(247, 250, 252, 0.72);
+}
+
+.hero__actions {
+  margin-top: t.$space-7;
+  display: inline-flex;
+  gap: t.$space-4;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero__proof {
+  margin: t.$space-7 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: t.$space-3;
+  max-width: 60ch;
+}
+
+.hero__proof-item {
+  display: flex;
+  align-items: flex-start;
+  gap: t.$space-3;
+  color: rgba(247, 250, 252, 0.72);
+  font-size: 13px;
+}
+
+.hero__proof-icon {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: 6px;
+  background: rgba(24, 182, 201, 0.18);
+  border: 1px solid rgba(24, 182, 201, 0.32);
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.hero__proof-icon::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 3px;
+  background: rgba(24, 182, 201, 0.9);
+  clip-path: polygon(14% 52%, 40% 76%, 86% 22%, 92% 30%, 40% 86%, 8% 58%);
+}
+
+.hero__visual {
+  position: relative;
+  min-height: 520px;
+}
+
+.hero__mock {
+  border-radius: t.$radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(13, 20, 27, 0.6);
+  box-shadow: t.$shadow-2;
+  overflow: hidden;
+}
+
+.hero__mock-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero__float {
+  position: absolute;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(13, 20, 27, 0.72);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+  padding: 14px 14px 12px;
+  width: min(240px, 46vw);
+  backdrop-filter: blur(8px);
+}
+
+.hero__float-label {
+  color: rgba(247, 250, 252, 0.62);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero__float-value {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hero__float-meta {
+  margin-top: 4px;
+  color: rgba(247, 250, 252, 0.68);
+  font-size: 12px;
+}
+
+.hero__float-accent {
+  color: t.$color-accent;
+  font-weight: 650;
+}
+
+.hero__float--revenue {
+  top: 24px;
+  left: -18px;
+}
+
+.hero__float--margin {
+  top: 50%;
+  right: -16px;
+  transform: translateY(-50%);
+}
+
+.hero__float--orders {
+  bottom: 18px;
+  left: 12px;
+}
+
+@include m.respond-max(1023px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__visual {
+    min-height: unset;
+  }
+
+  .hero__float--revenue {
+    left: 10px;
+  }
+
+  .hero__float--margin {
+    right: 10px;
+  }
+}
+
+@include m.respond-max(767px) {
+  .hero {
+    padding-block: 76px;
+  }
+
+  .hero__actions {
+    display: grid;
+  }
+
+  .hero__float {
+    position: static;
+    width: 100%;
+    margin-top: t.$space-4;
+  }
+
+  .hero__float--revenue,
+  .hero__float--margin,
+  .hero__float--orders {
+    transform: none;
+  }
+}

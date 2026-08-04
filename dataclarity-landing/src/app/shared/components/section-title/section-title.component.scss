@@ -1,0 +1,24 @@
+@use '../../../../styles/tokens' as t;
+
+.section-title {
+  text-align: center;
+}
+
+.section-title--left {
+  text-align: left;
+}
+
+.section-title__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(11, 15, 20, 0.55);
+  margin-bottom: t.$space-2;
+}
+
+.section-title__title {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}

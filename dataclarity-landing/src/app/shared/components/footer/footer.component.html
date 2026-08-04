@@ -1,0 +1,37 @@
+<footer class="site-footer">
+  <div class="site-footer__inner container">
+    <div class="site-footer__brand">
+      <div class="site-footer__logo">{{ brand }}</div>
+      <p class="site-footer__desc">
+        Consultoria especializada em análise de dados, automação e integração de sistemas para PMEs
+        brasileiras.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Navegação do rodapé">
+      <div class="site-footer__col-title">Navegação</div>
+      <a class="site-footer__link" *ngFor="let item of navItems" [href]="item.href">{{
+        item.label
+      }}</a>
+    </nav>
+
+    <div class="site-footer__legal">
+      <div class="site-footer__col-title">Legal</div>
+      <a class="site-footer__link" href="#">Privacidade</a>
+      <a class="site-footer__link" href="#">Termos de Uso</a>
+    </div>
+
+    <div class="site-footer__social">
+      <div class="site-footer__col-title">Social</div>
+      <a class="site-footer__social-link" *ngFor="let s of socialLinks" [href]="s.href">
+        {{ s.label }}
+      </a>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom container">
+    <div class="site-footer__copy">
+      © 2026 DataClarity Consultoria. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>

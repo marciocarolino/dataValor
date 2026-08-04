@@ -1,0 +1,46 @@
+@use '../../../../styles/tokens' as t;
+
+.deliverables {
+  margin: t.$space-6 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.deliverables__item {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+  align-items: start;
+  color: rgba(9, 16, 23, 0.78);
+  font-size: 13px;
+}
+
+.deliverables__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(24, 182, 201, 0.18);
+  border: 1px solid rgba(24, 182, 201, 0.35);
+  position: relative;
+  margin-top: 2px;
+}
+
+.deliverables__icon::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 3px;
+  background: rgba(24, 182, 201, 0.92);
+  clip-path: polygon(14% 52%, 40% 76%, 86% 22%, 92% 30%, 40% 86%, 8% 58%);
+}
+
+.deliverables--dark .deliverables__item {
+  color: rgba(247, 250, 252, 0.72);
+}
+
+.deliverables--dark .deliverables__icon {
+  background: rgba(24, 182, 201, 0.16);
+  border-color: rgba(24, 182, 201, 0.28);
+}

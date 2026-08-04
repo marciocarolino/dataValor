@@ -1,0 +1,23 @@
+<article
+  class="service-card"
+  [class.service-card--dark]="service.variant === 'dark'"
+  [class.service-card--large]="size === 'large'"
+>
+  <div class="service-card__icon" aria-hidden="true">
+    <span class="service-card__dot"></span>
+  </div>
+
+  <div class="service-card__content">
+    <h3 class="service-card__title">{{ service.title }}</h3>
+    <p class="service-card__description">{{ service.description }}</p>
+  </div>
+
+  <div class="service-card__media" *ngIf="service.imageSrc">
+    <img
+      class="service-card__image"
+      [src]="service.imageSrc"
+      [alt]="service.imageAlt"
+      loading="lazy"
+    />
+  </div>
+</article>

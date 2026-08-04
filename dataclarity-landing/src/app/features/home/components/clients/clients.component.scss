@@ -1,0 +1,40 @@
+@use '../../../../../styles/tokens' as t;
+@use '../../../../../styles/mixins' as m;
+
+.clients {
+  text-align: center;
+}
+
+.clients__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(11, 15, 20, 0.5);
+}
+
+.clients__logos {
+  margin-top: t.$space-6;
+  display: flex;
+  justify-content: center;
+  gap: t.$space-8;
+  flex-wrap: wrap;
+}
+
+.clients__logo {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(11, 15, 20, 0.55);
+}
+
+.clients__testimonial {
+  margin-top: t.$space-8;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+@include m.respond-max(767px) {
+  .clients__logos {
+    gap: t.$space-6;
+  }
+}

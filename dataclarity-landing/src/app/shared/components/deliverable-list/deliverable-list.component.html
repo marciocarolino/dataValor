@@ -1,0 +1,6 @@
+<ul class="deliverables" [class.deliverables--dark]="theme === 'dark'">
+  <li class="deliverables__item" *ngFor="let i of items">
+    <span class="deliverables__icon" aria-hidden="true"></span>
+    <span class="deliverables__text">{{ i }}</span>
+  </li>
+</ul>

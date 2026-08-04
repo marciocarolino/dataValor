@@ -1,0 +1,23 @@
+<section class="benefits section" id="sobre">
+  <div class="container benefits__layout">
+    <div class="benefits__content">
+      <div class="benefits__eyebrow">POR QUE NOS ESCOLHER?</div>
+      <h2 class="benefits__title">
+        Clareza para crescer<br />
+        sem desperdício
+      </h2>
+
+      <div class="benefits__list" aria-label="Benefícios">
+        <app-benefit-item *ngFor="let b of benefits" [benefit]="b" />
+      </div>
+    </div>
+
+    <div class="benefits__image">
+      <img
+        src="/images/business-meeting.svg"
+        alt="Equipe em reunião analisando indicadores"
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>

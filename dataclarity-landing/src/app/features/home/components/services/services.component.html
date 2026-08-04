@@ -1,0 +1,70 @@
+<section class="services section section--soft" id="servicos" aria-label="Soluções DataClarity">
+  <div class="container">
+    <div class="services__heading">
+      <div class="services__eyebrow">SOLUÇÕES DATA CLARITY</div>
+      <h2 class="services__title">Dados organizados para decisões melhores</h2>
+      <p class="services__lead">
+        Da integração das fontes à visualização executiva, estruturamos soluções que reduzem
+        trabalho manual, centralizam indicadores e ajudam sua empresa a agir com mais segurança.
+      </p>
+    </div>
+
+    <div class="services__list" aria-label="Lista de soluções">
+      <article
+        class="solution"
+        *ngFor="let s of solutions; let i = index"
+        [class.solution--dark]="s.theme === 'dark'"
+        [class.solution--image-left]="s.imagePosition === 'left'"
+        [attr.id]="s.id"
+      >
+        <div class="solution__inner">
+          <div class="solution__content">
+            <div class="solution__eyebrow">{{ s.eyebrow }}</div>
+            <h3 class="solution__title">{{ s.title }}</h3>
+
+            <p class="solution__desc">
+              {{ s.description }}
+            </p>
+
+            <app-deliverable-list [items]="s.deliverables" [theme]="s.theme" />
+
+            <p class="solution__benefit">
+              <span class="solution__benefit-label">Benefício</span>
+              {{ s.benefit }}
+            </p>
+
+            <div class="solution__cta">
+              <app-call-to-action [label]="s.ctaLabel" [href]="s.ctaHref" variant="primary" />
+            </div>
+          </div>
+
+          <div class="solution__visual" aria-hidden="false">
+            <div class="solution__frame">
+              <img class="solution__img" [src]="s.image" [alt]="s.imageAlt" loading="lazy" />
+            </div>
+
+            <!-- micro-KPIs apenas no bloco 01 (dashboards) -->
+            <div class="solution__kpis" *ngIf="s.id === 'dashboards'">
+              <div class="kpi kpi--a">
+                <div class="kpi__label">Receita</div>
+                <div class="kpi__value">R$ 428 mil</div>
+              </div>
+              <div class="kpi kpi--b">
+                <div class="kpi__label">Margem</div>
+                <div class="kpi__value">27,8%</div>
+              </div>
+              <div class="kpi kpi--c">
+                <div class="kpi__label">Vendas</div>
+                <div class="kpi__value">1.284</div>
+              </div>
+              <div class="kpi kpi--d">
+                <div class="kpi__label">Meta</div>
+                <div class="kpi__value">83%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+@use '../../../../styles/tokens' as t;
+
+.testimonial-card {
+  background: t.$color-surface;
+  border: 1px solid t.$color-border;
+  border-radius: t.$radius-sm;
+  padding: t.$space-8;
+  position: relative;
+  margin: 0;
+}
+
+.testimonial-card__quotes {
+  position: absolute;
+  top: t.$space-6;
+  left: t.$space-7;
+  font-size: 34px;
+  line-height: 1;
+  color: rgba(26, 167, 179, 0.25);
+}
+
+.testimonial-card__quote {
+  margin: 0;
+  padding-top: t.$space-5;
+  color: rgba(11, 15, 20, 0.72);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.testimonial-card__person {
+  margin-top: t.$space-7;
+  display: flex;
+  gap: t.$space-3;
+  align-items: center;
+}
+
+.testimonial-card__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(26, 167, 179, 0.25);
+}
+
+.testimonial-card__name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.testimonial-card__role {
+  font-size: 11px;
+  color: rgba(11, 15, 20, 0.6);
+}

@@ -1,0 +1,15 @@
+<figure class="testimonial-card">
+  <div class="testimonial-card__quotes" aria-hidden="true">“</div>
+
+  <blockquote class="testimonial-card__quote">
+    {{ testimonial.quote }}
+  </blockquote>
+
+  <figcaption class="testimonial-card__person">
+    <div class="testimonial-card__avatar" aria-hidden="true"></div>
+    <div>
+      <div class="testimonial-card__name">{{ testimonial.name }}</div>
+      <div class="testimonial-card__role">{{ testimonial.role }}, {{ testimonial.company }}</div>
+    </div>
+  </figcaption>
+</figure>

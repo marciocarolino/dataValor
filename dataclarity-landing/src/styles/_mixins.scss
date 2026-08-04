@@ -1,0 +1,18 @@
+@use './tokens' as t;
+
+@mixin container {
+  width: min(100% - (t.$space-6 * 2), t.$container-max);
+  margin-inline: auto;
+}
+
+@mixin respond-max($max) {
+  @media (max-width: $max) {
+    @content;
+  }
+}
+
+@mixin respond-min($min) {
+  @media (min-width: $min) {
+    @content;
+  }
+}
