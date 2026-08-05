@@ -20,6 +20,13 @@
 .site-header__brand {
   font-weight: 700;
   letter-spacing: -0.02em;
+  color: t.$color-text;
+}
+
+.site-header__brand:visited,
+.site-header__brand:hover,
+.site-header__brand:active {
+  color: t.$color-text;
 }
 
 .site-header__nav {

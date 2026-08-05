@@ -1,0 +1,7 @@
+
+# graphify-axet
+.graphify/
+./dataclarity-landing/node_modules/*
+./dataclarity-landing/dist/*
+./dataclarity-api/node_modules/*
+./dataclarity-api/dist/*

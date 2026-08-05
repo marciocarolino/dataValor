@@ -1,1 +1,250 @@
-{}
+{
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/eslint.config.mjs": {
+    "mtime": 1785888124826.1934,
+    "hash": "069d66f3fd2af0b03d917cf51a1f4c42"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma.config.ts": {
+    "mtime": 1785889803537.4763,
+    "hash": "f6143a6083213d512c0beaa8d98daf63"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/0001_create_contacts/migration.sql": {
+    "mtime": 1785890117812.52,
+    "hash": "72c326d4acc963baa0a8d47f0215935e"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/app.controller.spec.ts": {
+    "mtime": 1785888124856.604,
+    "hash": "e91fed2ee35431d60d1adbf1d5739b83"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/app.controller.ts": {
+    "mtime": 1785888124844.344,
+    "hash": "ae15d1c5a85e6ebfad68b7193766dfb5"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/app.module.ts": {
+    "mtime": 1785890537406.5447,
+    "hash": "8b4797ae378778c780be668c32dab35b"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/app.service.ts": {
+    "mtime": 1785888124849.859,
+    "hash": "08e985e831bca61f6be89c5c2ecef2fa"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/app.swagger.ts": {
+    "mtime": 1785889254706.2617,
+    "hash": "547c02d495c54a3deb0cc11c3cc554a7"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/common/filters/http-exception.filter.ts": {
+    "mtime": 1785888511955.3032,
+    "hash": "b57e38953e371cb3f8e0a07fae2dded2"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/common/response/api-response.ts": {
+    "mtime": 1785888473511.4534,
+    "hash": "e36e8eb4c47c1f0a1d42581e20e6c083"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/config/env.schema.ts": {
+    "mtime": 1785888910207.3176,
+    "hash": "f120a05663f02ac696ac474b1fbd6bc6"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/main.ts": {
+    "mtime": 1785889336335.3264,
+    "hash": "774975d9acd13ae19976b5dab6b22461"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/contacts.controller.ts": {
+    "mtime": 1785892644276.6943,
+    "hash": "ee00723097669ed4b7572f1f38b30251"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/contacts.module.ts": {
+    "mtime": 1785890522060.35,
+    "hash": "ab673714f02a78a5affd1478287f96c7"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/contacts.service.spec.ts": {
+    "mtime": 1785893700497.54,
+    "hash": "fff6291964f66ba715f0447ec0b08eeb"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/contacts.service.ts": {
+    "mtime": 1785893415391.733,
+    "hash": "e3c6a214c29055e9b2d78674cf5faa34"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/dto/create-contact.dto.ts": {
+    "mtime": 1785890358255.4097,
+    "hash": "d4b3fab44c386f262f12ece7b2e96ff2"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/dto/list-contacts-query.dto.ts": {
+    "mtime": 1785890403701.8223,
+    "hash": "f626a04d43a277e6d4a3111988213fd4"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/dto/update-contact-status.dto.ts": {
+    "mtime": 1785890374110.02,
+    "hash": "8bb34eeae9368d4a195961ece4872a2c"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/dto/update-contact.dto.ts": {
+    "mtime": 1785892489721.939,
+    "hash": "38b5780767b44006017d4e2a15a2666c"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/entities/contact.entity.ts": {
+    "mtime": 1785893399962.6704,
+    "hash": "132c4d9b7f45ad11749b70c20b78c3fe"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/contacts/enums/contact-status.enum.ts": {
+    "mtime": 1785890318473.891,
+    "hash": "c74c7b3ba973999f6cec0e0aeaa9749f"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/health/health.controller.ts": {
+    "mtime": 1785888761187.4219,
+    "hash": "d8cb85e0fc33805fa0d737bf206223b0"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/health/health.module.ts": {
+    "mtime": 1785889309330.6353,
+    "hash": "717d72f31291ba916bf633e479c7a629"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/health/throttler-exception.filter.ts": {
+    "mtime": 1785888841241.1948,
+    "hash": "4c5d3ddb2e839958b6e05cc8ebe54e61"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/prisma/prisma.module.ts": {
+    "mtime": 1785890288587.3484,
+    "hash": "0d14fad4b4742f49ea6d9d9c48069e8b"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/prisma/prisma.service.ts": {
+    "mtime": 1785891278298.3362,
+    "hash": "ce1d765865c77dfb166782b77f495431"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/test/app.e2e-spec.ts": {
+    "mtime": 1785893958316.1758,
+    "hash": "abe269cc742fc50d738b828e5155f3a2"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/test/contacts.e2e-spec.ts": {
+    "mtime": 1785893936348.9329,
+    "hash": "16d11ad2f0f546c79ca382d89f5f9658"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.config.ts": {
+    "mtime": 1785860036847.6658,
+    "hash": "14ad5ca71b8d7220a057c80aeeba050e"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.routes.ts": {
+    "mtime": 1785865080361.298,
+    "hash": "9b962d782584111d5aa646b59c2d8825"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.spec.ts": {
+    "mtime": 1785860036844.2754,
+    "hash": "1886bb912e2466103cc8e3496042c90e"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.ts": {
+    "mtime": 1785860036845.3037,
+    "hash": "42f8dbd50c9b978f1189b19c06892330"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/components/benefits/benefits.component.ts": {
+    "mtime": 1785864811550.8196,
+    "hash": "4022c1e79cd5d847f2f284be8ec7b60f"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/components/clients/clients.component.ts": {
+    "mtime": 1785864855498.1257,
+    "hash": "b26de300a416a0dc0deaf90a63d49ed1"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/components/final-cta/final-cta.component.ts": {
+    "mtime": 1785864901296.7524,
+    "hash": "23741e5e4e94c9a2f6351aed9a2ccf1d"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/components/hero/hero.component.ts": {
+    "mtime": 1785864728460.2488,
+    "hash": "28bfa6b92a0196c0633947e44f000d24"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/components/services/services.component.ts": {
+    "mtime": 1785875143438.0945,
+    "hash": "f7751b350d475171e0400a5ce07f8f95"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/benefits.data.ts": {
+    "mtime": 1785863336992.143,
+    "hash": "79b4fc979059d5b229029150651b5527"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/clients.data.ts": {
+    "mtime": 1785863354610.004,
+    "hash": "5967cadc438edba329ea57bee9e24416"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/navigation.data.ts": {
+    "mtime": 1785863312047.6233,
+    "hash": "43ad60c8056ba2242f11877ab0498912"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/service-solutions.data.ts": {
+    "mtime": 1785875041705.8289,
+    "hash": "85b0a1fdb04744a8b15fbe7fefc674a9"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/services.data.ts": {
+    "mtime": 1785866160832.7886,
+    "hash": "5a3cd0167ac4c173c3c888065c6fcda3"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/site-config.data.ts": {
+    "mtime": 1785874662657.5298,
+    "hash": "126815701b24aa9d334af3631ef84cb8"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/social-links.data.ts": {
+    "mtime": 1785863382482.6406,
+    "hash": "74ecca007ab129bba5bcbe21b1f94164"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/data/testimonial.data.ts": {
+    "mtime": 1785863368291.2888,
+    "hash": "8c49caf98c282ddbcf0bcd6e7748c95c"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/home/pages/home-page/home-page.component.ts": {
+    "mtime": 1785865001517.4165,
+    "hash": "7c530639a845138e92cf687dcb868b05"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/benefit-item/benefit-item.component.ts": {
+    "mtime": 1785864276719.6616,
+    "hash": "f75b00e9a7526aaf0190b61434b8879c"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/call-to-action/call-to-action.component.ts": {
+    "mtime": 1785866385708.926,
+    "hash": "e4fa1e55b88bc0c4585fbecc247495dd"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/deliverable-list/deliverable-list.component.ts": {
+    "mtime": 1785875070194.824,
+    "hash": "264dadf2b1586ac823640bf50aa554df"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/footer/footer.component.ts": {
+    "mtime": 1785864591723.1406,
+    "hash": "e95d552cf2358be9a1598148eb8b5804"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/header/header.component.ts": {
+    "mtime": 1785864533350.264,
+    "hash": "39b1c24d89d53ee026bb62fa0bed47e9"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/section-title/section-title.component.ts": {
+    "mtime": 1785863632318.1558,
+    "hash": "2d3c3dec32bfc8f0c50faa3ec8c000e3"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/service-card/service-card.component.ts": {
+    "mtime": 1785864102348.38,
+    "hash": "000fde8c04b3b1096b1ae68d5a0d61a7"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/components/testimonial-card/testimonial-card.component.ts": {
+    "mtime": 1785864455883.934,
+    "hash": "5d0b19285af0351860986bc600e7eaa3"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/benefit.model.ts": {
+    "mtime": 1785863261471.389,
+    "hash": "a238073c47ccd9394623da55e5a3b6ce"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/client.model.ts": {
+    "mtime": 1785863267932.1406,
+    "hash": "0c3971e2f1ddf81b43599db161f65e31"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/navigation-item.model.ts": {
+    "mtime": 1785863240167.3591,
+    "hash": "7e38f5ee863ffc7ae5bb77c0b2e46570"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/service.model.ts": {
+    "mtime": 1785863252944.2048,
+    "hash": "eb55b10156fa490ee6705c753de1a462"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/social-link.model.ts": {
+    "mtime": 1785863303368.4395,
+    "hash": "f4c6bd9e25a8b728952f5a3dee563c17"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/shared/models/testimonial.model.ts": {
+    "mtime": 1785863279381.633,
+    "hash": "befc758ef5ebe5c736899363781b6341"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/main.ts": {
+    "mtime": 1785860036841.0796,
+    "hash": "1289536d6d8f94242a4ffc598d094633"
+  }
+}

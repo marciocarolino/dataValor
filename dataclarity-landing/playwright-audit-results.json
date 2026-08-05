@@ -1,0 +1,1422 @@
+{
+  "base_url": "http://localhost:4200",
+  "audits": [
+    {
+      "viewport": "desktop",
+      "width": 1280,
+      "height": 720,
+      "console": [],
+      "failed_requests": [],
+      "dom_issues": {
+        "brokenImages": [],
+        "overlapCandidates": [
+          {
+            "tag": "header",
+            "top": -603,
+            "left": 0,
+            "width": 1280,
+            "height": 65
+          }
+        ],
+        "clippedTextCandidates": [],
+        "contrastCandidates": [
+          {
+            "tag": "a",
+            "text": "DataClarity",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Dados organizados para decisões melhores",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Da integração das fontes à visualização executiva, estruturamos soluções que red",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.72)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Enxergue o desempenho da empresa em poucos segundos",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Centralize vendas, finanças, clientes e operações em painéis objetivos, atualiza",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Relatórios prontos sem depender de tarefas repetitivas",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Automatize a coleta, consolidação e distribuição de informações para que sua equ",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Benefício Dados confiáveis começam por uma estrutura bem construída.",
+            "ratio": 2.34,
+            "color": "rgba(247, 250, 252, 0.82)",
+            "backgroundColor": "rgba(24, 182, 201, 0.12)"
+          },
+          {
+            "tag": "h3",
+            "text": "Conecte sistemas, planilhas e bancos em uma única visão",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Unifique informações de ERP, CRM, planilhas, APIs e bancos de dados para elimina",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Clareza para crescer sem desperdício",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Economia de Tempo",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Reduzimos em até 90% o tempo gasto em extração e limpeza de dados manual pela su",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Precisão Decisória",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Acabe com o “eu acho”. Tome decisões baseadas em tendências estatísticas e dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Escalabilidade",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Nossas soluções acompanham o crescimento da sua PME, suportando volumes de dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Consultoria especializada em análise de dados, automação e integração de sistema",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Privacidade",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Termos de Uso",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "LinkedIn",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Instagram",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "tablet",
+      "width": 820,
+      "height": 1180,
+      "console": [],
+      "failed_requests": [],
+      "dom_issues": {
+        "brokenImages": [],
+        "overlapCandidates": [
+          {
+            "tag": "header",
+            "top": -1054,
+            "left": 0,
+            "width": 820,
+            "height": 65
+          }
+        ],
+        "clippedTextCandidates": [],
+        "contrastCandidates": [
+          {
+            "tag": "a",
+            "text": "DataClarity",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Dados organizados para decisões melhores",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Da integração das fontes à visualização executiva, estruturamos soluções que red",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.72)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Enxergue o desempenho da empresa em poucos segundos",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Centralize vendas, finanças, clientes e operações em painéis objetivos, atualiza",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Relatórios prontos sem depender de tarefas repetitivas",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Automatize a coleta, consolidação e distribuição de informações para que sua equ",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Benefício Dados confiáveis começam por uma estrutura bem construída.",
+            "ratio": 2.34,
+            "color": "rgba(247, 250, 252, 0.82)",
+            "backgroundColor": "rgba(24, 182, 201, 0.12)"
+          },
+          {
+            "tag": "h3",
+            "text": "Conecte sistemas, planilhas e bancos em uma única visão",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Unifique informações de ERP, CRM, planilhas, APIs e bancos de dados para elimina",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Clareza para crescer sem desperdício",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Economia de Tempo",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Reduzimos em até 90% o tempo gasto em extração e limpeza de dados manual pela su",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Precisão Decisória",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Acabe com o “eu acho”. Tome decisões baseadas em tendências estatísticas e dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Escalabilidade",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Nossas soluções acompanham o crescimento da sua PME, suportando volumes de dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Consultoria especializada em análise de dados, automação e integração de sistema",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Privacidade",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Termos de Uso",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "LinkedIn",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Instagram",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "console": [],
+      "failed_requests": [],
+      "dom_issues": {
+        "brokenImages": [],
+        "overlapCandidates": [
+          {
+            "tag": "header",
+            "top": -143,
+            "left": 0,
+            "width": 390,
+            "height": 373
+          }
+        ],
+        "clippedTextCandidates": [],
+        "contrastCandidates": [
+          {
+            "tag": "a",
+            "text": "DataClarity",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1,
+            "color": "rgba(11, 15, 20, 0.78)",
+            "backgroundColor": "rgba(11, 15, 20, 0.04)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Dados organizados para decisões melhores",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Da integração das fontes à visualização executiva, estruturamos soluções que red",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.72)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Enxergue o desempenho da empresa em poucos segundos",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Centralize vendas, finanças, clientes e operações em painéis objetivos, atualiza",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Indicadores personalizados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Visão comercial e financeira",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Filtros e comparações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Atualização automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Acompanhamento de metas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Relatórios prontos sem depender de tarefas repetitivas",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Automatize a coleta, consolidação e distribuição de informações para que sua equ",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Relatórios programados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Consolidação automática",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Envio por e-mail",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Padronização de indicadores",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Redução de retrabalho",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Benefício Dados confiáveis começam por uma estrutura bem construída.",
+            "ratio": 2.34,
+            "color": "rgba(247, 250, 252, 0.82)",
+            "backgroundColor": "rgba(24, 182, 201, 0.12)"
+          },
+          {
+            "tag": "h3",
+            "text": "Conecte sistemas, planilhas e bancos em uma única visão",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Unifique informações de ERP, CRM, planilhas, APIs e bancos de dados para elimina",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.74)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com ERP",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Integração com CRM",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "APIs e bancos de dados",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Importação de planilhas",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "li",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Sincronização de informações",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.78)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "span",
+            "text": "Benefício",
+            "ratio": 1.1,
+            "color": "rgba(9, 16, 23, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h2",
+            "text": "Clareza para crescer sem desperdício",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Economia de Tempo",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Reduzimos em até 90% o tempo gasto em extração e limpeza de dados manual pela su",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Precisão Decisória",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Acabe com o “eu acho”. Tome decisões baseadas em tendências estatísticas e dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "h3",
+            "text": "Escalabilidade",
+            "ratio": 1.1,
+            "color": "rgb(9, 16, 23)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Nossas soluções acompanham o crescimento da sua PME, suportando volumes de dados",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.66)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "p",
+            "text": "Consultoria especializada em análise de dados, automação e integração de sistema",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.62)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Serviços",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Soluções",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Sobre",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Contato",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Privacidade",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Termos de Uso",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "LinkedIn",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          },
+          {
+            "tag": "a",
+            "text": "Instagram",
+            "ratio": 1.09,
+            "color": "rgba(11, 15, 20, 0.7)",
+            "backgroundColor": "rgba(0, 0, 0, 0)"
+          }
+        ]
+      }
+    }
+  ]
+}
