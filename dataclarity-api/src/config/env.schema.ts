@@ -8,6 +8,8 @@ export const envSchema = z.object({
   DATABASE_URL: z.string().min(1).optional(),
   JWT_SECRET: z.string().min(24).optional(),
   JWT_EXPIRES_IN: z.string().min(1).default('15m'),
+  JWT_REFRESH_SECRET: z.string().min(24).optional(),
+  JWT_REFRESH_EXPIRES_IN: z.string().min(1).default('7d'),
   FRONTEND_URL: z.string().url().default('http://localhost:4200'),
   ADMIN_EMAIL: z.string().email().optional(),
   ADMIN_PASSWORD: z.string().min(12).optional(),

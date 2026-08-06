@@ -11,6 +11,9 @@ const common_1 = require("@nestjs/common");
 const api_response_1 = require("../response/api-response");
 let HttpExceptionFilter = class HttpExceptionFilter {
     catch(exception, host) {
+        if (!(exception instanceof common_1.HttpException)) {
+            console.error(exception);
+        }
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();

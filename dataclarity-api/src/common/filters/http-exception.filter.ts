@@ -13,6 +13,11 @@ type FieldError = { field?: string; message: string };
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
+    // Loga exceções não-HTTP para facilitar debug (mantém resposta genérica para o cliente)
+
+    if (!(exception instanceof HttpException)) {
+      console.error(exception);
+    }
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
