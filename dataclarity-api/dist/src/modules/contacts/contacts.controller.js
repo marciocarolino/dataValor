@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const throttler_1 = require("@nestjs/throttler");
 const create_contact_dto_1 = require("./dto/create-contact.dto");
 const list_contacts_query_dto_1 = require("./dto/list-contacts-query.dto");
 const update_contact_dto_1 = require("./dto/update-contact.dto");
@@ -45,6 +46,7 @@ exports.ContactsController = ContactsController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    (0, throttler_1.Throttle)({ default: { limit: 20, ttl: 60_000 } }),
     (0, swagger_1.ApiOperation)({
         summary: 'Criar contato',
         description: 'Cria um novo contato a partir dos dados do formulário da landing page.',

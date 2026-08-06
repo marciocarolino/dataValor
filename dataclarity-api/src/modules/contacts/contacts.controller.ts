@@ -23,6 +23,7 @@ import {
   ApiTags,
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { ListContactsQueryDto } from './dto/list-contacts-query.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -37,6 +38,7 @@ export class ContactsController {
   // ─── POST /contacts ────────────────────────────────────────────────────────
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 20, ttl: 60_000 } })
   @ApiOperation({
     summary: 'Criar contato',
     description:
