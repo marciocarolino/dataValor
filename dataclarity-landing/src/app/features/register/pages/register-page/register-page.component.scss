@@ -1,7 +1,7 @@
 @use '../../../../../styles/tokens' as t;
 @use '../../../../../styles/mixins' as m;
 
-.login-page {
+.register-page {
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -10,9 +10,9 @@
   padding: t.$space-6 t.$space-4;
 }
 
-.login-card {
+.register-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   background: t.$color-bg-surface;
   border-radius: t.$radius-lg;
   border: t.$border-subtle;
@@ -23,7 +23,7 @@
   gap: t.$space-7;
 }
 
-.login-card__back {
+.register-card__back {
   display: inline-flex;
   align-items: center;
   gap: t.$space-2;
@@ -41,13 +41,13 @@
   }
 }
 
-.login-card__header {
+.register-card__header {
   display: flex;
   flex-direction: column;
   gap: t.$space-2;
 }
 
-.login-card__brand {
+.register-card__brand {
   font-size: 13px;
   font-weight: 600;
   color: t.$color-accent;
@@ -55,7 +55,7 @@
   text-transform: uppercase;
 }
 
-.login-card__title {
+.register-card__title {
   font-size: 26px;
   font-weight: 700;
   color: t.$color-text;
@@ -64,38 +64,44 @@
   margin: 0;
 }
 
-.login-card__subtitle {
+.register-card__subtitle {
   font-size: 14px;
   color: t.$color-text-muted;
   margin: 0;
 }
 
 /* Form */
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   gap: t.$space-5;
 }
 
-.login-form__field {
+.register-form__field {
   display: flex;
   flex-direction: column;
   gap: t.$space-2;
 }
 
-.login-form__label {
+.register-form__label {
   font-size: 13px;
   font-weight: 500;
   color: t.$color-text;
 }
 
-.login-form__input-wrapper {
+.register-form__optional {
+  font-size: 12px;
+  font-weight: 400;
+  color: t.$color-text-muted;
+}
+
+.register-form__input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.login-form__input {
+.register-form__input {
   width: 100%;
   height: 44px;
   padding: 0 t.$space-4;
@@ -125,12 +131,12 @@
     opacity: 0.7;
   }
 
-  .login-form__input-wrapper & {
+  .register-form__input-wrapper & {
     padding-right: 48px;
   }
 }
 
-.login-form__toggle-pw {
+.register-form__toggle-pw {
   position: absolute;
   right: t.$space-3;
   display: flex;
@@ -150,7 +156,7 @@
   }
 }
 
-.login-form__error {
+.register-form__error {
   display: flex;
   align-items: center;
   gap: t.$space-2;
@@ -166,7 +172,7 @@
   }
 }
 
-.login-form__submit {
+.register-form__submit {
   height: 48px;
   width: 100%;
   background: t.$color-accent;
@@ -191,7 +197,7 @@
   }
 }
 
-.login-form__spinner {
+.register-form__spinner {
   width: 20px;
   height: 20px;
   border: 2.5px solid rgba(255, 255, 255, 0.35);
@@ -207,7 +213,7 @@
   }
 }
 
-.login-form__register-link {
+.register-form__login-link {
   text-align: center;
   font-size: 13px;
   color: t.$color-text-muted;
@@ -224,7 +230,7 @@
 }
 
 @include m.respond-max(480px) {
-  .login-card {
+  .register-card {
     padding: t.$space-6 t.$space-5 t.$space-7;
   }
 }

@@ -8,6 +8,12 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface RegisterPayload {
+  email: string;
+  password: string;
+  name?: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -23,6 +29,13 @@ export class AuthService {
 
   login(payload: LoginPayload): Observable<AuthTokens> {
     return this.http.post<AuthTokens>(`${API_URL}/auth/login`, payload).pipe(
+      tap((tokens) => this.storeTokens(tokens)),
+      catchError(this.handleError),
+    );
+  }
+
+  register(payload: RegisterPayload): Observable<AuthTokens> {
+    return this.http.post<AuthTokens>(`${API_URL}/auth/register`, payload).pipe(
       tap((tokens) => this.storeTokens(tokens)),
       catchError(this.handleError),
     );
