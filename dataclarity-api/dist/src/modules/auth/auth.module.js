@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const env_schema_1 = require("../../config/env.schema");
 const prisma_module_1 = require("../../prisma/prisma.module");
+const mail_module_1 = require("../mail/mail.module");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const jwt_strategy_1 = require("./strategies/jwt.strategy");
@@ -21,6 +22,7 @@ exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             prisma_module_1.PrismaModule,
+            mail_module_1.MailModule,
             jwt_1.JwtModule.register({
                 global: false,
                 secret: env_schema_1.envSchema.parse(process.env).JWT_SECRET,

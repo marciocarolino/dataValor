@@ -6,13 +6,17 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import type { StringValue } from 'ms';
 import { envSchema } from '../../config/env.schema';
 import { PrismaService } from '../../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
 
 type JwtUserPayload = {
   sub: string;
   email: string;
 };
+
+const EMAIL_VERIFICATION_TTL_MS = 72 * 60 * 60 * 1000; // 72 horas
 
 @Injectable()
 export class AuthService {
@@ -21,13 +25,14 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly mail: MailService,
   ) {}
 
   async register(input: {
     email: string;
     password: string;
     name?: string;
-  }): Promise<{ accessToken: string; refreshToken: string }> {
+  }): Promise<{ message: string }> {
     const normalizedEmail = input.email.toLowerCase().trim();
 
     const exists = await this.prisma.user.findUnique({
@@ -41,16 +46,76 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(input.password, 12);
 
+    // Gera token aleatório de 48 bytes (96 chars hex) com expiração de 72h
+    const verificationToken = crypto.randomBytes(48).toString('hex');
+    const verificationExpiresAt = new Date(
+      Date.now() + EMAIL_VERIFICATION_TTL_MS,
+    );
+
     const user = await this.prisma.user.create({
       data: {
         email: normalizedEmail,
         passwordHash,
         name: input.name,
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpiresAt: verificationExpiresAt,
       },
-      select: { id: true, email: true },
+      select: { id: true, email: true, name: true },
     });
 
-    return this.issueTokens(user.id, user.email);
+    // Envia e-mail de verificação (falha silenciosa para não bloquear o cadastro)
+    await this.mail.sendEmailVerification(
+      user.email,
+      verificationToken,
+      user.name,
+    );
+
+    return {
+      message:
+        'Cadastro realizado! Verifique seu e-mail para ativar sua conta.',
+    };
+  }
+
+  async verifyEmail(token: string): Promise<{ message: string }> {
+    const user = await this.prisma.user.findUnique({
+      where: { emailVerificationToken: token },
+      select: {
+        id: true,
+        emailVerified: true,
+        emailVerificationExpiresAt: true,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Token de verificação inválido.');
+    }
+
+    if (user.emailVerified) {
+      return { message: 'E-mail já verificado. Você pode fazer login.' };
+    }
+
+    if (
+      !user.emailVerificationExpiresAt ||
+      user.emailVerificationExpiresAt < new Date()
+    ) {
+      throw new BadRequestException(
+        'Token de verificação expirado. Solicite um novo e-mail de verificação.',
+      );
+    }
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerified: true,
+        emailVerificationToken: null,
+        emailVerificationExpiresAt: null,
+      },
+    });
+
+    return {
+      message: 'E-mail verificado com sucesso! Você já pode fazer login.',
+    };
   }
 
   async login(input: {
@@ -66,6 +131,7 @@ export class AuthService {
         email: true,
         passwordHash: true,
         isActive: true,
+        emailVerified: true,
       },
     });
 
@@ -78,13 +144,18 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
+    if (!user.emailVerified) {
+      throw new UnauthorizedException(
+        'E-mail não verificado. Verifique sua caixa de entrada e clique no link de ativação.',
+      );
+    }
+
     return this.issueTokens(user.id, user.email);
   }
 
   async refresh(input: {
     refreshToken: string;
   }): Promise<{ accessToken: string; refreshToken: string }> {
-    // Valida assinatura/exp do refresh JWT
     const payload = await this.verifyRefresh(input.refreshToken);
 
     const tokenHash = this.hashToken(input.refreshToken);
@@ -94,28 +165,35 @@ export class AuthService {
         userId: payload.sub,
         tokenHash,
         revokedAt: null,
-        expiresAt: {
-          gt: new Date(),
-        },
+        expiresAt: { gt: new Date() },
       },
       select: {
         id: true,
         userId: true,
-        user: { select: { email: true, isActive: true } },
+        user: { select: { email: true, isActive: true, emailVerified: true } },
       },
     });
 
-    if (!dbToken?.user?.isActive) {
+    if (!dbToken) {
       throw new UnauthorizedException('Refresh token inválido');
     }
 
-    // Rotação: revoga o token atual e emite novo par
+    const tokenUser = dbToken.user as {
+      email: string;
+      isActive: boolean;
+      emailVerified: boolean;
+    };
+
+    if (!tokenUser.isActive || !tokenUser.emailVerified) {
+      throw new UnauthorizedException('Refresh token inválido');
+    }
+
     await this.prisma.refreshToken.update({
       where: { id: dbToken.id },
       data: { revokedAt: new Date() },
     });
 
-    return this.issueTokens(dbToken.userId, dbToken.user.email);
+    return this.issueTokens(dbToken.userId, tokenUser.email);
   }
 
   async me(
@@ -151,12 +229,12 @@ export class AuthService {
 
     const accessToken = await this.jwt.signAsync(accessPayload, {
       secret: this.env.JWT_SECRET,
-      expiresIn: this.env.JWT_EXPIRES_IN as any,
+      expiresIn: this.env.JWT_EXPIRES_IN as StringValue,
     });
 
     const refreshToken = await this.jwt.signAsync(accessPayload, {
       secret: this.env.JWT_REFRESH_SECRET,
-      expiresIn: this.env.JWT_REFRESH_EXPIRES_IN as any,
+      expiresIn: this.env.JWT_REFRESH_EXPIRES_IN as StringValue,
     });
 
     const tokenHash = this.hashToken(refreshToken);
@@ -191,15 +269,12 @@ export class AuthService {
   }
 
   private hashToken(token: string): string {
-    // Hash determinístico para lookup no banco, sem armazenar token em texto puro
     return crypto.createHash('sha256').update(token).digest('hex');
   }
 
   private expiresAtFromNow(expiresIn: string): Date {
-    // suporta padrões simples tipo '7d', '15m', '1h'
     const match = /^([0-9]+)([smhd])$/.exec(expiresIn.trim());
     if (!match) {
-      // fallback: 7 dias
       return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     }
 

@@ -21,6 +21,7 @@ const auth_tokens_dto_1 = require("./dto/auth-tokens.dto");
 const login_dto_1 = require("./dto/login.dto");
 const refresh_dto_1 = require("./dto/refresh.dto");
 const register_dto_1 = require("./dto/register.dto");
+const register_response_dto_1 = require("./dto/register-response.dto");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
 const auth_user_entity_1 = require("./entities/auth-user.entity");
 let AuthController = class AuthController {
@@ -30,6 +31,9 @@ let AuthController = class AuthController {
     }
     async register(dto) {
         return this.auth.register(dto);
+    }
+    async verifyEmail(token) {
+        return this.auth.verifyEmail(token);
     }
     async login(dto) {
         return this.auth.login(dto);
@@ -46,12 +50,26 @@ exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('/register'),
     (0, throttler_1.Throttle)({ auth: { limit: 5, ttl: 60_000 } }),
-    (0, swagger_1.ApiOkResponse)({ type: auth_tokens_dto_1.AuthTokensDto }),
+    (0, swagger_1.ApiOkResponse)({ type: register_response_dto_1.RegisterResponseDto }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Get)('/verify-email'),
+    (0, throttler_1.Throttle)({ auth: { limit: 10, ttl: 60_000 } }),
+    (0, swagger_1.ApiOkResponse)({ type: register_response_dto_1.RegisterResponseDto }),
+    (0, swagger_1.ApiQuery)({
+        name: 'token',
+        description: 'Token de verificação de e-mail',
+        required: true,
+    }),
+    __param(0, (0, common_1.Query)('token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyEmail", null);
 __decorate([
     (0, common_1.Post)('/login'),
     (0, throttler_1.Throttle)({ auth: { limit: 10, ttl: 60_000 } }),

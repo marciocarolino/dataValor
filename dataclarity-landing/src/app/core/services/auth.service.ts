@@ -14,6 +14,10 @@ export interface RegisterPayload {
   name?: string;
 }
 
+export interface RegisterResponse {
+  message: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -34,11 +38,10 @@ export class AuthService {
     );
   }
 
-  register(payload: RegisterPayload): Observable<AuthTokens> {
-    return this.http.post<AuthTokens>(`${API_URL}/auth/register`, payload).pipe(
-      tap((tokens) => this.storeTokens(tokens)),
-      catchError(this.handleError),
-    );
+  register(payload: RegisterPayload): Observable<RegisterResponse> {
+    return this.http
+      .post<RegisterResponse>(`${API_URL}/auth/register`, payload)
+      .pipe(catchError(this.handleError));
   }
 
   logout(): void {
@@ -61,7 +64,9 @@ export class AuthService {
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     if (error.status === 401 || error.status === 403) {
-      return throwError(() => new Error('E-mail ou senha inválidos.'));
+      const msg: string =
+        error.error?.message ?? 'E-mail ou senha inválidos.';
+      return throwError(() => new Error(msg));
     }
     if (error.status === 0) {
       return throwError(() => new Error('Não foi possível conectar ao servidor. Verifique sua conexão.'));

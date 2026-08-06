@@ -19,13 +19,17 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
 const env_schema_1 = require("../../config/env.schema");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const mail_service_1 = require("../mail/mail.service");
+const EMAIL_VERIFICATION_TTL_MS = 72 * 60 * 60 * 1000;
 let AuthService = class AuthService {
     prisma;
     jwt;
+    mail;
     env = env_schema_1.envSchema.parse(process.env);
-    constructor(prisma, jwt) {
+    constructor(prisma, jwt, mail) {
         this.prisma = prisma;
         this.jwt = jwt;
+        this.mail = mail;
     }
     async register(input) {
         const normalizedEmail = input.email.toLowerCase().trim();
@@ -37,15 +41,54 @@ let AuthService = class AuthService {
             throw new common_1.BadRequestException('E-mail já cadastrado');
         }
         const passwordHash = await bcrypt_1.default.hash(input.password, 12);
+        const verificationToken = crypto_1.default.randomBytes(48).toString('hex');
+        const verificationExpiresAt = new Date(Date.now() + EMAIL_VERIFICATION_TTL_MS);
         const user = await this.prisma.user.create({
             data: {
                 email: normalizedEmail,
                 passwordHash,
                 name: input.name,
+                emailVerified: false,
+                emailVerificationToken: verificationToken,
+                emailVerificationExpiresAt: verificationExpiresAt,
             },
-            select: { id: true, email: true },
+            select: { id: true, email: true, name: true },
         });
-        return this.issueTokens(user.id, user.email);
+        await this.mail.sendEmailVerification(user.email, verificationToken, user.name);
+        return {
+            message: 'Cadastro realizado! Verifique seu e-mail para ativar sua conta.',
+        };
+    }
+    async verifyEmail(token) {
+        const user = await this.prisma.user.findUnique({
+            where: { emailVerificationToken: token },
+            select: {
+                id: true,
+                emailVerified: true,
+                emailVerificationExpiresAt: true,
+            },
+        });
+        if (!user) {
+            throw new common_1.BadRequestException('Token de verificação inválido.');
+        }
+        if (user.emailVerified) {
+            return { message: 'E-mail já verificado. Você pode fazer login.' };
+        }
+        if (!user.emailVerificationExpiresAt ||
+            user.emailVerificationExpiresAt < new Date()) {
+            throw new common_1.BadRequestException('Token de verificação expirado. Solicite um novo e-mail de verificação.');
+        }
+        await this.prisma.user.update({
+            where: { id: user.id },
+            data: {
+                emailVerified: true,
+                emailVerificationToken: null,
+                emailVerificationExpiresAt: null,
+            },
+        });
+        return {
+            message: 'E-mail verificado com sucesso! Você já pode fazer login.',
+        };
     }
     async login(input) {
         const normalizedEmail = input.email.toLowerCase().trim();
@@ -56,6 +99,7 @@ let AuthService = class AuthService {
                 email: true,
                 passwordHash: true,
                 isActive: true,
+                emailVerified: true,
             },
         });
         if (!user || !user.isActive) {
@@ -64,6 +108,9 @@ let AuthService = class AuthService {
         const ok = await bcrypt_1.default.compare(input.password, user.passwordHash);
         if (!ok) {
             throw new common_1.UnauthorizedException('Credenciais inválidas');
+        }
+        if (!user.emailVerified) {
+            throw new common_1.UnauthorizedException('E-mail não verificado. Verifique sua caixa de entrada e clique no link de ativação.');
         }
         return this.issueTokens(user.id, user.email);
     }
@@ -75,24 +122,26 @@ let AuthService = class AuthService {
                 userId: payload.sub,
                 tokenHash,
                 revokedAt: null,
-                expiresAt: {
-                    gt: new Date(),
-                },
+                expiresAt: { gt: new Date() },
             },
             select: {
                 id: true,
                 userId: true,
-                user: { select: { email: true, isActive: true } },
+                user: { select: { email: true, isActive: true, emailVerified: true } },
             },
         });
-        if (!dbToken?.user?.isActive) {
+        if (!dbToken) {
+            throw new common_1.UnauthorizedException('Refresh token inválido');
+        }
+        const tokenUser = dbToken.user;
+        if (!tokenUser.isActive || !tokenUser.emailVerified) {
             throw new common_1.UnauthorizedException('Refresh token inválido');
         }
         await this.prisma.refreshToken.update({
             where: { id: dbToken.id },
             data: { revokedAt: new Date() },
         });
-        return this.issueTokens(dbToken.userId, dbToken.user.email);
+        return this.issueTokens(dbToken.userId, tokenUser.email);
     }
     async me(userId) {
         const user = await this.prisma.user.findUnique({
@@ -173,6 +222,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        mail_service_1.MailService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

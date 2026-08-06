@@ -1,0 +1,109 @@
+@use '../../../../../styles/tokens' as t;
+@use '../../../../../styles/mixins' as m;
+
+.verify-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: t.$color-bg-page;
+  padding: t.$space-6 t.$space-4;
+}
+
+.verify-card {
+  width: 100%;
+  max-width: 460px;
+  background: t.$color-bg-surface;
+  border-radius: t.$radius-lg;
+  border: t.$border-subtle;
+  box-shadow: t.$shadow-1;
+  padding: t.$space-8 t.$space-8 t.$space-9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: t.$space-6;
+  text-align: center;
+  min-height: 280px;
+  justify-content: center;
+}
+
+.verify-card__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid t.$color-bg-soft;
+  border-top-color: t.$color-accent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.verify-card__icon {
+  flex-shrink: 0;
+}
+
+.verify-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+}
+
+.verify-card__brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: t.$color-accent;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.verify-card__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: t.$color-text;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.verify-card__subtitle {
+  font-size: 14px;
+  color: t.$color-text-muted;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.verify-card__action {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  padding: t.$space-3 t.$space-7;
+  background: t.$color-accent;
+  border-radius: t.$radius-xs;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: t.$color-accent-hover;
+  }
+}
+
+.verify-card__action--secondary {
+  background: transparent;
+  color: t.$color-accent;
+  border: 1px solid t.$color-accent;
+
+  &:hover {
+    background: t.$color-accent;
+    color: #fff;
+  }
+}
+
+@include m.respond-max(480px) {
+  .verify-card {
+    padding: t.$space-6 t.$space-5 t.$space-7;
+  }
+}

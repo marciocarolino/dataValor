@@ -24,14 +24,19 @@ model Contact {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  passwordHash  String
-  name          String?
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  refreshTokens RefreshToken[]
+  id                           String         @id @default(uuid())
+  email                        String         @unique
+  passwordHash                 String
+  name                         String?
+  isActive                     Boolean        @default(true)
+  emailVerified                Boolean        @default(false)
+  emailVerificationToken       String?        @unique
+  emailVerificationExpiresAt   DateTime?
+  createdAt                    DateTime       @default(now())
+  updatedAt                    DateTime       @updatedAt
+  refreshTokens                RefreshToken[]
+
+  @@index([emailVerificationToken])
 }
 
 model RefreshToken {

@@ -14,5 +14,11 @@ export declare const envSchema: z.ZodObject<{
     FRONTEND_URL: z.ZodDefault<z.ZodString>;
     ADMIN_EMAIL: z.ZodOptional<z.ZodString>;
     ADMIN_PASSWORD: z.ZodOptional<z.ZodString>;
+    SMTP_HOST: z.ZodDefault<z.ZodString>;
+    SMTP_PORT: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+    SMTP_SECURE: z.ZodDefault<z.ZodPipe<z.ZodString, z.ZodTransform<boolean, string>>>;
+    SMTP_USER: z.ZodOptional<z.ZodString>;
+    SMTP_PASS: z.ZodOptional<z.ZodString>;
+    SMTP_FROM: z.ZodDefault<z.ZodString>;
 }, z.core.$strip>;
 export type Env = z.infer<typeof envSchema>;

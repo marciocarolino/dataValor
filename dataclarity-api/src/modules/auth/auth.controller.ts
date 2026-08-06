@@ -1,5 +1,18 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
@@ -7,6 +20,7 @@ import { AuthTokensDto } from './dto/auth-tokens.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthUserEntity } from './entities/auth-user.entity';
 
@@ -17,9 +31,23 @@ export class AuthController {
 
   @Post('/register')
   @Throttle({ auth: { limit: 5, ttl: 60_000 } })
-  @ApiOkResponse({ type: AuthTokensDto })
-  async register(@Body() dto: RegisterDto): Promise<AuthTokensDto> {
+  @ApiOkResponse({ type: RegisterResponseDto })
+  async register(@Body() dto: RegisterDto): Promise<RegisterResponseDto> {
     return this.auth.register(dto);
+  }
+
+  @Get('/verify-email')
+  @Throttle({ auth: { limit: 10, ttl: 60_000 } })
+  @ApiOkResponse({ type: RegisterResponseDto })
+  @ApiQuery({
+    name: 'token',
+    description: 'Token de verificação de e-mail',
+    required: true,
+  })
+  async verifyEmail(
+    @Query('token') token: string,
+  ): Promise<{ message: string }> {
+    return this.auth.verifyEmail(token);
   }
 
   @Post('/login')

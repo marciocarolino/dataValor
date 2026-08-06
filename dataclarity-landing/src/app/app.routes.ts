@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
+  // ── Página pública (landing) ─────────────────────────────────────────────
   {
     path: '',
     loadComponent: () =>
@@ -8,8 +11,11 @@ export const routes: Routes = [
         (m) => m.HomePageComponent,
       ),
   },
+
+  // ── Rotas de autenticação (apenas para não-autenticados) ──────────────────
   {
     path: 'login',
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./features/login/pages/login-page/login-page.component').then(
         (m) => m.LoginPageComponent,
@@ -17,10 +23,40 @@ export const routes: Routes = [
   },
   {
     path: 'register',
+    canActivate: [guestGuard],
     loadComponent: () =>
-      import('./features/register/pages/register-page/register-page.component').then(
-        (m) => m.RegisterPageComponent,
+      import(
+        './features/register/pages/register-page/register-page.component'
+      ).then((m) => m.RegisterPageComponent),
+  },
+
+  // ── Verificação de e-mail (pública) ───────────────────────────────────────
+  {
+    path: 'verify-email-sent',
+    loadComponent: () =>
+      import(
+        './features/auth/pages/verify-email-sent/verify-email-sent.component'
+      ).then((m) => m.VerifyEmailSentComponent),
+  },
+  {
+    path: 'verify-email',
+    loadComponent: () =>
+      import(
+        './features/auth/pages/verify-email/verify-email.component'
+      ).then((m) => m.VerifyEmailComponent),
+  },
+
+  // ── Rotas protegidas (exigem autenticação) ────────────────────────────────
+  {
+    path: 'dashboard',
+    canActivate: [authGuard],
+    // Placeholder — substituir pelo componente de dashboard quando existir
+    loadComponent: () =>
+      import('./features/home/pages/home-page/home-page.component').then(
+        (m) => m.HomePageComponent,
       ),
   },
+
+  // ── Fallback ──────────────────────────────────────────────────────────────
   { path: '**', redirectTo: '' },
 ];

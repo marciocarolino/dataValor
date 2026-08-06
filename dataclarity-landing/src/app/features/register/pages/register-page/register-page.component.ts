@@ -60,7 +60,9 @@ export class RegisterPageComponent {
     this.authService.register(payload).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/verify-email-sent'], {
+          queryParams: { email: this.email },
+        });
       },
       error: (err: unknown) => {
         this.isLoading.set(false);

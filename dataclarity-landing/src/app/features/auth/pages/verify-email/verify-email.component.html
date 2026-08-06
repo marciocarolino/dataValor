@@ -1,0 +1,55 @@
+<div class="verify-page">
+  <div class="verify-card">
+    @if (status() === 'loading') {
+      <div class="verify-card__spinner" aria-label="Verificando..."></div>
+      <div class="verify-card__header">
+        <span class="verify-card__brand">DataClarity</span>
+        <h1 class="verify-card__title">Verificando...</h1>
+        <p class="verify-card__subtitle">Aguarde enquanto confirmamos seu e-mail.</p>
+      </div>
+    }
+
+    @if (status() === 'success') {
+      <div class="verify-card__icon verify-card__icon--success" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="14" fill="#d8f5f8" />
+          <path
+            d="M14 24l8 8 12-14"
+            stroke="#18b6c9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="verify-card__header">
+        <span class="verify-card__brand">DataClarity</span>
+        <h1 class="verify-card__title">E-mail verificado!</h1>
+        <p class="verify-card__subtitle">{{ message() }}</p>
+      </div>
+      <a class="verify-card__action" routerLink="/login">Fazer login</a>
+    }
+
+    @if (status() === 'error') {
+      <div class="verify-card__icon verify-card__icon--error" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect width="48" height="48" rx="14" fill="#fff3f3" />
+          <path
+            d="M17 17l14 14M31 17L17 31"
+            stroke="#c0392b"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <div class="verify-card__header">
+        <span class="verify-card__brand">DataClarity</span>
+        <h1 class="verify-card__title">Link inválido</h1>
+        <p class="verify-card__subtitle">{{ message() }}</p>
+      </div>
+      <a class="verify-card__action verify-card__action--secondary" routerLink="/register">
+        Criar nova conta
+      </a>
+    }
+  </div>
+</div>
