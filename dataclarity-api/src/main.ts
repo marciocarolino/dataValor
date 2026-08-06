@@ -50,6 +50,10 @@ async function bootstrap() {
 
   setupSwagger(app);
 
+  // Permite que o Nest dispare corretamente os hooks de shutdown (SIGTERM/SIGINT),
+  // garantindo que providers como o PrismaService executem onModuleDestroy().
+  app.enableShutdownHooks();
+
   await app.listen(env.PORT);
 }
 void bootstrap();

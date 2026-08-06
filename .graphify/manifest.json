@@ -104,8 +104,8 @@
     "hash": "0d14fad4b4742f49ea6d9d9c48069e8b"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/prisma/prisma.service.ts": {
-    "mtime": 1785891278298.3362,
-    "hash": "ce1d765865c77dfb166782b77f495431"
+    "mtime": 1785937867210.7722,
+    "hash": "7a29ebab5f3ca56f52f65ebd5228f654"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/test/app.e2e-spec.ts": {
     "mtime": 1785893958316.1758,
@@ -124,8 +124,8 @@
     "hash": "9b962d782584111d5aa646b59c2d8825"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.spec.ts": {
-    "mtime": 1785860036844.2754,
-    "hash": "1886bb912e2466103cc8e3496042c90e"
+    "mtime": 1785934167508.7732,
+    "hash": "11436370be89c4ecb00ecdb62c346468"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/app.ts": {
     "mtime": 1785860036845.3037,
@@ -246,5 +246,9 @@
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/main.ts": {
     "mtime": 1785860036841.0796,
     "hash": "1289536d6d8f94242a4ffc598d094633"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/playwright-audit.py": {
+    "mtime": 1785935212643.1995,
+    "hash": "eaf53a15391bc6c9b6b9ff179764f23b"
   }
 }

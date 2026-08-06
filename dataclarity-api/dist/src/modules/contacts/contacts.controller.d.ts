@@ -8,15 +8,15 @@ export declare class ContactsController {
     constructor(contactsService: ContactsService);
     create(dto: CreateContactDto): Promise<ContactEntity>;
     findAll(query: ListContactsQueryDto): Promise<import("./contacts.service").PaginatedResult<{
-        status: import("generated/prisma").$Enums.ContactStatus;
         name: string;
+        id: string;
         email: string;
         phone: string | null;
         company: string | null;
         subject: string | null;
         message: string;
+        status: import("generated/prisma").$Enums.ContactStatus;
         createdAt: Date;
-        id: string;
         updatedAt: Date;
     }>>;
     findOne(id: string): Promise<ContactEntity>;

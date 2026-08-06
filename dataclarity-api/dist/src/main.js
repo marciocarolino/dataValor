@@ -37,6 +37,7 @@ async function bootstrap() {
     }));
     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter(), new throttler_exception_filter_1.ThrottlerExceptionFilter());
     (0, app_swagger_1.setupSwagger)(app);
+    app.enableShutdownHooks();
     await app.listen(env.PORT);
 }
 void bootstrap();
