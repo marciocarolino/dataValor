@@ -14,4 +14,4 @@
   - Mantém a tipagem do PrismaClient e evita hacks de path mapping no runtime.
 */
 
-export { PrismaClient } from '../../../../generated/prisma/client';
+export { PrismaClient } from '@prisma/client';

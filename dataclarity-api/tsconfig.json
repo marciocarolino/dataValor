@@ -1,4 +1,5 @@
 {
+  "exclude": ["src/generated/prisma/**"],
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
