@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealthController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const throttler_1 = require("@nestjs/throttler");
 const api_response_1 = require("../../common/response/api-response");
 let HealthController = class HealthController {
     health() {
@@ -45,6 +46,7 @@ __decorate([
 ], HealthController.prototype, "health", null);
 exports.HealthController = HealthController = __decorate([
     (0, swagger_1.ApiTags)('Health'),
+    (0, throttler_1.SkipThrottle)(),
     (0, common_1.Controller)('health')
 ], HealthController);
 //# sourceMappingURL=health.controller.js.map

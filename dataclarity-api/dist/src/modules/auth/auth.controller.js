@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const throttler_1 = require("@nestjs/throttler");
 const auth_service_1 = require("./auth.service");
 const auth_tokens_dto_1 = require("./dto/auth-tokens.dto");
 const login_dto_1 = require("./dto/login.dto");
@@ -44,6 +45,7 @@ let AuthController = class AuthController {
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('/register'),
+    (0, throttler_1.Throttle)({ auth: { limit: 5, ttl: 60_000 } }),
     (0, swagger_1.ApiOkResponse)({ type: auth_tokens_dto_1.AuthTokensDto }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -52,6 +54,7 @@ __decorate([
 ], AuthController.prototype, "register", null);
 __decorate([
     (0, common_1.Post)('/login'),
+    (0, throttler_1.Throttle)({ auth: { limit: 10, ttl: 60_000 } }),
     (0, swagger_1.ApiOkResponse)({ type: auth_tokens_dto_1.AuthTokensDto }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -60,6 +63,7 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Post)('/refresh'),
+    (0, throttler_1.Throttle)({ auth: { limit: 10, ttl: 60_000 } }),
     (0, swagger_1.ApiOkResponse)({ type: auth_tokens_dto_1.AuthTokensDto }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

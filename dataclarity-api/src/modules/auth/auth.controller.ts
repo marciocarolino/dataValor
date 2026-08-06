@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
@@ -15,18 +16,21 @@ export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
   @Post('/register')
+  @Throttle({ auth: { limit: 5, ttl: 60_000 } })
   @ApiOkResponse({ type: AuthTokensDto })
   async register(@Body() dto: RegisterDto): Promise<AuthTokensDto> {
     return this.auth.register(dto);
   }
 
   @Post('/login')
+  @Throttle({ auth: { limit: 10, ttl: 60_000 } })
   @ApiOkResponse({ type: AuthTokensDto })
   async login(@Body() dto: LoginDto): Promise<AuthTokensDto> {
     return this.auth.login(dto);
   }
 
   @Post('/refresh')
+  @Throttle({ auth: { limit: 10, ttl: 60_000 } })
   @ApiOkResponse({ type: AuthTokensDto })
   async refresh(@Body() dto: RefreshDto): Promise<AuthTokensDto> {
     return this.auth.refresh(dto);
