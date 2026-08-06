@@ -10,9 +10,13 @@
 
     <nav class="site-footer__nav" aria-label="Navegação do rodapé">
       <div class="site-footer__col-title">Navegação</div>
-      <a class="site-footer__link" *ngFor="let item of navItems" [href]="item.href">{{
-        item.label
-      }}</a>
+      @for (item of navItems; track item.href) {
+        @if (item.isRoute) {
+          <a class="site-footer__link" [routerLink]="item.href">{{ item.label }}</a>
+        } @else {
+          <a class="site-footer__link" [href]="item.href">{{ item.label }}</a>
+        }
+      }
     </nav>
 
     <div class="site-footer__legal">
@@ -23,9 +27,9 @@
 
     <div class="site-footer__social">
       <div class="site-footer__col-title">Social</div>
-      <a class="site-footer__social-link" *ngFor="let s of socialLinks" [href]="s.href">
-        {{ s.label }}
-      </a>
+      @for (s of socialLinks; track s.href) {
+        <a class="site-footer__social-link" [href]="s.href">{{ s.label }}</a>
+      }
     </div>
   </div>
 

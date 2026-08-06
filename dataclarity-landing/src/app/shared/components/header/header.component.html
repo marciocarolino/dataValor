@@ -5,13 +5,18 @@
     </a>
 
     <nav class="site-header__nav" aria-label="Navegação principal">
-      <a
-        class="site-header__link"
-        *ngFor="let item of navItems"
-        [href]="item.href"
-        (click)="closeMenu()"
-        >{{ item.label }}</a
-      >
+      @for (item of navItems; track item.href) {
+        @if (item.isRoute) {
+          <a
+            class="site-header__link site-header__link--cta"
+            [routerLink]="item.href"
+            (click)="closeMenu()"
+            >{{ item.label }}</a
+          >
+        } @else {
+          <a class="site-header__link" [href]="item.href" (click)="closeMenu()">{{ item.label }}</a>
+        }
+      }
     </nav>
 
     <div class="site-header__actions">
@@ -31,17 +36,26 @@
     </button>
   </div>
 
-  <div class="site-header__mobile" id="mobile-menu" *ngIf="isMenuOpen()" aria-label="Menu mobile">
-    <div class="site-header__mobile-inner container">
-      <a
-        class="site-header__mobile-link"
-        *ngFor="let item of navItems"
-        [href]="item.href"
-        (click)="closeMenu()"
-        >{{ item.label }}</a
-      >
+  @if (isMenuOpen()) {
+    <div class="site-header__mobile" id="mobile-menu" aria-label="Menu mobile">
+      <div class="site-header__mobile-inner container">
+        @for (item of navItems; track item.href) {
+          @if (item.isRoute) {
+            <a
+              class="site-header__mobile-link site-header__mobile-link--cta"
+              [routerLink]="item.href"
+              (click)="closeMenu()"
+              >{{ item.label }}</a
+            >
+          } @else {
+            <a class="site-header__mobile-link" [href]="item.href" (click)="closeMenu()">{{
+              item.label
+            }}</a>
+          }
+        }
 
-      <app-call-to-action label="Falar com Consultor" href="#contato" variant="primary" />
+        <app-call-to-action label="Falar com Consultor" href="#contato" variant="primary" />
+      </div>
     </div>
-  </div>
+  }
 </header>

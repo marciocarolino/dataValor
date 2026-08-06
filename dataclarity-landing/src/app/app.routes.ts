@@ -8,5 +8,12 @@ export const routes: Routes = [
         (m) => m.HomePageComponent,
       ),
   },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features/login/pages/login-page/login-page.component').then(
+        (m) => m.LoginPageComponent,
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];

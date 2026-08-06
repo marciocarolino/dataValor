@@ -44,6 +44,22 @@
   color: t.$color-text;
 }
 
+.site-header__link--cta {
+  color: t.$color-accent;
+  font-weight: 600;
+  padding: t.$space-1 t.$space-3;
+  border: 1px solid t.$color-accent;
+  border-radius: t.$radius-xs;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.site-header__link--cta:hover {
+  background: t.$color-accent;
+  color: #fff;
+}
+
 .site-header__actions {
   display: flex;
   justify-content: flex-end;
@@ -89,6 +105,18 @@
 
 .site-header__mobile-link:hover {
   background: rgba(11, 15, 20, 0.04);
+}
+
+.site-header__mobile-link--cta {
+  color: t.$color-accent;
+  font-weight: 600;
+  border: 1px solid t.$color-accent;
+  text-align: center;
+}
+
+.site-header__mobile-link--cta:hover {
+  background: t.$color-accent;
+  color: #fff;
 }
 
 @include m.respond-max(767px) {

@@ -5,4 +5,5 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   { label: 'Soluções', href: '#solucoes' },
   { label: 'Sobre', href: '#sobre' },
   { label: 'Contato', href: '#contato' },
+  { label: 'Acessar Sistema', href: '/login', isRoute: true },
 ];

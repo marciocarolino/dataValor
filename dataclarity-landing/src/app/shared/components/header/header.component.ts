@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { NavigationItem } from '../../models/navigation-item.model';
 import { CallToActionComponent } from '../call-to-action/call-to-action.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, CallToActionComponent],
+  imports: [CommonModule, RouterModule, CallToActionComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

@@ -1,0 +1,214 @@
+@use '../../../../../styles/tokens' as t;
+@use '../../../../../styles/mixins' as m;
+
+.login-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: t.$color-bg-page;
+  padding: t.$space-6 t.$space-4;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  background: t.$color-bg-surface;
+  border-radius: t.$radius-lg;
+  border: t.$border-subtle;
+  box-shadow: t.$shadow-1;
+  padding: t.$space-8 t.$space-8 t.$space-9;
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-7;
+}
+
+.login-card__back {
+  display: inline-flex;
+  align-items: center;
+  gap: t.$space-2;
+  font-size: 13px;
+  color: t.$color-text-muted;
+  transition: color 0.15s ease;
+  width: fit-content;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: t.$color-text;
+  }
+}
+
+.login-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+}
+
+.login-card__brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: t.$color-accent;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-card__title {
+  font-size: 26px;
+  font-weight: 700;
+  color: t.$color-text;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.login-card__subtitle {
+  font-size: 14px;
+  color: t.$color-text-muted;
+  margin: 0;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-5;
+}
+
+.login-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+}
+
+.login-form__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: t.$color-text;
+}
+
+.login-form__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-form__input {
+  width: 100%;
+  height: 44px;
+  padding: 0 t.$space-4;
+  border: 1px solid t.$color-border-light;
+  border-radius: t.$radius-xs;
+  background: t.$color-bg-surface;
+  font-size: 14px;
+  color: t.$color-text;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: t.$color-text-muted;
+  }
+
+  &:focus {
+    border-color: t.$color-accent;
+    box-shadow: 0 0 0 3px rgba(24, 182, 201, 0.14);
+  }
+
+  &:disabled {
+    background: t.$color-bg-soft;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .login-form__input-wrapper & {
+    padding-right: 48px;
+  }
+}
+
+.login-form__toggle-pw {
+  position: absolute;
+  right: t.$space-3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: t.$color-text-muted;
+  cursor: pointer;
+  border-radius: t.$radius-xs;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: t.$color-text;
+  }
+}
+
+.login-form__error {
+  display: flex;
+  align-items: center;
+  gap: t.$space-2;
+  padding: t.$space-3 t.$space-4;
+  background: #fff3f3;
+  border: 1px solid #fcc;
+  border-radius: t.$radius-xs;
+  font-size: 13px;
+  color: #c0392b;
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.login-form__submit {
+  height: 48px;
+  width: 100%;
+  background: t.$color-accent;
+  color: #fff;
+  border: none;
+  border-radius: t.$radius-xs;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background: t.$color-accent-hover;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.login-form__spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@include m.respond-max(480px) {
+  .login-card {
+    padding: t.$space-6 t.$space-5 t.$space-7;
+  }
+}

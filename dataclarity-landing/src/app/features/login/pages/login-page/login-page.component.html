@@ -1,0 +1,121 @@
+<div class="login-page">
+  <div class="login-card">
+    <a class="login-card__back" routerLink="/">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M10 12L6 8l4-4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Voltar ao site
+    </a>
+
+    <div class="login-card__header">
+      <span class="login-card__brand">DataClarity</span>
+      <h1 class="login-card__title">Acessar Sistema</h1>
+      <p class="login-card__subtitle">Digite suas credenciais para entrar</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="login-form__field">
+        <label class="login-form__label" for="email">E-mail</label>
+        <input
+          class="login-form__input"
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="seu@email.com"
+          autocomplete="email"
+          [disabled]="isLoading()"
+          required
+        />
+      </div>
+
+      <div class="login-form__field">
+        <label class="login-form__label" for="password">Senha</label>
+        <div class="login-form__input-wrapper">
+          <input
+            class="login-form__input"
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            [disabled]="isLoading()"
+            required
+          />
+          <button
+            class="login-form__toggle-pw"
+            type="button"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+          >
+            @if (!showPassword()) {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+            } @else {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M1 1l22 22"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="login-form__error" role="alert">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4" />
+            <path
+              d="M8 5v3.5M8 11h.01"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <button class="login-form__submit" type="submit" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <span class="login-form__spinner" aria-label="Carregando..."></span>
+        } @else {
+          <span>Entrar</span>
+        }
+      </button>
+    </form>
+  </div>
+</div>
