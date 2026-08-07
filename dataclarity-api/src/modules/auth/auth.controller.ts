@@ -13,7 +13,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { Throttle } from '@nestjs/throttler';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { AuthTokensDto } from './dto/auth-tokens.dto';
@@ -25,6 +25,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthUserEntity } from './entities/auth-user.entity';
 
 @ApiTags('Authentication')
+@UseGuards(ThrottlerGuard)
 @Controller('/auth')
 export class AuthController {
   constructor(private readonly auth: AuthService) {}

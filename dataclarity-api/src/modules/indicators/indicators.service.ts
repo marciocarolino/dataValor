@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access,
-   @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { CreateIndicatorDto } from './dto/create-indicator.dto';
@@ -44,6 +42,8 @@ export class IndicatorsService {
         color: dto.color ?? null,
         icon: dto.icon ?? null,
         chartType: dto.chartType,
+        startDate: dto.startDate ? new Date(dto.startDate) : null,
+        endDate: dto.endDate ? new Date(dto.endDate) : null,
         isActive: dto.isActive ?? true,
         showOnDashboard: dto.showOnDashboard ?? false,
       },
@@ -157,9 +157,17 @@ export class IndicatorsService {
         }),
         ...(dto.variation !== undefined && { variation: dto.variation }),
         ...(dto.status !== undefined && { status: dto.status }),
-        ...(dto.color !== undefined && { color: dto.color }),
-        ...(dto.icon !== undefined && { icon: dto.icon }),
+        // Inclui color mesmo quando null para permitir limpar o valor
+        ...('color' in dto && { color: dto.color ?? null }),
+        // Inclui icon mesmo quando null para permitir limpar o valor
+        ...('icon' in dto && { icon: dto.icon ?? null }),
         ...(dto.chartType !== undefined && { chartType: dto.chartType }),
+        ...('startDate' in dto && {
+          startDate: dto.startDate ? new Date(dto.startDate) : null,
+        }),
+        ...('endDate' in dto && {
+          endDate: dto.endDate ? new Date(dto.endDate) : null,
+        }),
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
         ...(dto.showOnDashboard !== undefined && {
           showOnDashboard: dto.showOnDashboard,

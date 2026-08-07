@@ -31,6 +31,8 @@ class IndicatorEntity {
     color;
     icon;
     chartType;
+    startDate;
+    endDate;
     isActive;
     showOnDashboard;
     createdAt;
@@ -111,6 +113,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: indicator_chart_type_enum_1.IndicatorChartType, example: indicator_chart_type_enum_1.IndicatorChartType.LINE }),
     __metadata("design:type", String)
 ], IndicatorEntity.prototype, "chartType", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String, format: 'date-time', nullable: true }),
+    __metadata("design:type", Object)
+], IndicatorEntity.prototype, "startDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ type: String, format: 'date-time', nullable: true }),
+    __metadata("design:type", Object)
+], IndicatorEntity.prototype, "endDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: true }),
     __metadata("design:type", Boolean)

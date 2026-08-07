@@ -23,9 +23,9 @@ import {
   ApiQuery,
   ApiResponse,
   ApiTags,
-  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AnalysisFilterDto } from './dto/analysis-filter.dto';
 import { CreateAnalysisDto } from './dto/create-analysis.dto';
@@ -37,6 +37,7 @@ import { ExecuteAnalysisResultDto } from './dto/execute-analysis-result.dto';
 
 @ApiTags('Analysis')
 @ApiBearerAuth()
+@SkipThrottle() // Endpoints de dados autenticados — filtragem frequente é esperada em BI
 @UseGuards(JwtAuthGuard)
 @Controller('analysis')
 export class AnalysisController {
@@ -179,7 +180,6 @@ export class AnalysisController {
   @ApiResponse({ status: 200, description: 'Lista paginada de análises.' })
   @ApiBadRequestResponse({ description: 'Parâmetros inválidos.' })
   @ApiUnauthorizedResponse({ description: 'Token inválido ou ausente.' })
-  @ApiTooManyRequestsResponse({ description: 'Rate limit excedido.' })
   @ApiInternalServerErrorResponse({ description: 'Erro inesperado.' })
   async findAll(@Query() query: AnalysisFilterDto) {
     return this.analysisService.findAll(query);

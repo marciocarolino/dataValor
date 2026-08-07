@@ -15,4 +15,5 @@ export class MetricCardComponent {
   @Input() icon = 'payments';
   @Input() iconBg = '#eef2ff';
   @Input() iconColor = '#4c6ef5';
+  @Input() accentColor = '';
 }

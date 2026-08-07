@@ -18,6 +18,8 @@ export declare class IndicatorEntity {
     color: string | null;
     icon: string | null;
     chartType: IndicatorChartType;
+    startDate: string | null;
+    endDate: string | null;
     isActive: boolean;
     showOnDashboard: boolean;
     createdAt: Date;

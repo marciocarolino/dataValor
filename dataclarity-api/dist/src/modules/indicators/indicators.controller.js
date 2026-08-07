@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IndicatorsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const throttler_1 = require("@nestjs/throttler");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const create_indicator_dto_1 = require("./dto/create-indicator.dto");
 const list_indicators_query_dto_1 = require("./dto/list-indicators-query.dto");
@@ -184,7 +185,6 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista paginada de indicadores.' }),
     (0, swagger_1.ApiBadRequestResponse)({ description: 'Parâmetros inválidos.' }),
     (0, swagger_1.ApiUnauthorizedResponse)({ description: 'Token inválido ou ausente.' }),
-    (0, swagger_1.ApiTooManyRequestsResponse)({ description: 'Rate limit excedido.' }),
     (0, swagger_1.ApiInternalServerErrorResponse)({ description: 'Erro inesperado.' }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -265,6 +265,7 @@ __decorate([
 exports.IndicatorsController = IndicatorsController = __decorate([
     (0, swagger_1.ApiTags)('Indicators'),
     (0, swagger_1.ApiBearerAuth)(),
+    (0, throttler_1.SkipThrottle)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('indicators'),
     __metadata("design:paramtypes", [indicators_service_1.IndicatorsService])

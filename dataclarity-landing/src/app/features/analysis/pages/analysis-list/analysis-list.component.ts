@@ -2,6 +2,7 @@ import {
   Component,
   inject,
   OnInit,
+  OnDestroy,
   signal,
   computed,
   effect,
@@ -31,7 +32,7 @@ import {
   templateUrl: './analysis-list.component.html',
   styleUrls: ['./analysis-list.component.scss'],
 })
-export class AnalysisListComponent implements OnInit {
+export class AnalysisListComponent implements OnInit, OnDestroy {
   readonly svc = inject(AnalysisService);
   private readonly fb = inject(FormBuilder);
 
@@ -109,6 +110,8 @@ export class AnalysisListComponent implements OnInit {
     isPublic: [false],
   });
 
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
   constructor() {
     effect(() => {
       const params: AnalysisQueryParams = {
@@ -124,8 +127,13 @@ export class AnalysisListComponent implements OnInit {
       const ct = this.filterChartType();
       if (ct) params.chartType = ct;
       if (this.filterFavorite()) params.isFavorite = true;
-      this.svc.loadList(params);
+      if (this.debounceTimer) clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => this.svc.loadList(params), 300);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
   }
 
   ngOnInit(): void {

@@ -192,6 +192,7 @@ __decorate([
 ], ContactsController.prototype, "remove", null);
 exports.ContactsController = ContactsController = __decorate([
     (0, swagger_1.ApiTags)('Contacts'),
+    (0, common_1.UseGuards)(throttler_1.ThrottlerGuard),
     (0, common_1.Controller)('contacts'),
     __metadata("design:paramtypes", [contacts_service_1.ContactsService])
 ], ContactsController);

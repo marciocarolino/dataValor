@@ -48,6 +48,8 @@ export interface Indicator {
   color: string | null;
   icon: string | null;
   chartType: IndicatorChartType;
+  startDate: string | null;
+  endDate: string | null;
   isActive: boolean;
   showOnDashboard: boolean;
   createdAt: string;
@@ -98,9 +100,11 @@ export interface CreateIndicatorPayload {
   previousPeriod?: IndicatorPeriod;
   variation?: number;
   status: IndicatorStatus;
-  color?: string;
-  icon?: string;
+  color?: string | null | undefined;
+  icon?: string | null | undefined;
   chartType: IndicatorChartType;
+  startDate?: string | null;
+  endDate?: string | null;
   isActive?: boolean;
   showOnDashboard?: boolean;
 }

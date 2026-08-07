@@ -64,6 +64,12 @@ export class IndicatorEntity {
   @ApiProperty({ enum: IndicatorChartType, example: IndicatorChartType.LINE })
   chartType!: IndicatorChartType;
 
+  @ApiPropertyOptional({ type: String, format: 'date-time', nullable: true })
+  startDate!: string | null;
+
+  @ApiPropertyOptional({ type: String, format: 'date-time', nullable: true })
+  endDate!: string | null;
+
   @ApiProperty({ example: true })
   isActive!: boolean;
 

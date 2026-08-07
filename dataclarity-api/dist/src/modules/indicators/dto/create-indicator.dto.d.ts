@@ -14,9 +14,11 @@ export declare class CreateIndicatorDto {
     previousPeriod?: IndicatorPeriod;
     variation?: number;
     status: IndicatorStatus;
-    color?: string;
-    icon?: string;
+    color?: string | null;
+    icon?: string | null;
     chartType: IndicatorChartType;
+    startDate?: string | null;
+    endDate?: string | null;
     isActive?: boolean;
     showOnDashboard?: boolean;
 }

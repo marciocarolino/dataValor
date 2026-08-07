@@ -13,24 +13,26 @@ export declare class IndicatorsController {
     findByCategory(category: IndicatorCategory): Promise<IndicatorEntity[]>;
     findAll(query: ListIndicatorsQueryDto): Promise<{
         items: {
-            name: string;
-            id: string;
             status: import(".prisma/client").$Enums.IndicatorStatus;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
+            name: string;
+            createdAt: Date;
+            id: string;
+            updatedAt: Date;
             isActive: boolean;
             category: import(".prisma/client").$Enums.IndicatorCategory;
             formula: string | null;
             unit: string | null;
-            goalValue: number | null;
-            currentValue: number | null;
-            previousValue: number | null;
+            goalValue: import("@prisma/client-runtime-utils").Decimal | null;
+            currentValue: import("@prisma/client-runtime-utils").Decimal | null;
+            previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousPeriod: import(".prisma/client").$Enums.IndicatorPeriod | null;
-            variation: number | null;
+            variation: import("@prisma/client-runtime-utils").Decimal | null;
             color: string | null;
             icon: string | null;
             chartType: import(".prisma/client").$Enums.IndicatorChartType;
+            startDate: Date | null;
+            endDate: Date | null;
             showOnDashboard: boolean;
         }[];
         pagination: {

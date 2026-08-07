@@ -68,15 +68,17 @@ model Indicator {
   category       IndicatorCategory
   formula        String?
   unit           String?
-  goalValue      Float?
-  currentValue   Float?
-  previousValue  Float?
+  goalValue      Decimal?  @db.Decimal(18, 2)
+  currentValue   Decimal?  @db.Decimal(18, 2)
+  previousValue  Decimal?  @db.Decimal(18, 2)
   previousPeriod IndicatorPeriod?
-  variation      Float?
+  variation      Decimal?  @db.Decimal(10, 4)
   status         IndicatorStatus     @default(NEUTRAL)
   color          String?
   icon           String?
   chartType      IndicatorChartType  @default(NUMBER)
+  startDate      DateTime?
+  endDate        DateTime?
   isActive       Boolean             @default(true)
   showOnDashboard Boolean            @default(false)
   createdAt      DateTime            @default(now())

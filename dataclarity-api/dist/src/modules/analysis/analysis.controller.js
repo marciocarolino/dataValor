@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnalysisController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const throttler_1 = require("@nestjs/throttler");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const analysis_filter_dto_1 = require("./dto/analysis-filter.dto");
 const create_analysis_dto_1 = require("./dto/create-analysis.dto");
@@ -197,7 +198,6 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista paginada de análises.' }),
     (0, swagger_1.ApiBadRequestResponse)({ description: 'Parâmetros inválidos.' }),
     (0, swagger_1.ApiUnauthorizedResponse)({ description: 'Token inválido ou ausente.' }),
-    (0, swagger_1.ApiTooManyRequestsResponse)({ description: 'Rate limit excedido.' }),
     (0, swagger_1.ApiInternalServerErrorResponse)({ description: 'Erro inesperado.' }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -329,6 +329,7 @@ __decorate([
 exports.AnalysisController = AnalysisController = __decorate([
     (0, swagger_1.ApiTags)('Analysis'),
     (0, swagger_1.ApiBearerAuth)(),
+    (0, throttler_1.SkipThrottle)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('analysis'),
     __metadata("design:paramtypes", [analysis_service_1.AnalysisService])

@@ -23,9 +23,9 @@ import {
   ApiQuery,
   ApiResponse,
   ApiTags,
-  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateIndicatorDto } from './dto/create-indicator.dto';
 import { ListIndicatorsQueryDto } from './dto/list-indicators-query.dto';
@@ -36,6 +36,7 @@ import { IndicatorCategory } from './enums/indicator-category.enum';
 
 @ApiTags('Indicators')
 @ApiBearerAuth()
+@SkipThrottle() // Endpoints de dados autenticados — filtragem frequente é esperada em BI
 @UseGuards(JwtAuthGuard)
 @Controller('indicators')
 export class IndicatorsController {
@@ -175,7 +176,6 @@ export class IndicatorsController {
   @ApiResponse({ status: 200, description: 'Lista paginada de indicadores.' })
   @ApiBadRequestResponse({ description: 'Parâmetros inválidos.' })
   @ApiUnauthorizedResponse({ description: 'Token inválido ou ausente.' })
-  @ApiTooManyRequestsResponse({ description: 'Rate limit excedido.' })
   @ApiInternalServerErrorResponse({ description: 'Erro inesperado.' })
   async findAll(@Query() query: ListIndicatorsQueryDto) {
     return this.indicatorsService.findAll(query);

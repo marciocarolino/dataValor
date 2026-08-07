@@ -2,6 +2,7 @@ import {
   Component,
   inject,
   OnInit,
+  OnDestroy,
   signal,
   computed,
   effect,
@@ -10,6 +11,8 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../../dashboard/components/sidebar/sidebar.component';
 import { TopBarComponent } from '../../../dashboard/components/top-bar/top-bar.component';
+import { IndicatorChartComponent } from '../../components/indicator-chart/indicator-chart.component';
+import { CurrencyBrlDirective } from '../../../../shared/directives/currency-brl.directive';
 import { IndicatorService } from '../../../../core/services/indicator.service';
 import {
   INDICATOR_CATEGORY_LABELS,
@@ -28,11 +31,11 @@ import {
 @Component({
   selector: 'app-indicators-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SidebarComponent, TopBarComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SidebarComponent, TopBarComponent, IndicatorChartComponent, CurrencyBrlDirective],
   templateUrl: './indicators-page.component.html',
   styleUrls: ['./indicators-page.component.scss'],
 })
-export class IndicatorsPageComponent implements OnInit {
+export class IndicatorsPageComponent implements OnInit, OnDestroy {
   private readonly svc = inject(IndicatorService);
   private readonly fb = inject(FormBuilder);
 
@@ -76,6 +79,14 @@ export class IndicatorsPageComponent implements OnInit {
   readonly saving = signal(false);
   readonly saveError = signal<string | null>(null);
 
+  // ── Modal Visualizar Gráfico ───────────────────────────────────────────────
+  readonly showChartModal = signal(false);
+  readonly chartIndicator = signal<Indicator | null>(null);
+
+  // ── Modal Detalhes (somente leitura) ──────────────────────────────────────
+  readonly showDetailsModal = signal(false);
+  readonly detailsIndicator = signal<Indicator | null>(null);
+
   // ── Confirmação de exclusão ────────────────────────────────────────────────
   readonly confirmDeleteId = signal<string | null>(null);
   readonly deleting = signal(false);
@@ -96,6 +107,8 @@ export class IndicatorsPageComponent implements OnInit {
     color: ['', Validators.maxLength(30)],
     icon: ['', Validators.maxLength(60)],
     chartType: ['NUMBER', Validators.required],
+    startDate: [null],
+    endDate: [null],
     isActive: [true],
     showOnDashboard: [false],
   });
@@ -108,8 +121,11 @@ export class IndicatorsPageComponent implements OnInit {
     return Array.from({ length: total }, (_, i) => i + 1);
   });
 
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
   constructor() {
     // Re-carrega a lista sempre que os filtros mudarem
+    // Debounce de 300ms para evitar múltiplas chamadas rápidas (ex: HMR, digitação)
     effect(() => {
       const params: IndicatorQueryParams = {
         page: this.currentPage(),
@@ -125,8 +141,14 @@ export class IndicatorsPageComponent implements OnInit {
       if (st) params.status = st;
       const active = this.filterActive();
       if (active !== '') params.isActive = active === 'true';
-      this.svc.loadList(params);
+
+      if (this.debounceTimer) clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => this.svc.loadList(params), 300);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
   }
 
   ngOnInit(): void {
@@ -173,6 +195,7 @@ export class IndicatorsPageComponent implements OnInit {
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
       goalValue: null, currentValue: null, previousValue: null, previousPeriod: null, variation: null,
       status: 'NEUTRAL', color: '', icon: '', chartType: 'NUMBER',
+      startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
     });
     this.editingId.set(null);
@@ -182,6 +205,10 @@ export class IndicatorsPageComponent implements OnInit {
   }
 
   openEdit(indicator: Indicator): void {
+    // Normaliza o ícone ao carregar (converte "Arrow Right" → "arrow_right")
+    const rawIcon = indicator.icon ?? '';
+    const normalizedIcon = rawIcon.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+
     this.form.patchValue({
       name: indicator.name,
       description: indicator.description ?? '',
@@ -195,8 +222,11 @@ export class IndicatorsPageComponent implements OnInit {
       variation: indicator.variation,
       status: indicator.status,
       color: indicator.color ?? '',
-      icon: indicator.icon ?? '',
+      icon: normalizedIcon,
       chartType: indicator.chartType,
+      // Converte ISO string para formato date (YYYY-MM-DD) para o input[type=date]
+      startDate: indicator.startDate ? indicator.startDate.substring(0, 10) : null,
+      endDate: indicator.endDate ? indicator.endDate.substring(0, 10) : null,
       isActive: indicator.isActive,
       showOnDashboard: indicator.showOnDashboard,
     });
@@ -218,6 +248,9 @@ export class IndicatorsPageComponent implements OnInit {
     }
 
     const raw = this.form.value as Record<string, unknown>;
+    const rawStartDate = raw['startDate'] as string | null;
+    const rawEndDate = raw['endDate'] as string | null;
+
     const payload: CreateIndicatorPayload = {
       name: raw['name'] as string,
       description: raw['description'] as string || undefined,
@@ -230,9 +263,14 @@ export class IndicatorsPageComponent implements OnInit {
       previousPeriod: (raw['previousPeriod'] as IndicatorPeriod) || undefined,
       variation: raw['variation'] as number ?? undefined,
       status: raw['status'] as IndicatorStatus,
-      color: raw['color'] as string || undefined,
-      icon: raw['icon'] as string || undefined,
+      // Envia null explicitamente para limpar a cor no backend
+      color: (raw['color'] as string) || null,
+      // Envia null explicitamente para limpar o ícone no backend (undefined omite o campo no PATCH)
+      icon: (raw['icon'] as string) || null,
       chartType: raw['chartType'] as IndicatorChartType,
+      // Converte string YYYY-MM-DD para ISO 8601 (meia-noite UTC) para o backend
+      startDate: rawStartDate ? `${rawStartDate}T00:00:00.000Z` : null,
+      endDate: rawEndDate ? `${rawEndDate}T00:00:00.000Z` : null,
       isActive: raw['isActive'] as boolean,
       showOnDashboard: raw['showOnDashboard'] as boolean,
     };
@@ -257,6 +295,43 @@ export class IndicatorsPageComponent implements OnInit {
         this.saveError.set(err.message);
       },
     });
+  }
+
+  openDetails(ind: Indicator): void {
+    this.detailsIndicator.set(ind);
+    this.showDetailsModal.set(true);
+  }
+
+  closeDetailsModal(): void {
+    this.showDetailsModal.set(false);
+    this.detailsIndicator.set(null);
+  }
+
+  editFromDetails(): void {
+    const ind = this.detailsIndicator();
+    if (!ind) return;
+    this.showDetailsModal.set(false);
+    this.detailsIndicator.set(null);
+    setTimeout(() => this.openEdit(ind), 50);
+  }
+
+  openChart(ind: Indicator): void {
+    this.chartIndicator.set(ind);
+    this.showChartModal.set(true);
+  }
+
+  closeChartModal(): void {
+    this.showChartModal.set(false);
+    this.chartIndicator.set(null);
+  }
+
+  editFromChart(): void {
+    const ind = this.chartIndicator();
+    if (!ind) return;
+    this.showChartModal.set(false);
+    this.chartIndicator.set(null);
+    // Pequeno delay para garantir que o modal do gráfico fechou antes de abrir o edit
+    setTimeout(() => this.openEdit(ind), 50);
   }
 
   requestDelete(id: string): void {
@@ -299,11 +374,60 @@ export class IndicatorsPageComponent implements OnInit {
 
   formatNumber(val: number | null): string {
     if (val === null || val === undefined) return '–';
-    return val.toLocaleString('pt-BR');
+    // Mostra até 2 casas decimais — exibe centavos quando presentes
+    return val.toLocaleString('pt-BR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+  }
+
+  /** Sincroniza o input color nativo quando o usuário digita o hex no campo de texto */
+  syncColorPicker(hexValue: string): void {
+    // Só sincroniza se for um hex válido (ex: #4c6ef5)
+    if (/^#[0-9a-fA-F]{6}$/.test(hexValue)) {
+      this.form.get('color')?.setValue(hexValue);
+    }
+  }
+
+  /** Atualiza o FormControl quando o usuário escolhe uma cor no picker nativo */
+  onColorPickerChange(hexValue: string): void {
+    this.form.get('color')?.setValue(hexValue);
+  }
+
+  /** Converte "Arrow Right" → "arrow_right" automaticamente ao digitar */
+  formatIconName(input: HTMLInputElement): void {
+    const raw = input.value;
+    // Converte para snake_case: lowercase + espaços → underscores + sem caracteres especiais
+    const formatted = raw.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    // Atualiza o DOM e o FormControl (emitEvent: true para atualizar o preview no template)
+    input.value = formatted;
+    this.form.get('icon')?.setValue(formatted);
   }
 
   isFieldInvalid(field: string): boolean {
     const ctrl = this.form.get(field);
     return !!(ctrl && ctrl.invalid && ctrl.touched);
+  }
+
+  /**
+   * Calcula quantos dias faltam até a data informada (formato YYYY-MM-DD ou ISO).
+   * Retorna null se a data for inválida, negativo se já passou.
+   */
+  daysRemaining(dateStr: string | null | undefined): number | null {
+    if (!dateStr) return null;
+    const end = new Date(dateStr);
+    if (isNaN(end.getTime())) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+    return Math.round((end.getTime() - today.getTime()) / 86_400_000);
+  }
+
+  /** Formata uma string ISO de data para dd/mm/aaaa */
+  formatDate(dateStr: string | null | undefined): string {
+    if (!dateStr) return '–';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '–';
+    return d.toLocaleDateString('pt-BR');
   }
 }

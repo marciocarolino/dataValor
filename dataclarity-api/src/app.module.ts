@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HealthModule } from './modules/health/health.module';
@@ -13,15 +12,17 @@ import { AnalysisModule } from './modules/analysis/analysis.module';
 
 @Module({
   imports: [
+    // ThrottlerModule registrado para uso seletivo via @Throttle() nos controllers que precisam
+    // O guard NÃO é global — aplicado apenas em Auth e Contacts (rotas públicas/sensíveis)
     ThrottlerModule.forRoot([
       {
-        // Limite geral: 100 requisições por minuto por IP
+        // Limite padrão para rotas públicas (Contacts form)
         name: 'default',
         ttl: 60_000,
-        limit: 100,
+        limit: 20,
       },
       {
-        // Limite restrito para auth: 10 tentativas por minuto por IP
+        // Limite restrito para autenticação (prevenção de brute force)
         name: 'auth',
         ttl: 60_000,
         limit: 10,
@@ -36,12 +37,6 @@ import { AnalysisModule } from './modules/analysis/analysis.module';
     AnalysisModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

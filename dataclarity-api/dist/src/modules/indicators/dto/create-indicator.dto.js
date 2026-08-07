@@ -33,6 +33,8 @@ class CreateIndicatorDto {
     color;
     icon;
     chartType;
+    startDate;
+    endDate;
     isActive;
     showOnDashboard;
 }
@@ -123,26 +125,54 @@ __decorate([
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: '#4c6ef5', maxLength: 30 }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '#4c6ef5', maxLength: 30, nullable: true }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_transformer_1.Transform)(trim),
     (0, class_validator_1.MaxLength)(30),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], CreateIndicatorDto.prototype, "color", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'trending_up', maxLength: 60 }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'trending_up',
+        maxLength: 60,
+        nullable: true,
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_transformer_1.Transform)(trim),
     (0, class_validator_1.MaxLength)(60),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], CreateIndicatorDto.prototype, "icon", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ enum: indicator_chart_type_enum_1.IndicatorChartType, example: indicator_chart_type_enum_1.IndicatorChartType.NUMBER }),
     (0, class_validator_1.IsEnum)(indicator_chart_type_enum_1.IndicatorChartType),
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "chartType", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        type: String,
+        format: 'date-time',
+        example: '2026-01-01T00:00:00.000Z',
+        description: 'Data de início do período de acompanhamento do indicador.',
+        nullable: true,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsISO8601)({ strict: false }),
+    __metadata("design:type", Object)
+], CreateIndicatorDto.prototype, "startDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        type: String,
+        format: 'date-time',
+        example: '2026-12-31T23:59:59.000Z',
+        description: 'Data de término do período de acompanhamento do indicador (prazo para bater a meta).',
+        nullable: true,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsISO8601)({ strict: false }),
+    __metadata("design:type", Object)
+], CreateIndicatorDto.prototype, "endDate", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: true, default: true }),
     (0, class_validator_1.IsOptional)(),

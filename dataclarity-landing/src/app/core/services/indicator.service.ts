@@ -14,6 +14,31 @@ import type {
 
 const API_URL = 'http://localhost:3001/api/v1';
 
+/** Converte campos Decimal (podem chegar como string do pg driver) para number */
+function parseDecimal(v: unknown): number | null {
+  if (v === null || v === undefined) return null;
+  const n = typeof v === 'string' ? parseFloat(v) : Number(v);
+  return isNaN(n) ? null : n;
+}
+
+function normalizeIcon(icon: unknown): string | null {
+  if (!icon || typeof icon !== 'string') return null;
+  const normalized = icon.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+  return normalized || null;
+}
+
+function parseIndicator(raw: Record<string, unknown>): Indicator {
+  return {
+    ...(raw as unknown as Indicator),
+    currentValue: parseDecimal(raw['currentValue']),
+    previousValue: parseDecimal(raw['previousValue']),
+    goalValue: parseDecimal(raw['goalValue']),
+    variation: parseDecimal(raw['variation']),
+    // Normaliza ícone ao receber da API — corrige valores com espaços/maiúsculas
+    icon: normalizeIcon(raw['icon']),
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class IndicatorService {
   private readonly http = inject(HttpClient);
@@ -95,7 +120,7 @@ export class IndicatorService {
     this.error.set(null);
     this.getDashboardIndicators().subscribe({
       next: (data) => {
-        this.dashboardIndicators.set(data);
+        this.dashboardIndicators.set(data.map(d => parseIndicator(d as unknown as Record<string, unknown>)));
         this.loading.set(false);
       },
       error: (err: Error) => {
@@ -117,7 +142,10 @@ export class IndicatorService {
     this.error.set(null);
     this.getAll(params).subscribe({
       next: (data) => {
-        this.paginatedList.set(data);
+        this.paginatedList.set({
+          ...data,
+          items: data.items.map(d => parseIndicator(d as unknown as Record<string, unknown>)),
+        });
         this.loading.set(false);
       },
       error: (err: Error) => {
@@ -131,7 +159,7 @@ export class IndicatorService {
     this.loading.set(true);
     this.getById(id).subscribe({
       next: (data) => {
-        this.selectedIndicator.set(data);
+        this.selectedIndicator.set(parseIndicator(data as unknown as Record<string, unknown>));
         this.loading.set(false);
       },
       error: (err: Error) => {

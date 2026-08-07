@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
+  IsISO8601,
   IsNumber,
   IsOptional,
   IsString,
@@ -93,23 +94,50 @@ export class CreateIndicatorDto {
   @IsEnum(IndicatorStatus)
   status!: IndicatorStatus;
 
-  @ApiPropertyOptional({ example: '#4c6ef5', maxLength: 30 })
+  @ApiPropertyOptional({ example: '#4c6ef5', maxLength: 30, nullable: true })
   @IsOptional()
   @IsString()
   @Transform(trim)
   @MaxLength(30)
-  color?: string;
+  color?: string | null;
 
-  @ApiPropertyOptional({ example: 'trending_up', maxLength: 60 })
+  @ApiPropertyOptional({
+    example: 'trending_up',
+    maxLength: 60,
+    nullable: true,
+  })
   @IsOptional()
   @IsString()
   @Transform(trim)
   @MaxLength(60)
-  icon?: string;
+  icon?: string | null;
 
   @ApiProperty({ enum: IndicatorChartType, example: IndicatorChartType.NUMBER })
   @IsEnum(IndicatorChartType)
   chartType!: IndicatorChartType;
+
+  @ApiPropertyOptional({
+    type: String,
+    format: 'date-time',
+    example: '2026-01-01T00:00:00.000Z',
+    description: 'Data de início do período de acompanhamento do indicador.',
+    nullable: true,
+  })
+  @IsOptional()
+  @IsISO8601({ strict: false })
+  startDate?: string | null;
+
+  @ApiPropertyOptional({
+    type: String,
+    format: 'date-time',
+    example: '2026-12-31T23:59:59.000Z',
+    description:
+      'Data de término do período de acompanhamento do indicador (prazo para bater a meta).',
+    nullable: true,
+  })
+  @IsOptional()
+  @IsISO8601({ strict: false })
+  endDate?: string | null;
 
   @ApiPropertyOptional({ example: true, default: true })
   @IsOptional()

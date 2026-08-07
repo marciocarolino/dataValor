@@ -17,6 +17,7 @@ interface MetricCard {
   icon: string;
   iconBg: string;
   iconColor: string;
+  accentColor?: string;
 }
 
 // Configuração visual por nome do indicador (para mapear API → cards visuais)
@@ -48,19 +49,27 @@ function getVisualConfig(name: string) {
 }
 
 function formatValue(indicator: Indicator): string {
-  const val = indicator.currentValue;
-  if (val === null || val === undefined) return '–';
+  const raw = indicator.currentValue;
+  if (raw === null || raw === undefined) return '–';
+  // Prisma Decimal chega como string no JSON — converter para number
+  const val = typeof raw === 'string' ? parseFloat(raw) : Number(raw);
+  if (isNaN(val)) return '–';
+
   const unit = indicator.unit ?? '';
 
   if (unit === 'BRL' || unit === 'R$') {
-    if (Math.abs(val) >= 1_000_000)
-      return `R$ ${(val / 1_000_000).toFixed(1)}M`;
-    if (Math.abs(val) >= 1_000) return `R$ ${(val / 1_000).toFixed(0)}k`;
-    return `R$ ${val.toLocaleString('pt-BR')}`;
+    // Sempre exibe valor completo com centavos — sem arredondamento
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(val);
   }
-  if (unit === '%') return `${val}%`;
-  if (Math.abs(val) >= 1_000) return val.toLocaleString('pt-BR');
-  return String(val);
+  if (unit === '%') return `${val.toFixed(2).replace('.', ',')}%`;
+  // Valores numéricos sem unidade
+  if (Math.abs(val) >= 1_000) return val.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  return val.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 4 });
 }
 
 function formatChange(indicator: Indicator): string {
@@ -149,6 +158,7 @@ export class DashboardPageComponent implements OnInit {
         icon: apiMatch.icon ?? visual.icon,
         iconBg: apiMatch.color ? `${apiMatch.color}22` : visual.iconBg,
         iconColor: apiMatch.color ?? visual.iconColor,
+        accentColor: apiMatch.color ?? '',
       };
     });
   });

@@ -34,6 +34,8 @@ let IndicatorsService = class IndicatorsService {
                 color: dto.color ?? null,
                 icon: dto.icon ?? null,
                 chartType: dto.chartType,
+                startDate: dto.startDate ? new Date(dto.startDate) : null,
+                endDate: dto.endDate ? new Date(dto.endDate) : null,
                 isActive: dto.isActive ?? true,
                 showOnDashboard: dto.showOnDashboard ?? false,
             },
@@ -133,9 +135,15 @@ let IndicatorsService = class IndicatorsService {
                 }),
                 ...(dto.variation !== undefined && { variation: dto.variation }),
                 ...(dto.status !== undefined && { status: dto.status }),
-                ...(dto.color !== undefined && { color: dto.color }),
-                ...(dto.icon !== undefined && { icon: dto.icon }),
+                ...('color' in dto && { color: dto.color ?? null }),
+                ...('icon' in dto && { icon: dto.icon ?? null }),
                 ...(dto.chartType !== undefined && { chartType: dto.chartType }),
+                ...('startDate' in dto && {
+                    startDate: dto.startDate ? new Date(dto.startDate) : null,
+                }),
+                ...('endDate' in dto && {
+                    endDate: dto.endDate ? new Date(dto.endDate) : null,
+                }),
                 ...(dto.isActive !== undefined && { isActive: dto.isActive }),
                 ...(dto.showOnDashboard !== undefined && {
                     showOnDashboard: dto.showOnDashboard,

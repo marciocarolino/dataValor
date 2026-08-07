@@ -134,15 +134,26 @@
                 <th>Variação</th>
                 <th>Tipo Gráfico</th>
                 <th>Ativo</th>
+                <th>Dias Restantes</th>
+                <th>Detalhes</th>
                 <th>Ações</th>
               </tr>
             </thead>
             <tbody>
               @for (ind of indicators(); track ind.id) {
-                <tr>
+                <tr [class.row--inactive]="!ind.isActive">
                   <td class="cell-name">
-                    @if (ind.icon) {
-                      <span class="material-icons cell-icon">{{ ind.icon }}</span>
+                    @if (ind.icon && !ind.icon.includes(' ')) {
+                      <!-- Com ícone: mostra o ícone colorido -->
+                      <span
+                        class="material-icons cell-icon cell-icon--colored"
+                        [style.color]="ind.color ?? undefined"
+                        [style.background]="ind.color ? ind.color + '22' : undefined"
+                        >{{ ind.icon }}</span
+                      >
+                    } @else if (ind.color) {
+                      <!-- Sem ícone: mostra bolinha colorida -->
+                      <span class="cell-color-dot" [style.background]="ind.color"></span>
                     }
                     {{ ind.name }}
                   </td>
@@ -182,7 +193,44 @@
                       {{ ind.isActive ? 'Sim' : 'Não' }}
                     </span>
                   </td>
+                  <td class="cell-deadline">
+                    @if (ind.endDate) {
+                      @if (daysRemaining(ind.endDate) === null) {
+                        <span class="deadline-badge">–</span>
+                      } @else if (daysRemaining(ind.endDate)! < 0) {
+                        <span class="deadline-badge deadline-badge--exp">Encerrado</span>
+                      } @else if (daysRemaining(ind.endDate) === 0) {
+                        <span class="deadline-badge deadline-badge--warn">Hoje!</span>
+                      } @else if (daysRemaining(ind.endDate)! <= 7) {
+                        <span class="deadline-badge deadline-badge--warn"
+                          >{{ daysRemaining(ind.endDate) }}d</span
+                        >
+                      } @else {
+                        <span class="deadline-badge deadline-badge--ok"
+                          >{{ daysRemaining(ind.endDate) }}d</span
+                        >
+                      }
+                    } @else {
+                      <span class="cell-muted">–</span>
+                    }
+                  </td>
+                  <td class="cell-details">
+                    <button
+                      class="action-btn action-btn--details"
+                      (click)="openDetails(ind)"
+                      title="Ver detalhes"
+                    >
+                      <span class="material-icons">info_outline</span>
+                    </button>
+                  </td>
                   <td class="cell-actions">
+                    <button
+                      class="action-btn action-btn--chart"
+                      (click)="openChart(ind)"
+                      title="Visualizar gráfico"
+                    >
+                      <span class="material-icons">bar_chart</span>
+                    </button>
                     <button
                       class="action-btn action-btn--edit"
                       (click)="openEdit(ind)"
@@ -201,7 +249,7 @@
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="9" class="empty-state">
+                  <td colspan="11" class="empty-state">
                     <span class="material-icons">bar_chart</span>
                     <p>Nenhum indicador encontrado.</p>
                   </td>
@@ -250,8 +298,8 @@
 
 <!-- ── Modal CRUD ─────────────────────────────────────────────────────────── -->
 @if (showModal()) {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" (mousedown)="$event.target === $event.currentTarget && closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()" (mousedown)="$event.stopPropagation()">
       <div class="modal__header">
         <h2 class="modal__title">
           {{ modalMode() === 'create' ? 'Novo Indicador' : 'Editar Indicador' }}
@@ -319,11 +367,23 @@
           <div class="form-row">
             <div class="form-group">
               <label>Valor Atual</label>
-              <input formControlName="currentValue" type="number" placeholder="0" />
+              <input
+                appCurrencyBrl
+                formControlName="currentValue"
+                type="text"
+                placeholder="0,00"
+                inputmode="decimal"
+              />
             </div>
             <div class="form-group">
               <label>Meta</label>
-              <input formControlName="goalValue" type="number" placeholder="0" />
+              <input
+                appCurrencyBrl
+                formControlName="goalValue"
+                type="text"
+                placeholder="0,00"
+                inputmode="decimal"
+              />
             </div>
             <div class="form-group">
               <label>Variação %</label>
@@ -331,11 +391,53 @@
             </div>
           </div>
 
-          <!-- Row 3b: Valor Anterior + Período de Referência -->
+          <!-- Row 3b: Datas de acompanhamento -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Data Início</label>
+              <input formControlName="startDate" type="date" />
+            </div>
+            <div class="form-group">
+              <label>Data Fim (prazo da meta)</label>
+              <input formControlName="endDate" type="date" />
+            </div>
+            @if (form.get('endDate')?.value) {
+              <div class="form-group form-group--auto">
+                <label>Dias Restantes</label>
+                <div
+                  class="days-remaining"
+                  [class.days-remaining--urgent]="
+                    daysRemaining(form.get('endDate')?.value) !== null &&
+                    daysRemaining(form.get('endDate')?.value)! <= 7
+                  "
+                  [class.days-remaining--expired]="
+                    daysRemaining(form.get('endDate')?.value) !== null &&
+                    daysRemaining(form.get('endDate')?.value)! < 0
+                  "
+                >
+                  @if (daysRemaining(form.get('endDate')?.value) === null) {
+                    <span>–</span>
+                  } @else if (daysRemaining(form.get('endDate')?.value)! < 0) {
+                    <span>Prazo encerrado</span>
+                  } @else {
+                    <span>{{ daysRemaining(form.get('endDate')?.value) }} dia(s)</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Row 3c: Valor Anterior + Período de Referência -->
           <div class="form-row form-row--previous">
             <div class="form-group">
               <label>Valor Anterior</label>
-              <input formControlName="previousValue" type="number" placeholder="0" />
+              <input
+                appCurrencyBrl
+                formControlName="previousValue"
+                type="text"
+                placeholder="0,00"
+                inputmode="decimal"
+              />
             </div>
             <div class="form-group">
               <label>Período de Referência</label>
@@ -357,12 +459,73 @@
           <!-- Row 4: Visual -->
           <div class="form-row">
             <div class="form-group">
-              <label>Ícone (material)</label>
-              <input formControlName="icon" type="text" placeholder="Ex: trending_up" />
+              <label class="label--with-link">
+                Ícone (Material Icons)
+                <a
+                  href="https://fonts.google.com/icons"
+                  target="_blank"
+                  rel="noopener"
+                  class="label-link"
+                  title="Ver catálogo de ícones"
+                >
+                  <span class="material-icons">open_in_new</span>
+                  Ver ícones
+                </a>
+              </label>
+              <div class="input-with-preview">
+                <span class="icon-preview material-icons">
+                  {{ form.get('icon')?.value || 'help_outline' }}
+                </span>
+                <input
+                  formControlName="icon"
+                  type="text"
+                  placeholder="Ex: trending_up"
+                  (input)="formatIconName($any($event.target))"
+                />
+              </div>
+              <p class="field-hint">
+                O nome deve ser em <strong>minúsculas com underscores</strong> (snake_case). No
+                site, copie o nome e o sistema converte automaticamente. Exemplos:
+                <code>trending_up</code>, <code>savings</code>, <code>group</code>,
+                <code>payments</code>, <code>percent</code>, <code>bar_chart</code>,
+                <code>arrow_right</code>
+              </p>
             </div>
             <div class="form-group">
               <label>Cor (hex)</label>
-              <input formControlName="color" type="text" placeholder="#4c6ef5" />
+              <div class="input-with-preview input-with-preview--color">
+                <!-- Preview clicável que abre o color picker nativo -->
+                <span
+                  class="color-preview color-preview--clickable"
+                  [style.background]="form.get('color')?.value || '#4c6ef5'"
+                  (click)="colorPickerRef.click()"
+                  title="Clique para abrir o seletor de cores"
+                ></span>
+                <!-- Input de texto para digitar o hex -->
+                <input
+                  formControlName="color"
+                  type="text"
+                  placeholder="#4c6ef5"
+                  (input)="syncColorPicker($any($event.target).value)"
+                />
+                <!-- Botão ícone paleta -->
+                <button
+                  type="button"
+                  class="color-picker-btn"
+                  (click)="colorPickerRef.click()"
+                  title="Abrir seletor de cores"
+                >
+                  <span class="material-icons">palette</span>
+                </button>
+                <!-- Input color nativo oculto -->
+                <input
+                  #colorPickerRef
+                  type="color"
+                  class="color-picker-native"
+                  [value]="form.get('color')?.value || '#4c6ef5'"
+                  (input)="onColorPickerChange($any($event.target).value)"
+                />
+              </div>
             </div>
           </div>
 
@@ -379,8 +542,21 @@
           </div>
           <div class="form-row">
             <div class="form-group form-group--full">
-              <label>Fórmula</label>
-              <input formControlName="formula" type="text" placeholder="Ex: SUM(receitas)" />
+              <label class="label--with-link">
+                Fórmula
+                <span class="label-badge">Informativo</span>
+              </label>
+              <input
+                formControlName="formula"
+                type="text"
+                placeholder="Ex: SUM(receitas) - SUM(devoluções)"
+              />
+              <p class="field-hint">
+                Campo descritivo — documenta como o indicador é calculado. Será integrado à engine
+                de dados em versões futuras. Exemplos: <code>SUM(receitas)</code>,
+                <code>COUNT(clientes_ativos)</code>, <code>SUM(lucro) / SUM(receita) * 100</code>,
+                <code>AVG(ticket_medio)</code>
+              </p>
             </div>
           </div>
 
@@ -411,10 +587,261 @@
   </div>
 }
 
+<!-- ── Modal Visualizar Gráfico ──────────────────────────────────────────── -->
+@if (showChartModal() && chartIndicator()) {
+  <div
+    class="modal-overlay"
+    (mousedown)="$event.target === $event.currentTarget && closeChartModal()"
+  >
+    <div
+      class="modal modal--chart"
+      (click)="$event.stopPropagation()"
+      (mousedown)="$event.stopPropagation()"
+    >
+      <div class="modal__header">
+        <div class="modal__header-info">
+          <span class="modal__chart-badge">
+            <span class="material-icons">{{
+              chartTypeLabels[chartIndicator()!.chartType] ? 'bar_chart' : 'bar_chart'
+            }}</span>
+            {{ chartTypeLabels[chartIndicator()!.chartType] }}
+          </span>
+          <h2 class="modal__title">{{ chartIndicator()!.name }}</h2>
+          @if (chartIndicator()!.description) {
+            <p class="modal__desc">{{ chartIndicator()!.description }}</p>
+          }
+        </div>
+        <button class="modal__close" (click)="closeChartModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal__body modal__body--chart">
+        <app-indicator-chart [indicator]="chartIndicator()!"></app-indicator-chart>
+      </div>
+      <div class="modal__footer">
+        <div class="chart-footer-meta">
+          <span class="badge" [class]="statusClass(chartIndicator()!.status)">{{
+            statusLabels[chartIndicator()!.status]
+          }}</span>
+          <span class="badge badge--category">{{
+            categoryLabels[chartIndicator()!.category]
+          }}</span>
+        </div>
+        <button class="btn btn--ghost" (click)="closeChartModal()">Fechar</button>
+        <button class="btn btn--primary" (click)="editFromChart()">
+          <span class="material-icons">edit</span>
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ── Modal Detalhes (somente leitura) ──────────────────────────────────── -->
+@if (showDetailsModal() && detailsIndicator()) {
+  <div
+    class="modal-overlay"
+    (mousedown)="$event.target === $event.currentTarget && closeDetailsModal()"
+  >
+    <div
+      class="modal modal--details"
+      (click)="$event.stopPropagation()"
+      (mousedown)="$event.stopPropagation()"
+    >
+      <div class="modal__header">
+        <div class="modal__header-info">
+          @if (detailsIndicator()!.icon) {
+            <span
+              class="material-icons details-icon"
+              [style.color]="detailsIndicator()!.color ?? undefined"
+            >
+              {{ detailsIndicator()!.icon }}
+            </span>
+          }
+          <h2 class="modal__title">{{ detailsIndicator()!.name }}</h2>
+          <span class="badge" [class]="statusClass(detailsIndicator()!.status)">
+            {{ statusLabels[detailsIndicator()!.status] }}
+          </span>
+        </div>
+        <button class="modal__close" (click)="closeDetailsModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="details-grid">
+          <div class="details-field">
+            <span class="details-field__label">Categoria</span>
+            <span class="details-field__value">
+              <span class="badge badge--category">{{
+                categoryLabels[detailsIndicator()!.category]
+              }}</span>
+            </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Tipo de Gráfico</span>
+            <span class="details-field__value">
+              <span class="badge badge--chart">{{
+                chartTypeLabels[detailsIndicator()!.chartType]
+              }}</span>
+            </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Unidade</span>
+            <span class="details-field__value">{{ detailsIndicator()!.unit || '–' }}</span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Valor Atual</span>
+            <span class="details-field__value details-field__value--highlight">{{
+              formatNumber(detailsIndicator()!.currentValue)
+            }}</span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Meta</span>
+            <span class="details-field__value">{{
+              formatNumber(detailsIndicator()!.goalValue)
+            }}</span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Variação %</span>
+            <span
+              class="details-field__value"
+              [class.text--positive]="(detailsIndicator()!.variation ?? 0) >= 0"
+              [class.text--negative]="(detailsIndicator()!.variation ?? 0) < 0"
+            >
+              {{
+                detailsIndicator()!.variation !== null
+                  ? (detailsIndicator()!.variation ?? 0).toFixed(2) + '%'
+                  : '–'
+              }}
+            </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Valor Anterior</span>
+            <span class="details-field__value">{{
+              formatNumber(detailsIndicator()!.previousValue)
+            }}</span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Período de Referência</span>
+            <span class="details-field__value">
+              {{
+                detailsIndicator()!.previousPeriod
+                  ? periodLabels[detailsIndicator()!.previousPeriod!]
+                  : '–'
+              }}
+            </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Ativo</span>
+            <span class="details-field__value">
+              <span
+                class="active-dot"
+                [class.active-dot--on]="detailsIndicator()!.isActive"
+                [class.active-dot--off]="!detailsIndicator()!.isActive"
+              >
+                {{ detailsIndicator()!.isActive ? 'Sim' : 'Não' }}
+              </span>
+            </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">No Dashboard</span>
+            <span class="details-field__value">{{
+              detailsIndicator()!.showOnDashboard ? 'Sim' : 'Não'
+            }}</span>
+          </div>
+          @if (detailsIndicator()!.startDate || detailsIndicator()!.endDate) {
+            <div class="details-field">
+              <span class="details-field__label">Data Início</span>
+              <span class="details-field__value">{{
+                formatDate(detailsIndicator()!.startDate)
+              }}</span>
+            </div>
+            <div class="details-field">
+              <span class="details-field__label">Data Fim (meta)</span>
+              <span class="details-field__value">{{
+                formatDate(detailsIndicator()!.endDate)
+              }}</span>
+            </div>
+            @if (detailsIndicator()!.endDate) {
+              <div class="details-field">
+                <span class="details-field__label">Dias Restantes</span>
+                <span
+                  class="details-field__value details-field__value--days"
+                  [class.text--warning]="
+                    daysRemaining(detailsIndicator()!.endDate) !== null &&
+                    daysRemaining(detailsIndicator()!.endDate)! >= 0 &&
+                    daysRemaining(detailsIndicator()!.endDate)! <= 7
+                  "
+                  [class.text--negative]="
+                    daysRemaining(detailsIndicator()!.endDate) !== null &&
+                    daysRemaining(detailsIndicator()!.endDate)! < 0
+                  "
+                  [class.text--positive]="
+                    daysRemaining(detailsIndicator()!.endDate) !== null &&
+                    daysRemaining(detailsIndicator()!.endDate)! > 7
+                  "
+                >
+                  @if (daysRemaining(detailsIndicator()!.endDate) === null) {
+                    –
+                  } @else if (daysRemaining(detailsIndicator()!.endDate)! < 0) {
+                    <span class="material-icons" style="font-size: 14px; vertical-align: middle"
+                      >warning</span
+                    >
+                    Prazo encerrado
+                  } @else if (daysRemaining(detailsIndicator()!.endDate) === 0) {
+                    <span class="material-icons" style="font-size: 14px; vertical-align: middle"
+                      >warning</span
+                    >
+                    Vence hoje!
+                  } @else {
+                    {{ daysRemaining(detailsIndicator()!.endDate) }} dia(s)
+                  }
+                </span>
+              </div>
+            }
+          }
+          @if (detailsIndicator()!.color) {
+            <div class="details-field">
+              <span class="details-field__label">Cor</span>
+              <span class="details-field__value details-field__value--color">
+                <span class="cell-color-dot" [style.background]="detailsIndicator()!.color!"></span>
+                {{ detailsIndicator()!.color }}
+              </span>
+            </div>
+          }
+          @if (detailsIndicator()!.description) {
+            <div class="details-field details-field--full">
+              <span class="details-field__label">Descrição</span>
+              <span class="details-field__value">{{ detailsIndicator()!.description }}</span>
+            </div>
+          }
+          @if (detailsIndicator()!.formula) {
+            <div class="details-field details-field--full">
+              <span class="details-field__label">Fórmula</span>
+              <code class="details-field__code">{{ detailsIndicator()!.formula }}</code>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" (click)="closeDetailsModal()">Fechar</button>
+        <button class="btn btn--primary" (click)="editFromDetails()">
+          <span class="material-icons">edit</span>
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
 <!-- ── Modal Confirmação Exclusão ─────────────────────────────────────────── -->
 @if (confirmDeleteId()) {
-  <div class="modal-overlay" (click)="cancelDelete()">
-    <div class="modal modal--sm" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" (mousedown)="$event.target === $event.currentTarget && cancelDelete()">
+    <div
+      class="modal modal--sm"
+      (click)="$event.stopPropagation()"
+      (mousedown)="$event.stopPropagation()"
+    >
       <div class="modal__header">
         <h2 class="modal__title">Confirmar exclusão</h2>
       </div>
