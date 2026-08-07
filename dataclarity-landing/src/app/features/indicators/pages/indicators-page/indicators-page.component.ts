@@ -14,7 +14,7 @@ import { SidebarComponent } from '../../../dashboard/components/sidebar/sidebar.
 import { TopBarComponent } from '../../../dashboard/components/top-bar/top-bar.component';
 import { IndicatorChartComponent } from '../../components/indicator-chart/indicator-chart.component';
 import { CurrencyBrlDirective } from '../../../../shared/directives/currency-brl.directive';
-import { IndicatorService } from '../../../../core/services/indicator.service';
+import { IndicatorService, CreateMeasurementPayload } from '../../../../core/services/indicator.service';
 import {
   INDICATOR_CATEGORY_LABELS,
   INDICATOR_STATUS_LABELS,
@@ -103,7 +103,10 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     minimumGoalValue: [null],
     maximumGoalValue: [null],
     desiredDirection: ['HIGHER_IS_BETTER'],
-    // currentValue / previousValue / variation / status: são calculados pelo backend
+    // currentValue e previousValue são capturados aqui apenas para criar medições iniciais
+    // O backend calcula esses campos a partir das medições — não são enviados no payload do indicador
+    currentValue: [null],
+    previousValue: [null],
     previousPeriod: [null],
     color: ['', Validators.maxLength(30)],
     icon: ['', Validators.maxLength(60)],
@@ -211,6 +214,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
       goalValue: null, minimumGoalValue: null, maximumGoalValue: null,
       desiredDirection: 'HIGHER_IS_BETTER',
+      currentValue: null, previousValue: null,
       previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
       startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
@@ -233,7 +237,10 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       formula: indicator.formula ?? '',
       unit: indicator.unit ?? '',
       goalValue: indicator.goalValue,
-      // currentValue/previousValue/variation/status: somente leitura (calculado no backend)
+      // currentValue e previousValue: preenchidos para exibir os valores atuais na edição
+      // Se alterados e salvos, criarão novas medições no backend
+      currentValue: indicator.currentValue,
+      previousValue: indicator.previousValue,
       previousPeriod: indicator.previousPeriod ?? null,
       color: indicator.color ?? '',
       icon: normalizedIcon,
@@ -293,17 +300,57 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     this.saving.set(true);
     this.saveError.set(null);
 
+    const currentValue = raw['currentValue'] as number | null;
+    const previousValue = raw['previousValue'] as number | null;
+
     const id = this.editingId();
     const obs = id
       ? this.svc.update(id, payload)
       : this.svc.create(payload);
 
     obs.subscribe({
-      next: () => {
-        this.saving.set(false);
-        this.closeModal();
-        this.svc.loadList({ page: this.currentPage(), limit: 10 });
-        this.svc.loadSummary();
+      next: (indicator) => {
+        const indicatorId = (indicator as { id: string }).id;
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const toISO = (d: Date) => d.toISOString().substring(0, 10) + 'T00:00:00.000Z';
+
+        // Cria medições iniciais em sequência — previousValue primeiro (data anterior),
+        // depois currentValue (data atual), para o backend calcular a variação corretamente
+        const measurementChain = (): void => {
+          this.saving.set(false);
+          this.closeModal();
+          this.svc.loadList({ page: this.currentPage(), limit: 10 });
+          this.svc.loadSummary();
+        };
+
+        if (currentValue != null && currentValue !== 0) {
+          const measurements: CreateMeasurementPayload[] = [];
+
+          // Valor anterior: cria com data de ontem se diferente do current
+          if (previousValue != null && previousValue !== currentValue) {
+            measurements.push({ value: previousValue, referenceDate: toISO(yesterday) });
+          }
+          // Valor atual: data de hoje
+          measurements.push({ value: currentValue, referenceDate: toISO(today) });
+
+          // Dispara em sequência (previous → current) para garantir ordem correta
+          const runNext = (index: number): void => {
+            if (index >= measurements.length) {
+              measurementChain();
+              return;
+            }
+            this.svc.createMeasurement(indicatorId, measurements[index]).subscribe({
+              next: () => runNext(index + 1),
+              // Ignora conflito 409 (medição para essa data já existe) e continua
+              error: () => runNext(index + 1),
+            });
+          };
+          runNext(0);
+        } else {
+          measurementChain();
+        }
       },
       error: (err: Error) => {
         this.saving.set(false);

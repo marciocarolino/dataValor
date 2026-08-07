@@ -12,6 +12,12 @@ import type {
   IndicatorCategory,
 } from '../models/indicator.model';
 
+export interface CreateMeasurementPayload {
+  value: number;
+  referenceDate: string;
+  notes?: string;
+}
+
 const API_URL = 'http://localhost:3001/api/v1';
 
 /** Converte campos Decimal (podem chegar como string do pg driver) para number */
@@ -92,6 +98,12 @@ export class IndicatorService {
   delete(id: string): Observable<Indicator> {
     return this.http
       .delete<Indicator>(`${API_URL}/indicators/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  createMeasurement(indicatorId: string, payload: CreateMeasurementPayload): Observable<unknown> {
+    return this.http
+      .post(`${API_URL}/indicators/${indicatorId}/measurements`, payload)
       .pipe(catchError(this.handleError));
   }
 
