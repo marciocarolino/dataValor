@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
+import { IndicatorPeriod } from '../enums/indicator-period.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 export class IndicatorEntity {
@@ -39,6 +40,14 @@ export class IndicatorEntity {
 
   @ApiPropertyOptional({ example: 2100000, nullable: true })
   previousValue!: number | null;
+
+  @ApiPropertyOptional({
+    enum: IndicatorPeriod,
+    example: IndicatorPeriod.PREVIOUS_MONTH,
+    nullable: true,
+    description: 'Período de referência do valor anterior.',
+  })
+  previousPeriod!: IndicatorPeriod | null;
 
   @ApiPropertyOptional({ example: 14.28, nullable: true })
   variation!: number | null;

@@ -71,6 +71,7 @@ model Indicator {
   goalValue      Float?
   currentValue   Float?
   previousValue  Float?
+  previousPeriod IndicatorPeriod?
   variation      Float?
   status         IndicatorStatus     @default(NEUTRAL)
   color          String?
@@ -112,4 +113,70 @@ enum IndicatorStatus {
   WARNING
   DANGER
   NEUTRAL
+}
+
+enum IndicatorPeriod {
+  PREVIOUS_MONTH
+  PREVIOUS_QUARTER
+  PREVIOUS_SEMESTER
+  PREVIOUS_YEAR
+  CUSTOM
+}
+
+// ─── Analysis ─────────────────────────────────────────────────────────────────
+
+model Analysis {
+  id          String            @id @default(uuid())
+  name        String
+  description String?
+  chartType   AnalysisChartType
+  category    AnalysisCategory
+  dataset     String?
+  metric      String?
+  aggregation AnalysisAggregation
+  groupBy     String?
+  dateField   String?
+  startDate   DateTime?
+  endDate     DateTime?
+  filters     Json?
+  isFavorite  Boolean           @default(false)
+  isPublic    Boolean           @default(false)
+  createdBy   String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([category])
+  @@index([chartType])
+  @@index([isFavorite])
+  @@index([isPublic])
+  @@index([createdBy])
+  @@index([createdAt])
+}
+
+enum AnalysisChartType {
+  LINE
+  BAR
+  AREA
+  PIE
+  DONUT
+  TABLE
+  KPI
+}
+
+enum AnalysisAggregation {
+  SUM
+  COUNT
+  AVG
+  MAX
+  MIN
+  DISTINCT
+}
+
+enum AnalysisCategory {
+  FINANCIAL
+  COMMERCIAL
+  CUSTOMER
+  MARKETING
+  OPERATIONAL
+  CUSTOM
 }

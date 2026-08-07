@@ -11,6 +11,7 @@ import {
 } from 'class-validator';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
+import { IndicatorPeriod } from '../enums/indicator-period.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 const trim = ({ value }: { value: unknown }): unknown =>
@@ -72,6 +73,16 @@ export class CreateIndicatorDto {
   @IsOptional()
   @IsNumber()
   previousValue?: number;
+
+  @ApiPropertyOptional({
+    enum: IndicatorPeriod,
+    example: IndicatorPeriod.PREVIOUS_MONTH,
+    description:
+      'Indica o período de referência do valor anterior: mês anterior, trimestre anterior, semestre anterior, ano anterior ou personalizado.',
+  })
+  @IsOptional()
+  @IsEnum(IndicatorPeriod)
+  previousPeriod?: IndicatorPeriod;
 
   @ApiPropertyOptional({ example: 14.28 })
   @IsOptional()

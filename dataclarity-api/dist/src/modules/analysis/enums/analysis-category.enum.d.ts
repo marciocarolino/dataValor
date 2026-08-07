@@ -1,0 +1,8 @@
+export declare enum AnalysisCategory {
+    FINANCIAL = "FINANCIAL",
+    COMMERCIAL = "COMMERCIAL",
+    CUSTOMER = "CUSTOMER",
+    MARKETING = "MARKETING",
+    OPERATIONAL = "OPERATIONAL",
+    CUSTOM = "CUSTOM"
+}

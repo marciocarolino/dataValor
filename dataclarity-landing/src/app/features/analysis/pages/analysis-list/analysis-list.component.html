@@ -1,0 +1,498 @@
+<div class="analysis-layout">
+  <app-sidebar class="analysis-layout__sidebar"></app-sidebar>
+
+  <div class="analysis-layout__main">
+    <app-top-bar></app-top-bar>
+
+    <main class="analysis-layout__content">
+      <!-- Header -->
+      <div class="analysis-page__header">
+        <div>
+          <h1 class="analysis-page__title">Análises</h1>
+          <p class="analysis-page__subtitle">Crie, execute e gerencie suas análises de dados.</p>
+        </div>
+        <div class="analysis-page__header-actions">
+          <button
+            class="btn btn--outline"
+            [class.btn--active]="filterFavorite()"
+            (click)="toggleFavoriteFilter()"
+          >
+            <span class="material-icons">{{ filterFavorite() ? 'star' : 'star_border' }}</span>
+            Favoritas
+          </button>
+          <button class="btn btn--primary" (click)="openCreate()">
+            <span class="material-icons">add</span>
+            Nova Análise
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      @if (summary()) {
+        <section class="summary-cards">
+          <div class="summary-card">
+            <span class="material-icons summary-card__icon">analytics</span>
+            <div>
+              <span class="summary-card__label">Total</span>
+              <span class="summary-card__value">{{ summary()!.total }}</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--star">
+            <span class="material-icons summary-card__icon">star</span>
+            <div>
+              <span class="summary-card__label">Favoritas</span>
+              <span class="summary-card__value">{{ summary()!.favorites }}</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--public">
+            <span class="material-icons summary-card__icon">public</span>
+            <div>
+              <span class="summary-card__label">Públicas</span>
+              <span class="summary-card__value">{{ summary()!.isPublic }}</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--private">
+            <span class="material-icons summary-card__icon">lock</span>
+            <div>
+              <span class="summary-card__label">Privadas</span>
+              <span class="summary-card__value">{{ summary()!.isPrivate }}</span>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar__search">
+          <span class="material-icons">search</span>
+          <input
+            type="text"
+            placeholder="Pesquisar análises..."
+            [value]="searchName()"
+            (input)="onSearch($any($event.target).value)"
+          />
+        </div>
+        <select class="toolbar__select" (change)="onCategoryFilter($any($event.target).value)">
+          <option value="">Todas categorias</option>
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ categoryLabels[cat] }}</option>
+          }
+        </select>
+        <select class="toolbar__select" (change)="onChartTypeFilter($any($event.target).value)">
+          <option value="">Todos tipos</option>
+          @for (ct of chartTypes; track ct) {
+            <option [value]="ct">{{ chartTypeLabels[ct] }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Error -->
+      @if (error()) {
+        <div class="error-banner">
+          <span class="material-icons">error_outline</span>
+          {{ error() }}
+        </div>
+      }
+
+      <!-- Skeleton -->
+      @if (loading()) {
+        <div class="cards-skeleton">
+          @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+            <div class="card-skeleton"></div>
+          }
+        </div>
+      }
+
+      <!-- Cards Grid -->
+      @if (!loading()) {
+        @if (analyses().length === 0) {
+          <div class="empty-state">
+            <span class="material-icons">analytics</span>
+            <h3>Nenhuma análise encontrada</h3>
+            <p>Crie sua primeira análise clicando em "Nova Análise".</p>
+            <button class="btn btn--primary" (click)="openCreate()">
+              <span class="material-icons">add</span>
+              Nova Análise
+            </button>
+          </div>
+        } @else {
+          <div class="cards-grid">
+            @for (a of analyses(); track a.id) {
+              <div class="analysis-card" [class.analysis-card--favorite]="a.isFavorite">
+                <!-- Card Header -->
+                <div class="analysis-card__header">
+                  <div class="analysis-card__chart-icon">
+                    <span class="material-icons">{{ chartTypeIcons[a.chartType] }}</span>
+                  </div>
+                  <div class="analysis-card__badges">
+                    <span class="badge badge--category">{{ categoryLabels[a.category] }}</span>
+                    @if (a.isPublic) {
+                      <span class="badge badge--public">Público</span>
+                    }
+                  </div>
+                  <button
+                    class="favorite-btn"
+                    [class.favorite-btn--active]="a.isFavorite"
+                    (click)="onToggleFavorite(a)"
+                    title="{{ a.isFavorite ? 'Remover favorito' : 'Adicionar favorito' }}"
+                  >
+                    <span class="material-icons">{{ a.isFavorite ? 'star' : 'star_border' }}</span>
+                  </button>
+                </div>
+
+                <!-- Card Body -->
+                <div class="analysis-card__body">
+                  <h3 class="analysis-card__name">{{ a.name }}</h3>
+                  @if (a.description) {
+                    <p class="analysis-card__description">{{ a.description }}</p>
+                  }
+
+                  <div class="analysis-card__meta">
+                    <div class="meta-item">
+                      <span class="material-icons">functions</span>
+                      <span>{{ chartTypeLabels[a.chartType] }}</span>
+                    </div>
+                    <div class="meta-item">
+                      <span class="material-icons">calculate</span>
+                      <span>{{ aggregationLabels[a.aggregation] }}</span>
+                    </div>
+                    @if (a.metric) {
+                      <div class="meta-item">
+                        <span class="material-icons">data_usage</span>
+                        <span>{{ a.metric }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="analysis-card__date">
+                    <span class="material-icons">schedule</span>
+                    Atualizado {{ formatDate(a.updatedAt) }}
+                  </div>
+                </div>
+
+                <!-- Card Footer -->
+                <div class="analysis-card__footer">
+                  <button class="card-btn card-btn--execute" (click)="openExecute(a)">
+                    <span class="material-icons">play_arrow</span>
+                    Executar
+                  </button>
+                  <div class="card-btn-group">
+                    <button class="card-btn card-btn--edit" (click)="openEdit(a)" title="Editar">
+                      <span class="material-icons">edit</span>
+                    </button>
+                    <button
+                      class="card-btn card-btn--delete"
+                      (click)="requestDelete(a.id)"
+                      title="Excluir"
+                    >
+                      <span class="material-icons">delete</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Paginação -->
+          @if (pagination() && pagination()!.totalPages > 1) {
+            <div class="pagination">
+              <button
+                class="pagination__btn"
+                [disabled]="!pagination()!.hasPreviousPage"
+                (click)="goToPage(currentPage() - 1)"
+              >
+                <span class="material-icons">chevron_left</span>
+              </button>
+              @for (p of pageNumbers(); track p) {
+                <button
+                  class="pagination__btn"
+                  [class.pagination__btn--active]="p === currentPage()"
+                  (click)="goToPage(p)"
+                >
+                  {{ p }}
+                </button>
+              }
+              <button
+                class="pagination__btn"
+                [disabled]="!pagination()!.hasNextPage"
+                (click)="goToPage(currentPage() + 1)"
+              >
+                <span class="material-icons">chevron_right</span>
+              </button>
+              <span class="pagination__info">{{ pagination()!.totalItems }} análises</span>
+            </div>
+          }
+        }
+      }
+    </main>
+  </div>
+</div>
+
+<!-- ── Snackbar ──────────────────────────────────────────────────────────── -->
+@if (snackbar()) {
+  <div class="snackbar" [class]="'snackbar--' + snackbar()!.type">
+    <span class="material-icons">
+      {{
+        snackbar()!.type === 'success'
+          ? 'check_circle'
+          : snackbar()!.type === 'error'
+            ? 'error'
+            : 'info'
+      }}
+    </span>
+    {{ snackbar()!.message }}
+  </div>
+}
+
+<!-- ── Modal Form ────────────────────────────────────────────────────────── -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal modal--lg" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <h2 class="modal__title">
+          {{ modalMode() === 'create' ? 'Nova Análise' : 'Editar Análise' }}
+        </h2>
+        <button class="modal__close" (click)="closeModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal__body">
+        @if (saveError()) {
+          <div class="error-banner">{{ saveError() }}</div>
+        }
+        <form [formGroup]="form" class="analysis-form">
+          <!-- Row 1 -->
+          <div class="form-row">
+            <div class="form-group form-group--lg">
+              <label>Nome *</label>
+              <input
+                formControlName="name"
+                type="text"
+                placeholder="Ex: Receita por Categoria"
+                [class.error]="isFieldInvalid('name')"
+              />
+              @if (isFieldInvalid('name')) {
+                <span class="form-error">Nome obrigatório (2–150 caracteres).</span>
+              }
+            </div>
+            <div class="form-group">
+              <label>Categoria *</label>
+              <select formControlName="category">
+                @for (cat of categories; track cat) {
+                  <option [value]="cat">{{ categoryLabels[cat] }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <!-- Row 2 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tipo Gráfico *</label>
+              <select formControlName="chartType">
+                @for (ct of chartTypes; track ct) {
+                  <option [value]="ct">{{ chartTypeLabels[ct] }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Agregação *</label>
+              <select formControlName="aggregation">
+                @for (ag of aggregations; track ag) {
+                  <option [value]="ag">{{ aggregationLabels[ag] }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Métrica</label>
+              <input formControlName="metric" type="text" placeholder="Ex: revenue" />
+            </div>
+          </div>
+          <!-- Row 3 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Dataset</label>
+              <input formControlName="dataset" type="text" placeholder="Ex: sales" />
+            </div>
+            <div class="form-group">
+              <label>Agrupamento</label>
+              <input formControlName="groupBy" type="text" placeholder="Ex: category" />
+            </div>
+            <div class="form-group">
+              <label>Campo de Data</label>
+              <input formControlName="dateField" type="text" placeholder="Ex: createdAt" />
+            </div>
+          </div>
+          <!-- Row 4 Período -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Data Início</label>
+              <input formControlName="startDate" type="date" />
+            </div>
+            <div class="form-group">
+              <label>Data Fim</label>
+              <input formControlName="endDate" type="date" />
+            </div>
+          </div>
+          <!-- Row 5 Descrição -->
+          <div class="form-row">
+            <div class="form-group form-group--full">
+              <label>Descrição</label>
+              <textarea
+                formControlName="description"
+                rows="2"
+                placeholder="Descrição opcional..."
+              ></textarea>
+            </div>
+          </div>
+          <!-- Row 6 Filtros JSON -->
+          <div class="form-row">
+            <div class="form-group form-group--full">
+              <label>Filtros (JSON)</label>
+              <input formControlName="filters" type="text" placeholder='{"status":"active"}' />
+            </div>
+          </div>
+          <!-- Row 7 Toggles -->
+          <div class="form-row form-row--toggles">
+            <label class="toggle-label">
+              <input formControlName="isFavorite" type="checkbox" />
+              <span>Favorita</span>
+            </label>
+            <label class="toggle-label">
+              <input formControlName="isPublic" type="checkbox" />
+              <span>Pública</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" (click)="closeModal()">Cancelar</button>
+        <button class="btn btn--primary" (click)="save()" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner"></span>
+          }
+          {{ saving() ? 'Salvando...' : modalMode() === 'create' ? 'Criar' : 'Salvar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ── Modal Execute ─────────────────────────────────────────────────────── -->
+@if (showExecuteModal()) {
+  <div class="modal-overlay" (click)="closeExecuteModal()">
+    <div class="modal modal--xl" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <div>
+          <h2 class="modal__title">{{ executeResult()?.title ?? executingAnalysisName() }}</h2>
+          @if (executeResult()) {
+            <span class="modal__subtitle">
+              {{ executeResult()!.summary.records }} registros ·
+              {{ executeResult()!.chartType }}
+              @if (executeResult()!.summary.growth !== null) {
+                · {{ executeResult()!.summary.growth }}% crescimento
+              }
+            </span>
+          }
+        </div>
+        <button class="modal__close" (click)="closeExecuteModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal__body">
+        @if (executing()) {
+          <div class="execute-loading">
+            <div class="execute-spinner"></div>
+            <p>Executando análise...</p>
+          </div>
+        }
+
+        @if (!executing() && executeResult()) {
+          <div class="execute-result">
+            <!-- KPI -->
+            @if (executeResult()!.chartType === 'KPI') {
+              <div class="kpi-result">
+                @for (ds of executeResult()!.datasets; track ds.label) {
+                  <div class="kpi-card">
+                    <span class="kpi-card__label">{{ ds.label }}</span>
+                    <span class="kpi-card__value">{{ ds.data[0] | number }}</span>
+                    <span class="kpi-card__unit"
+                      >total: {{ executeResult()!.summary.total | number }}</span
+                    >
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Tabela (LINE, BAR, AREA, PIE, DONUT, TABLE) -->
+            @if (executeResult()!.chartType !== 'KPI') {
+              <div class="result-table-wrap">
+                <table class="result-table">
+                  <thead>
+                    <tr>
+                      <th>Período</th>
+                      @for (ds of executeResult()!.datasets; track ds.label) {
+                        <th>{{ ds.label }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (label of executeResult()!.labels; track label; let i = $index) {
+                      <tr>
+                        <td>{{ label }}</td>
+                        @for (ds of executeResult()!.datasets; track ds.label) {
+                          <td>{{ ds.data[i] | number }}</td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td><strong>Total</strong></td>
+                      @for (ds of executeResult()!.datasets; track ds.label) {
+                        <td>
+                          <strong>{{ executeResult()!.summary.total | number }}</strong>
+                        </td>
+                      }
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <p class="result-note">
+                <span class="material-icons">info</span>
+                Visualização em gráfico (Chart.js) estará disponível com a integração de Datasets.
+              </p>
+            }
+          </div>
+        }
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" (click)="closeExecuteModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ── Modal Confirm Delete ───────────────────────────────────────────────── -->
+@if (confirmDeleteId()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal modal--sm" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <h2 class="modal__title">Confirmar exclusão</h2>
+      </div>
+      <div class="modal__body">
+        <p>Tem certeza que deseja excluir esta análise? Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" (click)="cancelDelete()" [disabled]="deleting()">
+          Cancelar
+        </button>
+        <button class="btn btn--danger" (click)="confirmDelete()" [disabled]="deleting()">
+          @if (deleting()) {
+            <span class="spinner"></span>
+          }
+          {{ deleting() ? 'Excluindo...' : 'Excluir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

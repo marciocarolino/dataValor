@@ -50,10 +50,11 @@ export class SidebarComponent implements OnInit {
   navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Indicadores', icon: 'bar_chart', route: '/dashboard/indicadores' },
-    { label: 'Análises', icon: 'trending_up' },
+    { label: 'Análises', icon: 'trending_up', route: '/dashboard/analises' },
     { label: 'Bases de Dados', icon: 'storage' },
     { label: 'Relatórios', icon: 'description' },
     { label: 'IA Insights', icon: 'auto_awesome' },
+    { label: 'Central de Ajuda', icon: 'help_outline', route: '/dashboard/ajuda' },
   ];
 
   bottomItems: NavItem[] = [

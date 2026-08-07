@@ -322,10 +322,6 @@
               <input formControlName="currentValue" type="number" placeholder="0" />
             </div>
             <div class="form-group">
-              <label>Valor Anterior</label>
-              <input formControlName="previousValue" type="number" placeholder="0" />
-            </div>
-            <div class="form-group">
               <label>Meta</label>
               <input formControlName="goalValue" type="number" placeholder="0" />
             </div>
@@ -334,6 +330,29 @@
               <input formControlName="variation" type="number" step="0.01" placeholder="0" />
             </div>
           </div>
+
+          <!-- Row 3b: Valor Anterior + Período de Referência -->
+          <div class="form-row form-row--previous">
+            <div class="form-group">
+              <label>Valor Anterior</label>
+              <input formControlName="previousValue" type="number" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label>Período de Referência</label>
+              <select formControlName="previousPeriod" class="select--period">
+                <option [value]="null">Não informado</option>
+                @for (p of periods; track p) {
+                  <option [value]="p">{{ periodLabels[p] }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          @if (form.get('previousValue')?.value !== null && !form.get('previousPeriod')?.value) {
+            <p class="form-hint">
+              <span class="material-icons">info</span>
+              Selecione o período de referência para o valor anterior (ex: Mês anterior).
+            </p>
+          }
 
           <!-- Row 4: Visual -->
           <div class="form-row">

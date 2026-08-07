@@ -486,6 +486,25 @@
   margin-top: 2px;
 }
 
+.form-hint {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: 12px;
+  color: #1c7ed6;
+  background: #e7f5ff;
+  border: 1px solid #a5d8ff;
+  border-radius: $radius-xs;
+  padding: $space-2 $space-3;
+  margin-top: -$space-2;
+  .material-icons { font-size: 15px; }
+}
+
+.select--period {
+  font-family: inherit;
+  font-size: 14px;
+}
+
 .toggle-label {
   display: flex;
   align-items: center;

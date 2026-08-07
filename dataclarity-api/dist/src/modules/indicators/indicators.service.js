@@ -28,6 +28,7 @@ let IndicatorsService = class IndicatorsService {
                 goalValue: dto.goalValue ?? null,
                 currentValue: dto.currentValue ?? null,
                 previousValue: dto.previousValue ?? null,
+                previousPeriod: dto.previousPeriod ?? null,
                 variation: dto.variation ?? null,
                 status: dto.status,
                 color: dto.color ?? null,
@@ -126,6 +127,9 @@ let IndicatorsService = class IndicatorsService {
                 }),
                 ...(dto.previousValue !== undefined && {
                     previousValue: dto.previousValue,
+                }),
+                ...(dto.previousPeriod !== undefined && {
+                    previousPeriod: dto.previousPeriod,
                 }),
                 ...(dto.variation !== undefined && { variation: dto.variation }),
                 ...(dto.status !== undefined && { status: dto.status }),

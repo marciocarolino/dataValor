@@ -13,6 +13,7 @@ exports.IndicatorEntity = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
+const indicator_period_enum_1 = require("../enums/indicator-period.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 class IndicatorEntity {
     id;
@@ -24,6 +25,7 @@ class IndicatorEntity {
     goalValue;
     currentValue;
     previousValue;
+    previousPeriod;
     variation;
     status;
     color;
@@ -80,6 +82,15 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 2100000, nullable: true }),
     __metadata("design:type", Object)
 ], IndicatorEntity.prototype, "previousValue", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_period_enum_1.IndicatorPeriod,
+        example: indicator_period_enum_1.IndicatorPeriod.PREVIOUS_MONTH,
+        nullable: true,
+        description: 'Período de referência do valor anterior.',
+    }),
+    __metadata("design:type", Object)
+], IndicatorEntity.prototype, "previousPeriod", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 14.28, nullable: true }),
     __metadata("design:type", Object)

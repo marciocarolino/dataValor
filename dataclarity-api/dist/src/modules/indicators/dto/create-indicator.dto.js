@@ -15,6 +15,7 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
+const indicator_period_enum_1 = require("../enums/indicator-period.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const trim = ({ value }) => typeof value === 'string' ? value.trim() : value;
 class CreateIndicatorDto {
@@ -26,6 +27,7 @@ class CreateIndicatorDto {
     goalValue;
     currentValue;
     previousValue;
+    previousPeriod;
     variation;
     status;
     color;
@@ -99,6 +101,16 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateIndicatorDto.prototype, "previousValue", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_period_enum_1.IndicatorPeriod,
+        example: indicator_period_enum_1.IndicatorPeriod.PREVIOUS_MONTH,
+        description: 'Indica o período de referência do valor anterior: mês anterior, trimestre anterior, semestre anterior, ano anterior ou personalizado.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(indicator_period_enum_1.IndicatorPeriod),
+    __metadata("design:type", String)
+], CreateIndicatorDto.prototype, "previousPeriod", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 14.28 }),
     (0, class_validator_1.IsOptional)(),

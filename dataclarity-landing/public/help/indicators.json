@@ -1,0 +1,244 @@
+{
+  "id": "indicators",
+  "title": "Indicadores",
+  "icon": "bar_chart",
+  "description": "O módulo de Indicadores permite criar, organizar e monitorar KPIs (Key Performance Indicators) — as métricas mais importantes do seu negócio.",
+  "objective": "Centralizar todas as métricas de negócio em um único lugar, permitindo acompanhar o desempenho e tomar decisões baseadas em dados.",
+  "sections": [
+    {
+      "id": "what-is",
+      "title": "O que é um Indicador?",
+      "icon": "help_outline",
+      "content": "Um indicador é uma medida quantitativa que representa o desempenho de uma área do seu negócio. Exemplos: Receita Total, Lucro, Número de Clientes, Taxa de Crescimento.\n\nIndicadores bem definidos respondem perguntas como: 'Estou atingindo minha meta de vendas?' ou 'O número de clientes cresceu em relação ao mês passado?'",
+      "tips": [
+        "Escolha indicadores que estejam diretamente ligados aos seus objetivos de negócio.",
+        "Mantenha os indicadores atualizados para decisões mais precisas.",
+        "Use a variação (%) para comparar com o período anterior."
+      ]
+    },
+    {
+      "id": "new-indicator-btn",
+      "title": "Botão 'Novo Indicador'",
+      "icon": "add_circle_outline",
+      "content": "Localizado no canto superior direito da tela, o botão '+ Novo Indicador' abre um formulário para cadastrar um novo KPI.\n\nAo clicar, você poderá preencher: nome, categoria, tipo de gráfico, valor atual, meta, variação e outras configurações.",
+      "tips": [
+        "Dê nomes claros e objetivos aos seus indicadores.",
+        "Preencha o campo 'Meta' para acompanhar o progresso.",
+        "Marque 'Exibir no Dashboard' para que o indicador apareça nos cards principais."
+      ]
+    },
+    {
+      "id": "summary-cards",
+      "title": "Cards de Resumo",
+      "icon": "dashboard",
+      "content": "Os cards no topo da página apresentam uma visão geral rápida dos seus indicadores.",
+      "items": [
+        {
+          "name": "Total",
+          "description": "Quantidade total de indicadores cadastrados no sistema, incluindo ativos e inativos."
+        },
+        {
+          "name": "Ativos",
+          "description": "Indicadores que estão sendo monitorados ativamente. Apenas indicadores ativos aparecem no Dashboard."
+        },
+        {
+          "name": "Inativos",
+          "description": "Indicadores que foram desativados. Eles não aparecem no Dashboard, mas ficam salvos para uso futuro."
+        },
+        {
+          "name": "Categorias",
+          "description": "Número de categorias distintas usadas nos seus indicadores (ex: Financeiro, Comercial, Marketing)."
+        }
+      ],
+      "tips": [
+        "Mantenha inativos apenas indicadores que não são mais relevantes.",
+        "Organize por categorias para facilitar a navegação."
+      ]
+    },
+    {
+      "id": "search-filter",
+      "title": "Pesquisa e Filtros",
+      "icon": "search",
+      "content": "A barra de ferramentas permite localizar rapidamente os indicadores desejados.",
+      "items": [
+        {
+          "name": "Campo de Busca",
+          "description": "Digite o nome (ou parte dele) do indicador. A lista é atualizada em tempo real conforme você digita."
+        },
+        {
+          "name": "Filtro por Categoria",
+          "description": "Filtre indicadores por categoria: Financeiro, Comercial, Operacional, Marketing, Clientes ou Personalizado."
+        },
+        {
+          "name": "Filtro por Status",
+          "description": "Filtre por status: Positivo, Atenção, Crítico ou Neutro. O status indica a saúde do indicador em relação à meta."
+        },
+        {
+          "name": "Filtro Ativo/Inativo",
+          "description": "Escolha entre ver todos os indicadores, apenas os ativos ou apenas os inativos."
+        }
+      ],
+      "tips": [
+        "Combine filtros para encontrar exatamente o que precisa.",
+        "Use o filtro de Status para identificar rapidamente indicadores que precisam de atenção."
+      ]
+    },
+    {
+      "id": "table",
+      "title": "Tabela de Indicadores",
+      "icon": "table_chart",
+      "content": "A tabela exibe todos os indicadores com suas principais informações. Clique no cabeçalho de qualquer coluna para ordenar.",
+      "items": [
+        {
+          "name": "Nome",
+          "description": "O nome do indicador. Pode conter um ícone visual ao lado para fácil identificação."
+        },
+        {
+          "name": "Categoria",
+          "description": "A categoria do indicador, exibida como um badge colorido (ex: Financeiro em azul)."
+        },
+        {
+          "name": "Valor Atual",
+          "description": "O valor mais recente do indicador. Pode ser um número, valor monetário ou percentual, dependendo da unidade configurada."
+        },
+        {
+          "name": "Meta",
+          "description": "O valor-alvo definido para o indicador. Compare com o Valor Atual para saber se o objetivo está sendo atingido."
+        },
+        {
+          "name": "Status",
+          "description": "Indica a saúde do indicador: Positivo (verde), Atenção (amarelo), Crítico (vermelho) ou Neutro (cinza)."
+        },
+        {
+          "name": "Variação",
+          "description": "Percentual de mudança em relação ao período anterior. Uma seta verde para cima indica crescimento; vermelha para baixo indica queda."
+        },
+        {
+          "name": "Tipo de Gráfico",
+          "description": "Define como o indicador será visualizado quando executado: Linha, Barra, Área, Rosca, Pizza, Velocímetro ou Número."
+        },
+        {
+          "name": "Ativo",
+          "description": "Indica se o indicador está ativo (Sim) ou inativo (Não). Somente indicadores ativos aparecem no Dashboard."
+        }
+      ],
+      "tips": [
+        "Clique no cabeçalho 'Valor Atual' para ordenar do maior para o menor.",
+        "Use a ordenação por 'Status' para ver primeiro os indicadores críticos."
+      ]
+    },
+    {
+      "id": "actions",
+      "title": "Ações por Indicador",
+      "icon": "settings",
+      "content": "Cada linha da tabela possui dois botões de ação no lado direito.",
+      "items": [
+        {
+          "name": "Editar (ícone de lápis)",
+          "description": "Abre o formulário de edição pré-preenchido com os dados do indicador. Você pode alterar qualquer campo e salvar."
+        },
+        {
+          "name": "Excluir (ícone de lixeira)",
+          "description": "Solicita confirmação antes de excluir permanentemente o indicador. Esta ação não pode ser desfeita."
+        }
+      ],
+      "tips": [
+        "Prefira desativar um indicador (campo 'Ativo = Não') em vez de excluir, para manter o histórico.",
+        "A confirmação de exclusão existe para evitar remoções acidentais."
+      ]
+    },
+    {
+      "id": "form-fields",
+      "title": "Formulário: Novo Indicador",
+      "icon": "edit_note",
+      "content": "Ao clicar em '+ Novo Indicador', um formulário é exibido com todos os campos necessários para cadastrar um KPI. Abaixo, a explicação de cada campo:",
+      "items": [
+        {
+          "name": "Nome *",
+          "description": "Identificação do indicador. Use um nome claro e objetivo, como 'Receita Total', 'Lucro Líquido' ou 'Número de Clientes'. Este nome aparecerá nos cards e na tabela. Obrigatório."
+        },
+        {
+          "name": "Categoria *",
+          "description": "Classifica o indicador em uma área do negócio. Opções: Financeiro (métricas de receita, lucro, custos), Comercial (vendas, contratos, clientes), Operacional (processos internos, eficiência), Marketing (campanhas, leads, conversão), Clientes (satisfação, churn, NPS) ou Personalizado (qualquer outro tipo). Obrigatório."
+        },
+        {
+          "name": "Status *",
+          "description": "Define a situação atual do indicador em relação à meta. Opções: Neutro (situação normal, sem alerta — use no início), Positivo (indicador está acima da meta ou com bom desempenho), Atenção (próximo do limite ou com queda moderada) e Crítico (abaixo da meta ou em situação preocupante). Obrigatório."
+        },
+        {
+          "name": "Tipo de Gráfico *",
+          "description": "Define como os dados do indicador serão exibidos visualmente. Opções: Número (exibe apenas o valor atual, ideal para KPIs simples), Linha (evolução ao longo do tempo), Barra (comparação entre períodos ou categorias), Área (similar à linha, com destaque na área abaixo), Rosca (distribuição percentual em forma circular), Pizza (distribuição percentual), Velocímetro (progresso em relação à meta). Obrigatório."
+        },
+        {
+          "name": "Unidade",
+          "description": "Define como o valor será formatado. Exemplos: BRL ou R$ (valor monetário em reais), % (percentual), USD (dólar), unid (unidades). Deixe em branco para valores sem unidade específica."
+        },
+        {
+          "name": "Valor Atual",
+          "description": "O valor mais recente do indicador. Por exemplo, se a Receita Total do mês é R$ 2.400.000, insira 2400000. Este valor aparece em destaque no card e na tabela."
+        },
+        {
+          "name": "Valor Anterior",
+          "description": "O valor do período anterior usado para calcular a variação. Após preencher este campo, selecione obrigatoriamente o Período de Referência para indicar de onde vem esse valor."
+        },
+        {
+          "name": "Período de Referência",
+          "description": "Define de onde vem o Valor Anterior. Opções: Mês anterior (comparação mensal), Trimestre anterior (últimos 3 meses), Semestre anterior (últimos 6 meses), Ano anterior (comparação anual) ou Personalizado (qualquer outro período). Sempre preencha este campo junto com o Valor Anterior — sem ele, não é possível saber qual período está sendo comparado."
+        },
+        {
+          "name": "Meta",
+          "description": "O valor-alvo que você deseja atingir. Por exemplo, se a meta de receita mensal é R$ 3.000.000, insira 3000000. A meta é exibida na tabela ao lado do Valor Atual para facilitar a comparação."
+        },
+        {
+          "name": "Variação %",
+          "description": "Percentual de crescimento ou queda em relação ao período anterior. Pode ser calculado manualmente: ((Valor Atual - Valor Anterior) / Valor Anterior) × 100. Exemplo: receita subiu de 2.100.000 para 2.400.000 → variação de 14,3%. Valores positivos indicam crescimento; negativos indicam queda."
+        },
+        {
+          "name": "Ícone (Material)",
+          "description": "Nome de um ícone do Material Icons que aparecerá ao lado do nome do indicador na tabela. Exemplos: 'trending_up' (seta subindo), 'savings' (cofre), 'group' (pessoas), 'payments' (pagamento), 'percent' (percentual). Acesse fonts.google.com/icons para ver todos os ícones disponíveis."
+        },
+        {
+          "name": "Cor (Hex)",
+          "description": "Cor em formato hexadecimal usada para personalizar a aparência do indicador. Exemplos: #4c6ef5 (azul), #2f9e44 (verde), #e03131 (vermelho), #e67700 (laranja). A cor é aplicada ao ícone e ao fundo do card no Dashboard."
+        },
+        {
+          "name": "Descrição",
+          "description": "Texto opcional que explica o que o indicador representa, como é calculado ou para que serve. Útil para que outros usuários entendam o contexto do KPI."
+        },
+        {
+          "name": "Fórmula",
+          "description": "Expressão matemática ou textual que descreve como o indicador é calculado. Exemplo: SUM(receitas) - SUM(devoluções). Atualmente informativo, será integrado com a engine de dados futuramente."
+        },
+        {
+          "name": "Ativo",
+          "description": "Quando marcado (✓), o indicador está ativo e aparece normalmente na tabela e pode ser exibido no Dashboard. Quando desmarcado, o indicador fica oculto da visualização principal mas não é excluído."
+        },
+        {
+          "name": "Exibir no Dashboard",
+          "description": "Quando marcado (✓), o indicador aparece como um dos cards principais na tela de Dashboard. Recomenda-se marcar apenas os 4 indicadores mais importantes do negócio para não sobrecarregar o painel principal."
+        }
+      ],
+      "tips": [
+        "Comece preenchendo apenas Nome, Categoria, Status e Tipo de Gráfico — os demais campos são opcionais.",
+        "Use Status 'Neutro' ao criar um indicador pela primeira vez, antes de ter histórico suficiente.",
+        "Para indicadores financeiros, sempre use Unidade 'BRL' para que os valores sejam formatados em reais.",
+        "Preencha Valor Anterior e Período de Referência juntos — sem indicar o período, a comparação perde significado.",
+        "Marque 'Exibir no Dashboard' somente para os 4 indicadores mais estratégicos do negócio."
+      ]
+    },
+    {
+      "id": "best-practices",
+      "title": "Boas Práticas",
+      "icon": "star",
+      "content": "Recomendações para usar o módulo de Indicadores de forma eficiente.",
+      "tips": [
+        "Defina sempre uma Meta para cada indicador — isso permite calcular o progresso automaticamente.",
+        "Use a Categoria corretamente para facilitar a organização e os filtros.",
+        "Ative 'Exibir no Dashboard' apenas para os 4 indicadores mais importantes do negócio.",
+        "Atualize o Valor Atual regularmente para manter as métricas confiáveis.",
+        "Use o campo 'Ícone' com nomes do Material Icons (ex: trending_up, savings) para tornar os cards mais visuais.",
+        "A Variação deve ser preenchida manualmente ou automaticamente por integrações futuras de dados."
+      ]
+    }
+  ]
+}

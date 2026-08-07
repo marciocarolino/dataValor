@@ -1,0 +1,230 @@
+<div class="help-layout">
+  <app-sidebar class="help-layout__sidebar"></app-sidebar>
+
+  <div class="help-layout__main">
+    <app-top-bar></app-top-bar>
+
+    <main class="help-layout__content">
+      <!-- Page Header -->
+      <div class="help-header">
+        <div class="help-header__icon">
+          <span class="material-icons">help_outline</span>
+        </div>
+        <div>
+          <h1 class="help-header__title">Central de Ajuda</h1>
+          <p class="help-header__subtitle">
+            Aprenda como utilizar cada funcionalidade do DataValor.
+          </p>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="help-search">
+        <span class="material-icons help-search__icon">search</span>
+        <input
+          class="help-search__input"
+          type="text"
+          placeholder="Pesquisar tópicos, dicas e funcionalidades..."
+          [value]="searchQuery()"
+          (input)="onSearch($any($event.target).value)"
+        />
+        @if (searchQuery()) {
+          <button class="help-search__clear" (click)="onSearch('')">
+            <span class="material-icons">close</span>
+          </button>
+        }
+      </div>
+
+      <!-- Main Panel -->
+      <div class="help-panel">
+        <!-- Left Menu -->
+        <aside class="help-menu">
+          <p class="help-menu__label">Conteúdo</p>
+          <ul class="help-menu__list">
+            @for (item of menuItems; track item.id) {
+              <li>
+                <button
+                  class="help-menu__item"
+                  [class.help-menu__item--active]="activeMenuId() === item.id"
+                  [class.help-menu__item--unavailable]="!item.available"
+                  (click)="selectTopic(item.id)"
+                >
+                  <span class="material-icons help-menu__item-icon">{{ item.icon }}</span>
+                  <span class="help-menu__item-label">{{ item.label }}</span>
+                  @if (!item.available) {
+                    <span class="help-menu__item-badge">Em breve</span>
+                  }
+                </button>
+              </li>
+            }
+          </ul>
+        </aside>
+
+        <!-- Content Area -->
+        <section class="help-content">
+          <!-- Loading -->
+          @if (loading()) {
+            <div class="help-loading">
+              <div class="help-spinner"></div>
+              <p>Carregando conteúdo...</p>
+            </div>
+          }
+
+          <!-- Not available -->
+          @if (!loading() && !currentTopic() && !error()) {
+            <div class="help-unavailable">
+              <span class="material-icons">construction</span>
+              <h3>Conteúdo em desenvolvimento</h3>
+              <p>
+                A documentação de <strong>{{ getActiveMenuItem()?.label }}</strong>
+                estará disponível em breve.
+              </p>
+              <p class="help-unavailable__note">
+                Selecione <strong>Indicadores</strong> no menu ao lado para ver o conteúdo
+                disponível.
+              </p>
+            </div>
+          }
+
+          <!-- Error -->
+          @if (error()) {
+            <div class="help-error">
+              <span class="material-icons">error_outline</span>
+              {{ error() }}
+            </div>
+          }
+
+          <!-- Topic Content -->
+          @if (!loading() && currentTopic()) {
+            <!-- Topic Intro -->
+            <div class="topic-intro">
+              <div class="topic-intro__header">
+                <div class="topic-intro__icon-wrap">
+                  <span class="material-icons">{{ currentTopic()!.icon }}</span>
+                </div>
+                <div>
+                  <h2 class="topic-intro__title">{{ currentTopic()!.title }}</h2>
+                  <p class="topic-intro__description">{{ currentTopic()!.description }}</p>
+                </div>
+              </div>
+              <div class="topic-intro__objective">
+                <span class="material-icons">flag</span>
+                <div>
+                  <strong>Objetivo:</strong>
+                  {{ currentTopic()!.objective }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Toolbar: expand/collapse + search result count -->
+            <div class="content-toolbar">
+              @if (searchQuery()) {
+                <span class="content-toolbar__count">
+                  <span class="material-icons">search</span>
+                  {{ filteredSections().length }} resultado(s) para "{{ searchQuery() }}"
+                </span>
+              } @else {
+                <span class="content-toolbar__count">
+                  {{ currentTopic()!.sections.length }} seções
+                </span>
+              }
+              <div class="content-toolbar__actions">
+                <button class="toolbar-btn" (click)="expandAll()">
+                  <span class="material-icons">unfold_more</span>
+                  Expandir tudo
+                </button>
+                <button class="toolbar-btn" (click)="collapseAll()">
+                  <span class="material-icons">unfold_less</span>
+                  Recolher tudo
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty search -->
+            @if (searchQuery() && filteredSections().length === 0) {
+              <div class="search-empty">
+                <span class="material-icons">search_off</span>
+                <p>
+                  Nenhum resultado para "<strong>{{ searchQuery() }}</strong
+                  >".
+                </p>
+                <button class="toolbar-btn" (click)="onSearch('')">Limpar busca</button>
+              </div>
+            }
+
+            <!-- Accordion Sections -->
+            <div class="accordion">
+              @for (section of filteredSections(); track section.id; let i = $index) {
+                <div
+                  class="accordion__item"
+                  [class.accordion__item--open]="isSectionExpanded(section.id)"
+                >
+                  <!-- Section Header -->
+                  <button class="accordion__header" (click)="toggleSection(section.id)">
+                    <div class="accordion__header-left">
+                      <div class="accordion__icon-wrap">
+                        <span class="material-icons">{{ section.icon }}</span>
+                      </div>
+                      <span class="accordion__title">{{ section.title }}</span>
+                    </div>
+                    <span class="material-icons accordion__chevron">
+                      {{ isSectionExpanded(section.id) ? 'expand_less' : 'expand_more' }}
+                    </span>
+                  </button>
+
+                  <!-- Section Body -->
+                  @if (isSectionExpanded(section.id)) {
+                    <div class="accordion__body">
+                      <!-- Content paragraphs -->
+                      @for (para of formatContent(section.content); track para) {
+                        <p class="section-paragraph">{{ para }}</p>
+                      }
+
+                      <!-- Items list -->
+                      @if (section.items && section.items.length > 0) {
+                        <div class="section-items">
+                          <p class="section-items__label">
+                            <span class="material-icons">list</span>
+                            Componentes desta seção:
+                          </p>
+                          <div class="section-items__grid">
+                            @for (item of section.items; track item.name) {
+                              <div class="item-card">
+                                <span class="item-card__name">{{ item.name }}</span>
+                                <p class="item-card__desc">{{ item.description }}</p>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+
+                      <!-- Tips -->
+                      @if (section.tips && section.tips.length > 0) {
+                        <div class="section-tips">
+                          <p class="section-tips__label">
+                            <span class="material-icons">lightbulb</span>
+                            Dicas
+                          </p>
+                          <ul class="section-tips__list">
+                            @for (tip of section.tips; track tip) {
+                              <li class="section-tips__item">
+                                <span class="material-icons section-tips__bullet"
+                                  >check_circle</span
+                                >
+                                {{ tip }}
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </section>
+      </div>
+    </main>
+  </div>
+</div>

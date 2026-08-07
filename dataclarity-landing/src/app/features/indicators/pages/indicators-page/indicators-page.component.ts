@@ -15,10 +15,12 @@ import {
   INDICATOR_CATEGORY_LABELS,
   INDICATOR_STATUS_LABELS,
   INDICATOR_CHART_TYPE_LABELS,
+  INDICATOR_PERIOD_LABELS,
   type Indicator,
   type IndicatorCategory,
   type IndicatorStatus,
   type IndicatorChartType,
+  type IndicatorPeriod,
   type IndicatorQueryParams,
   type CreateIndicatorPayload,
 } from '../../../../core/models/indicator.model';
@@ -38,9 +40,13 @@ export class IndicatorsPageComponent implements OnInit {
   readonly categoryLabels = INDICATOR_CATEGORY_LABELS;
   readonly statusLabels = INDICATOR_STATUS_LABELS;
   readonly chartTypeLabels = INDICATOR_CHART_TYPE_LABELS;
+  readonly periodLabels = INDICATOR_PERIOD_LABELS;
 
   readonly categories: IndicatorCategory[] = [
     'FINANCIAL', 'COMMERCIAL', 'OPERATIONAL', 'MARKETING', 'CUSTOMER', 'CUSTOM',
+  ];
+  readonly periods: IndicatorPeriod[] = [
+    'PREVIOUS_MONTH', 'PREVIOUS_QUARTER', 'PREVIOUS_SEMESTER', 'PREVIOUS_YEAR', 'CUSTOM',
   ];
   readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'];
   readonly chartTypes: IndicatorChartType[] = [
@@ -84,6 +90,7 @@ export class IndicatorsPageComponent implements OnInit {
     goalValue: [null],
     currentValue: [null],
     previousValue: [null],
+    previousPeriod: [null],
     variation: [null],
     status: ['NEUTRAL', Validators.required],
     color: ['', Validators.maxLength(30)],
@@ -164,7 +171,7 @@ export class IndicatorsPageComponent implements OnInit {
   openCreate(): void {
     this.form.reset({
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
-      goalValue: null, currentValue: null, previousValue: null, variation: null,
+      goalValue: null, currentValue: null, previousValue: null, previousPeriod: null, variation: null,
       status: 'NEUTRAL', color: '', icon: '', chartType: 'NUMBER',
       isActive: true, showOnDashboard: false,
     });
@@ -184,6 +191,7 @@ export class IndicatorsPageComponent implements OnInit {
       goalValue: indicator.goalValue,
       currentValue: indicator.currentValue,
       previousValue: indicator.previousValue,
+      previousPeriod: indicator.previousPeriod ?? null,
       variation: indicator.variation,
       status: indicator.status,
       color: indicator.color ?? '',
@@ -219,6 +227,7 @@ export class IndicatorsPageComponent implements OnInit {
       goalValue: raw['goalValue'] as number ?? undefined,
       currentValue: raw['currentValue'] as number ?? undefined,
       previousValue: raw['previousValue'] as number ?? undefined,
+      previousPeriod: (raw['previousPeriod'] as IndicatorPeriod) || undefined,
       variation: raw['variation'] as number ?? undefined,
       status: raw['status'] as IndicatorStatus,
       color: raw['color'] as string || undefined,

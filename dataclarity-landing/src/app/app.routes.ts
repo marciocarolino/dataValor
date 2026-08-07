@@ -63,6 +63,22 @@ export const routes: Routes = [
         './features/indicators/pages/indicators-page/indicators-page.component'
       ).then((m) => m.IndicatorsPageComponent),
   },
+  {
+    path: 'dashboard/analises',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './features/analysis/pages/analysis-list/analysis-list.component'
+      ).then((m) => m.AnalysisListComponent),
+  },
+  {
+    path: 'dashboard/ajuda',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './features/help-center/pages/help-center/help-center.component'
+      ).then((m) => m.HelpCenterComponent),
+  },
 
   // ── Fallback ──────────────────────────────────────────────────────────────
   { path: '**', redirectTo: '' },

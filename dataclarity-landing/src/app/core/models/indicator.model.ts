@@ -17,6 +17,21 @@ export type IndicatorChartType =
 
 export type IndicatorStatus = 'SUCCESS' | 'WARNING' | 'DANGER' | 'NEUTRAL';
 
+export type IndicatorPeriod =
+  | 'PREVIOUS_MONTH'
+  | 'PREVIOUS_QUARTER'
+  | 'PREVIOUS_SEMESTER'
+  | 'PREVIOUS_YEAR'
+  | 'CUSTOM';
+
+export const INDICATOR_PERIOD_LABELS: Record<IndicatorPeriod, string> = {
+  PREVIOUS_MONTH: 'Mês anterior',
+  PREVIOUS_QUARTER: 'Trimestre anterior',
+  PREVIOUS_SEMESTER: 'Semestre anterior',
+  PREVIOUS_YEAR: 'Ano anterior',
+  CUSTOM: 'Personalizado',
+};
+
 export interface Indicator {
   id: string;
   name: string;
@@ -27,6 +42,7 @@ export interface Indicator {
   goalValue: number | null;
   currentValue: number | null;
   previousValue: number | null;
+  previousPeriod: IndicatorPeriod | null;
   variation: number | null;
   status: IndicatorStatus;
   color: string | null;
@@ -79,6 +95,7 @@ export interface CreateIndicatorPayload {
   goalValue?: number;
   currentValue?: number;
   previousValue?: number;
+  previousPeriod?: IndicatorPeriod;
   variation?: number;
   status: IndicatorStatus;
   color?: string;
