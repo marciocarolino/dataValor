@@ -50,6 +50,7 @@ export interface Indicator {
   chartType: IndicatorChartType;
   startDate: string | null;
   endDate: string | null;
+  daysRemaining: number | null;
   isActive: boolean;
   showOnDashboard: boolean;
   createdAt: string;
@@ -95,11 +96,10 @@ export interface CreateIndicatorPayload {
   formula?: string;
   unit?: string;
   goalValue?: number;
-  currentValue?: number;
-  previousValue?: number;
+  minimumGoalValue?: number;
+  maximumGoalValue?: number;
+  desiredDirection?: 'HIGHER_IS_BETTER' | 'LOWER_IS_BETTER' | 'RANGE_IS_BETTER';
   previousPeriod?: IndicatorPeriod;
-  variation?: number;
-  status: IndicatorStatus;
   color?: string | null | undefined;
   icon?: string | null | undefined;
   chartType: IndicatorChartType;

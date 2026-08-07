@@ -14,6 +14,7 @@ const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
+const indicator_desired_direction_enum_1 = require("../enums/indicator-desired-direction.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const toInt = ({ value }) => {
     if (value === undefined || value === null || value === '')
@@ -34,7 +35,9 @@ class ListIndicatorsQueryDto {
     limit = 20;
     category;
     status;
+    desiredDirection;
     isActive;
+    showOnDashboard;
     name;
     sortBy = 'createdAt';
     sortOrder = 'desc';
@@ -77,6 +80,15 @@ __decorate([
 ], ListIndicatorsQueryDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_desired_direction_enum_1.IndicatorDesiredDirection,
+        description: 'Filtrar por direção desejada do KPI.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(indicator_desired_direction_enum_1.IndicatorDesiredDirection),
+    __metadata("design:type", String)
+], ListIndicatorsQueryDto.prototype, "desiredDirection", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
         description: 'Filtrar por indicadores ativos (true) ou inativos (false).',
     }),
     (0, class_validator_1.IsOptional)(),
@@ -84,6 +96,15 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], ListIndicatorsQueryDto.prototype, "isActive", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Filtrar por indicadores marcados para exibição no Dashboard.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(toBool),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], ListIndicatorsQueryDto.prototype, "showOnDashboard", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         maxLength: 120,

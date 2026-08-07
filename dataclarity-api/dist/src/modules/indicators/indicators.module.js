@@ -8,16 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IndicatorsModule = void 0;
 const common_1 = require("@nestjs/common");
+const schedule_1 = require("@nestjs/schedule");
 const indicators_controller_1 = require("./indicators.controller");
 const indicators_service_1 = require("./indicators.service");
+const indicator_analytics_service_1 = require("./indicator-analytics.service");
+const indicator_cron_service_1 = require("./indicator-cron.service");
+const measurements_service_1 = require("./measurements.service");
+const measurements_controller_1 = require("./measurements.controller");
 let IndicatorsModule = class IndicatorsModule {
 };
 exports.IndicatorsModule = IndicatorsModule;
 exports.IndicatorsModule = IndicatorsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [indicators_controller_1.IndicatorsController],
-        providers: [indicators_service_1.IndicatorsService],
-        exports: [indicators_service_1.IndicatorsService],
+        imports: [schedule_1.ScheduleModule.forRoot()],
+        controllers: [indicators_controller_1.IndicatorsController, measurements_controller_1.MeasurementsController],
+        providers: [
+            indicators_service_1.IndicatorsService,
+            indicator_analytics_service_1.IndicatorAnalyticsService,
+            indicator_cron_service_1.IndicatorCronService,
+            measurements_service_1.MeasurementsService,
+        ],
+        exports: [indicators_service_1.IndicatorsService, indicator_analytics_service_1.IndicatorAnalyticsService, measurements_service_1.MeasurementsService],
     })
 ], IndicatorsModule);
 //# sourceMappingURL=indicators.module.js.map

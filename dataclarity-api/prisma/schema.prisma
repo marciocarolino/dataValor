@@ -62,33 +62,62 @@ enum ContactStatus {
 // ─── Indicators ───────────────────────────────────────────────────────────────
 
 model Indicator {
-  id             String              @id @default(uuid())
-  name           String
-  description    String?
-  category       IndicatorCategory
-  formula        String?
-  unit           String?
-  goalValue      Decimal?  @db.Decimal(18, 2)
-  currentValue   Decimal?  @db.Decimal(18, 2)
-  previousValue  Decimal?  @db.Decimal(18, 2)
-  previousPeriod IndicatorPeriod?
-  variation      Decimal?  @db.Decimal(10, 4)
-  status         IndicatorStatus     @default(NEUTRAL)
-  color          String?
-  icon           String?
-  chartType      IndicatorChartType  @default(NUMBER)
-  startDate      DateTime?
-  endDate        DateTime?
-  isActive       Boolean             @default(true)
-  showOnDashboard Boolean            @default(false)
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  id               String                    @id @default(uuid())
+  name             String
+  description      String?
+  category         IndicatorCategory
+  formula          String?
+  unit             String?
+  goalValue        Decimal?                  @db.Decimal(18, 2)
+  minimumGoalValue Decimal?                  @db.Decimal(18, 2)
+  maximumGoalValue Decimal?                  @db.Decimal(18, 2)
+  desiredDirection IndicatorDesiredDirection @default(HIGHER_IS_BETTER)
+  // ── Cache fields (fonte de verdade: IndicatorMeasurement) ───────────────
+  currentValue     Decimal?                  @db.Decimal(18, 2)
+  previousValue    Decimal?                  @db.Decimal(18, 2)
+  previousPeriod   IndicatorPeriod?
+  variation        Decimal?                  @db.Decimal(10, 4)
+  status           IndicatorStatus           @default(NEUTRAL)
+  // ── Visual ──────────────────────────────────────────────────────────────
+  color            String?
+  icon             String?
+  chartType        IndicatorChartType        @default(NUMBER)
+  // ── Prazo ───────────────────────────────────────────────────────────────
+  startDate        DateTime?
+  endDate          DateTime?
+  daysRemaining    Int?
+  // ── Controle ────────────────────────────────────────────────────────────
+  isActive         Boolean                   @default(true)
+  showOnDashboard  Boolean                   @default(false)
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+
+  measurements IndicatorMeasurement[]
 
   @@index([category])
   @@index([status])
   @@index([isActive])
   @@index([showOnDashboard])
   @@index([createdAt])
+}
+
+model IndicatorMeasurement {
+  id            String    @id @default(uuid())
+  indicatorId   String
+  value         Decimal   @db.Decimal(18, 2)
+  referenceDate DateTime
+  periodStart   DateTime?
+  periodEnd     DateTime?
+  source        String?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  indicator Indicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+
+  @@unique([indicatorId, referenceDate])
+  @@index([indicatorId, referenceDate])
+  @@index([referenceDate])
 }
 
 enum IndicatorCategory {
@@ -125,10 +154,16 @@ enum IndicatorPeriod {
   CUSTOM
 }
 
+enum IndicatorDesiredDirection {
+  HIGHER_IS_BETTER
+  LOWER_IS_BETTER
+  RANGE_IS_BETTER
+}
+
 // ─── Analysis ─────────────────────────────────────────────────────────────────
 
 model Analysis {
-  id          String            @id @default(uuid())
+  id          String              @id @default(uuid())
   name        String
   description String?
   chartType   AnalysisChartType
@@ -141,11 +176,11 @@ model Analysis {
   startDate   DateTime?
   endDate     DateTime?
   filters     Json?
-  isFavorite  Boolean           @default(false)
-  isPublic    Boolean           @default(false)
+  isFavorite  Boolean             @default(false)
+  isPublic    Boolean             @default(false)
   createdBy   String?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   @@index([category])
   @@index([chartType])

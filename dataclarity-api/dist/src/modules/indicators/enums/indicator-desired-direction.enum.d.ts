@@ -1,0 +1,5 @@
+export declare enum IndicatorDesiredDirection {
+    HIGHER_IS_BETTER = "HIGHER_IS_BETTER",
+    LOWER_IS_BETTER = "LOWER_IS_BETTER",
+    RANGE_IS_BETTER = "RANGE_IS_BETTER"
+}

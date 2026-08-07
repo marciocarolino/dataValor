@@ -12,6 +12,7 @@ import {
   Min,
 } from 'class-validator';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
+import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 type SortBy = 'name' | 'category' | 'status' | 'createdAt' | 'currentValue';
@@ -65,12 +66,28 @@ export class ListIndicatorsQueryDto {
   status?: IndicatorStatus;
 
   @ApiPropertyOptional({
+    enum: IndicatorDesiredDirection,
+    description: 'Filtrar por direção desejada do KPI.',
+  })
+  @IsOptional()
+  @IsEnum(IndicatorDesiredDirection)
+  desiredDirection?: IndicatorDesiredDirection;
+
+  @ApiPropertyOptional({
     description: 'Filtrar por indicadores ativos (true) ou inativos (false).',
   })
   @IsOptional()
   @Transform(toBool)
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Filtrar por indicadores marcados para exibição no Dashboard.',
+  })
+  @IsOptional()
+  @Transform(toBool)
+  @IsBoolean()
+  showOnDashboard?: boolean;
 
   @ApiPropertyOptional({
     maxLength: 120,

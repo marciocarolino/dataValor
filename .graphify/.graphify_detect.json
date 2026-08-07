@@ -11,6 +11,7 @@
       "dataclarity-api/prisma/migrations/20260807121229_add_indicators/migration.sql",
       "dataclarity-api/prisma/migrations/20260807125155_add_analysis/migration.sql",
       "dataclarity-api/prisma/migrations/20260807135458_add_indicator_period/migration.sql",
+      "dataclarity-api/prisma/migrations/20260807150000_add_indicator_dates/migration.sql",
       "dataclarity-api/src/app.controller.spec.ts",
       "dataclarity-api/src/app.controller.ts",
       "dataclarity-api/src/app.module.ts",
@@ -120,6 +121,7 @@
       "dataclarity-landing/src/app/features/home/data/social-links.data.ts",
       "dataclarity-landing/src/app/features/home/data/testimonial.data.ts",
       "dataclarity-landing/src/app/features/home/pages/home-page/home-page.component.ts",
+      "dataclarity-landing/src/app/features/indicators/components/indicator-chart/indicator-chart.component.ts",
       "dataclarity-landing/src/app/features/indicators/pages/indicators-page/indicators-page.component.ts",
       "dataclarity-landing/src/app/features/login/pages/login-page/login-page.component.ts",
       "dataclarity-landing/src/app/features/register/pages/register-page/register-page.component.ts",
@@ -131,6 +133,7 @@
       "dataclarity-landing/src/app/shared/components/section-title/section-title.component.ts",
       "dataclarity-landing/src/app/shared/components/service-card/service-card.component.ts",
       "dataclarity-landing/src/app/shared/components/testimonial-card/testimonial-card.component.ts",
+      "dataclarity-landing/src/app/shared/directives/currency-brl.directive.ts",
       "dataclarity-landing/src/app/shared/models/benefit.model.ts",
       "dataclarity-landing/src/app/shared/models/client.model.ts",
       "dataclarity-landing/src/app/shared/models/navigation-item.model.ts",
@@ -144,10 +147,10 @@
     "image": [],
     "video": []
   },
-  "total_files": 137,
-  "total_words": 22572,
+  "total_files": 140,
+  "total_words": 25448,
   "needs_graph": false,
-  "warning": "Corpus is ~22.572 words - fits in a single context window. You may not need a graph.",
+  "warning": "Corpus is ~25.448 words - fits in a single context window. You may not need a graph.",
   "skipped_sensitive": [
     "dataclarity-api/src/modules/auth/dto/auth-tokens.dto.ts",
     "dataclarity-landing/src/styles/_tokens.scss"
@@ -155,7 +158,7 @@
   "graphifyignore_patterns": 52,
   "git": {
     "source_owner": "git",
-    "source_hash": "8deff6244e9bb539e3de771860875da03325cffb",
+    "source_hash": "7fb9ab0a53fbb7288ff4ba934de143cb2c966d35",
     "branches": [
       "master"
     ],
@@ -168,11 +171,11 @@
     "source": "default-auto",
     "root": ".",
     "git_root": ".",
-    "head": "8deff6244e9bb539e3de771860875da03325cffb",
-    "candidate_count": 701,
-    "included_count": 137,
-    "excluded_untracked_count": 2,
-    "excluded_ignored_count": 69343,
+    "head": "7fb9ab0a53fbb7288ff4ba934de143cb2c966d35",
+    "candidate_count": 704,
+    "included_count": 140,
+    "excluded_untracked_count": 40,
+    "excluded_ignored_count": 69515,
     "excluded_sensitive_count": 2,
     "missing_committed_count": 0,
     "warnings": [],

@@ -33,6 +33,7 @@ class IndicatorEntity {
     chartType;
     startDate;
     endDate;
+    daysRemaining;
     isActive;
     showOnDashboard;
     createdAt;
@@ -121,6 +122,14 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: String, format: 'date-time', nullable: true }),
     __metadata("design:type", Object)
 ], IndicatorEntity.prototype, "endDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        type: Number,
+        nullable: true,
+        description: 'Dias restantes até o prazo (calculado automaticamente pelo cron). Negativo = prazo encerrado.',
+    }),
+    __metadata("design:type", Object)
+], IndicatorEntity.prototype, "daysRemaining", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: true }),
     __metadata("design:type", Boolean)

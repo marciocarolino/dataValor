@@ -20,6 +20,7 @@ export declare class IndicatorEntity {
     chartType: IndicatorChartType;
     startDate: string | null;
     endDate: string | null;
+    daysRemaining: number | null;
     isActive: boolean;
     showOnDashboard: boolean;
     createdAt: Date;

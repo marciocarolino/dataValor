@@ -7,6 +7,7 @@ import {
   computed,
   effect,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../../dashboard/components/sidebar/sidebar.component';
@@ -99,11 +100,11 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     formula: ['', Validators.maxLength(300)],
     unit: ['', Validators.maxLength(30)],
     goalValue: [null],
-    currentValue: [null],
-    previousValue: [null],
+    minimumGoalValue: [null],
+    maximumGoalValue: [null],
+    desiredDirection: ['HIGHER_IS_BETTER'],
+    // currentValue / previousValue / variation / status: são calculados pelo backend
     previousPeriod: [null],
-    variation: [null],
-    status: ['NEUTRAL', Validators.required],
     color: ['', Validators.maxLength(30)],
     icon: ['', Validators.maxLength(60)],
     chartType: ['NUMBER', Validators.required],
@@ -111,6 +112,21 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     endDate: [null],
     isActive: [true],
     showOnDashboard: [false],
+  });
+
+  // ── Signal dos valores do formulário (para computed reativo) ────────────────
+  private readonly formValues = toSignal(this.form.valueChanges, {
+    initialValue: this.form.value as Record<string, unknown>,
+  });
+
+  // ── Computed: variação automática baseada nos valores do formulário ─────────
+  readonly autoVariation = computed<number | null>(() => {
+    const vals = this.formValues();
+    const cur = vals['currentValue'] as number | null;
+    const prev = vals['previousValue'] as number | null;
+    if (cur == null || prev == null || prev === 0) return null;
+    const v = ((cur - prev) / Math.abs(prev)) * 100;
+    return Math.round(v * 100) / 100;
   });
 
   // ── Computed para total pages ──────────────────────────────────────────────
@@ -193,8 +209,9 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   openCreate(): void {
     this.form.reset({
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
-      goalValue: null, currentValue: null, previousValue: null, previousPeriod: null, variation: null,
-      status: 'NEUTRAL', color: '', icon: '', chartType: 'NUMBER',
+      goalValue: null, minimumGoalValue: null, maximumGoalValue: null,
+      desiredDirection: 'HIGHER_IS_BETTER',
+      previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
       startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
     });
@@ -216,11 +233,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       formula: indicator.formula ?? '',
       unit: indicator.unit ?? '',
       goalValue: indicator.goalValue,
-      currentValue: indicator.currentValue,
-      previousValue: indicator.previousValue,
+      // currentValue/previousValue/variation/status: somente leitura (calculado no backend)
       previousPeriod: indicator.previousPeriod ?? null,
-      variation: indicator.variation,
-      status: indicator.status,
       color: indicator.color ?? '',
       icon: normalizedIcon,
       chartType: indicator.chartType,
@@ -253,22 +267,23 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
 
     const payload: CreateIndicatorPayload = {
       name: raw['name'] as string,
-      description: raw['description'] as string || undefined,
+      description: (raw['description'] as string) || undefined,
       category: raw['category'] as IndicatorCategory,
-      formula: raw['formula'] as string || undefined,
-      unit: raw['unit'] as string || undefined,
-      goalValue: raw['goalValue'] as number ?? undefined,
-      currentValue: raw['currentValue'] as number ?? undefined,
-      previousValue: raw['previousValue'] as number ?? undefined,
+      formula: (raw['formula'] as string) || undefined,
+      unit: (raw['unit'] as string) || undefined,
+      goalValue: (raw['goalValue'] as number) ?? undefined,
+      minimumGoalValue: (raw['minimumGoalValue'] as number) ?? undefined,
+      maximumGoalValue: (raw['maximumGoalValue'] as number) ?? undefined,
+      desiredDirection: (raw['desiredDirection'] as
+        | 'HIGHER_IS_BETTER'
+        | 'LOWER_IS_BETTER'
+        | 'RANGE_IS_BETTER') ?? undefined,
       previousPeriod: (raw['previousPeriod'] as IndicatorPeriod) || undefined,
-      variation: raw['variation'] as number ?? undefined,
-      status: raw['status'] as IndicatorStatus,
-      // Envia null explicitamente para limpar a cor no backend
+      // currentValue / previousValue / variation / status:
+      // são calculados no backend e NÃO devem ser enviados no POST (ValidationPipe)
       color: (raw['color'] as string) || null,
-      // Envia null explicitamente para limpar o ícone no backend (undefined omite o campo no PATCH)
       icon: (raw['icon'] as string) || null,
       chartType: raw['chartType'] as IndicatorChartType,
-      // Converte string YYYY-MM-DD para ISO 8601 (meia-noite UTC) para o backend
       startDate: rawStartDate ? `${rawStartDate}T00:00:00.000Z` : null,
       endDate: rawEndDate ? `${rawEndDate}T00:00:00.000Z` : null,
       isActive: raw['isActive'] as boolean,

@@ -9,11 +9,12 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
+import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
 import { IndicatorPeriod } from '../enums/indicator-period.enum';
-import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 const trim = ({ value }: { value: unknown }): unknown =>
   typeof value === 'string' ? value.trim() : value;
@@ -60,39 +61,62 @@ export class CreateIndicatorDto {
   @MaxLength(30)
   unit?: string;
 
-  @ApiPropertyOptional({ example: 3000000 })
+  @ApiPropertyOptional({
+    example: 3000,
+    description:
+      'Meta principal (usado em HIGHER_IS_BETTER e LOWER_IS_BETTER).',
+  })
   @IsOptional()
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
   goalValue?: number;
 
-  @ApiPropertyOptional({ example: 2400000 })
+  @ApiPropertyOptional({
+    example: 900,
+    description: 'Valor mínimo da faixa (obrigatório para RANGE_IS_BETTER).',
+  })
   @IsOptional()
-  @IsNumber()
-  currentValue?: number;
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @ValidateIf(
+    (o: CreateIndicatorDto) =>
+      o.desiredDirection === IndicatorDesiredDirection.RANGE_IS_BETTER,
+  )
+  minimumGoalValue?: number;
 
-  @ApiPropertyOptional({ example: 2100000 })
+  @ApiPropertyOptional({
+    example: 1200,
+    description: 'Valor máximo da faixa (obrigatório para RANGE_IS_BETTER).',
+  })
   @IsOptional()
-  @IsNumber()
-  previousValue?: number;
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @ValidateIf(
+    (o: CreateIndicatorDto) =>
+      o.desiredDirection === IndicatorDesiredDirection.RANGE_IS_BETTER,
+  )
+  maximumGoalValue?: number;
+
+  @ApiPropertyOptional({
+    enum: IndicatorDesiredDirection,
+    example: IndicatorDesiredDirection.HIGHER_IS_BETTER,
+    default: IndicatorDesiredDirection.HIGHER_IS_BETTER,
+    description:
+      'Define se maior é melhor (ex: receita), menor é melhor (ex: custo) ou faixa (ex: glicemia).',
+  })
+  @IsOptional()
+  @IsEnum(IndicatorDesiredDirection)
+  desiredDirection?: IndicatorDesiredDirection;
 
   @ApiPropertyOptional({
     enum: IndicatorPeriod,
     example: IndicatorPeriod.PREVIOUS_MONTH,
-    description:
-      'Indica o período de referência do valor anterior: mês anterior, trimestre anterior, semestre anterior, ano anterior ou personalizado.',
+    description: 'Período de referência do valor anterior (informativo).',
   })
   @IsOptional()
   @IsEnum(IndicatorPeriod)
   previousPeriod?: IndicatorPeriod;
 
-  @ApiPropertyOptional({ example: 14.28 })
-  @IsOptional()
-  @IsNumber()
-  variation?: number;
-
-  @ApiProperty({ enum: IndicatorStatus, example: IndicatorStatus.NEUTRAL })
-  @IsEnum(IndicatorStatus)
-  status!: IndicatorStatus;
+  @ApiProperty({ enum: IndicatorChartType, example: IndicatorChartType.NUMBER })
+  @IsEnum(IndicatorChartType)
+  chartType!: IndicatorChartType;
 
   @ApiPropertyOptional({ example: '#4c6ef5', maxLength: 30, nullable: true })
   @IsOptional()
@@ -112,15 +136,11 @@ export class CreateIndicatorDto {
   @MaxLength(60)
   icon?: string | null;
 
-  @ApiProperty({ enum: IndicatorChartType, example: IndicatorChartType.NUMBER })
-  @IsEnum(IndicatorChartType)
-  chartType!: IndicatorChartType;
-
   @ApiPropertyOptional({
     type: String,
     format: 'date-time',
     example: '2026-01-01T00:00:00.000Z',
-    description: 'Data de início do período de acompanhamento do indicador.',
+    description: 'Data de início do período de acompanhamento.',
     nullable: true,
   })
   @IsOptional()
@@ -132,7 +152,7 @@ export class CreateIndicatorDto {
     format: 'date-time',
     example: '2026-12-31T23:59:59.000Z',
     description:
-      'Data de término do período de acompanhamento do indicador (prazo para bater a meta).',
+      'Prazo final para atingir a meta. Não pode ser anterior a startDate.',
     nullable: true,
   })
   @IsOptional()

@@ -194,20 +194,18 @@
                     </span>
                   </td>
                   <td class="cell-deadline">
-                    @if (ind.endDate) {
-                      @if (daysRemaining(ind.endDate) === null) {
-                        <span class="deadline-badge">–</span>
-                      } @else if (daysRemaining(ind.endDate)! < 0) {
+                    @if (ind.daysRemaining !== null && ind.daysRemaining !== undefined) {
+                      @if (ind.daysRemaining < 0) {
                         <span class="deadline-badge deadline-badge--exp">Encerrado</span>
-                      } @else if (daysRemaining(ind.endDate) === 0) {
+                      } @else if (ind.daysRemaining === 0) {
                         <span class="deadline-badge deadline-badge--warn">Hoje!</span>
-                      } @else if (daysRemaining(ind.endDate)! <= 7) {
+                      } @else if (ind.daysRemaining <= 7) {
                         <span class="deadline-badge deadline-badge--warn"
-                          >{{ daysRemaining(ind.endDate) }}d</span
+                          >{{ ind.daysRemaining }}d</span
                         >
                       } @else {
                         <span class="deadline-badge deadline-badge--ok"
-                          >{{ daysRemaining(ind.endDate) }}d</span
+                          >{{ ind.daysRemaining }}d</span
                         >
                       }
                     } @else {
@@ -385,9 +383,22 @@
                 inputmode="decimal"
               />
             </div>
-            <div class="form-group">
+            <div class="form-group form-group--auto">
               <label>Variação %</label>
-              <input formControlName="variation" type="number" step="0.01" placeholder="0" />
+              <div class="variation-auto">
+                @if (autoVariation() !== null) {
+                  <span
+                    class="variation-auto__value"
+                    [class.variation-auto__value--pos]="autoVariation()! >= 0"
+                    [class.variation-auto__value--neg]="autoVariation()! < 0"
+                  >
+                    {{ autoVariation()! >= 0 ? '▲' : '▼' }} {{ autoVariation()!.toFixed(2) }}%
+                  </span>
+                  <span class="variation-auto__hint">calculado automaticamente</span>
+                } @else {
+                  <span class="variation-auto__hint">Preencha Valor Atual e Anterior</span>
+                }
+              </div>
             </div>
           </div>
 

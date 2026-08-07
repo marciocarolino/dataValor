@@ -81,25 +81,44 @@ export class IndicatorsController {
     return this.indicatorsService.findDashboard() as Promise<IndicatorEntity[]>;
   }
 
-  // ─── GET /indicators/summary ──────────────────────────────────────────────
-  @Get('summary')
+  // ─── GET /indicators/dashboard/summary ────────────────────────────────────
+  @Get('dashboard/summary')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Resumo dos indicadores',
-    description: 'Retorna contagens e categorias existentes de indicadores.',
+    summary: 'Dashboard summary',
+    description:
+      'Retorna totais de indicadores por status, ativo/inativo e número de categorias.',
   })
   @ApiResponse({
     status: 200,
-    description: 'Resumo dos indicadores.',
+    description: 'Summary do dashboard.',
     schema: {
       example: {
         total: 10,
         active: 8,
         inactive: 2,
-        categories: ['FINANCIAL', 'COMMERCIAL'],
+        categories: 4,
+        byStatus: { SUCCESS: 4, WARNING: 2, DANGER: 1, NEUTRAL: 3 },
       },
     },
   })
+  @ApiUnauthorizedResponse({ description: 'Token inválido ou ausente.' })
+  @ApiInternalServerErrorResponse({ description: 'Erro inesperado.' })
+  async getDashboardSummary(): Promise<
+    ReturnType<IndicatorsService['getDashboardSummary']>
+  > {
+    return this.indicatorsService.getDashboardSummary();
+  }
+
+  // ─── GET /indicators/summary (legado) ─────────────────────────────────────
+  @Get('summary')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Resumo dos indicadores (legado)',
+    description:
+      'Mantido por compatibilidade. Use /indicators/dashboard/summary.',
+  })
+  @ApiResponse({ status: 200, description: 'Resumo dos indicadores.' })
   @ApiUnauthorizedResponse({ description: 'Token inválido ou ausente.' })
   @ApiInternalServerErrorResponse({ description: 'Erro inesperado.' })
   async getSummary(): Promise<ReturnType<IndicatorsService['getSummary']>> {

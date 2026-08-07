@@ -9,10 +9,16 @@ export declare class IndicatorsController {
     constructor(indicatorsService: IndicatorsService);
     create(dto: CreateIndicatorDto): Promise<IndicatorEntity>;
     findDashboard(): Promise<IndicatorEntity[]>;
+    getDashboardSummary(): Promise<ReturnType<IndicatorsService['getDashboardSummary']>>;
     getSummary(): Promise<ReturnType<IndicatorsService['getSummary']>>;
     findByCategory(category: IndicatorCategory): Promise<IndicatorEntity[]>;
     findAll(query: ListIndicatorsQueryDto): Promise<{
-        items: {
+        items: (Omit<{
+            measurements: {
+                value: import("@prisma/client-runtime-utils").Decimal;
+                referenceDate: Date;
+            }[];
+        } & {
             status: import(".prisma/client").$Enums.IndicatorStatus;
             description: string | null;
             name: string;
@@ -24,17 +30,34 @@ export declare class IndicatorsController {
             formula: string | null;
             unit: string | null;
             goalValue: import("@prisma/client-runtime-utils").Decimal | null;
-            currentValue: import("@prisma/client-runtime-utils").Decimal | null;
-            previousValue: import("@prisma/client-runtime-utils").Decimal | null;
+            minimumGoalValue: import("@prisma/client-runtime-utils").Decimal | null;
+            maximumGoalValue: import("@prisma/client-runtime-utils").Decimal | null;
+            desiredDirection: import(".prisma/client").$Enums.IndicatorDesiredDirection;
             previousPeriod: import(".prisma/client").$Enums.IndicatorPeriod | null;
-            variation: import("@prisma/client-runtime-utils").Decimal | null;
+            chartType: import(".prisma/client").$Enums.IndicatorChartType;
             color: string | null;
             icon: string | null;
-            chartType: import(".prisma/client").$Enums.IndicatorChartType;
             startDate: Date | null;
             endDate: Date | null;
             showOnDashboard: boolean;
-        }[];
+            currentValue: import("@prisma/client-runtime-utils").Decimal | null;
+            previousValue: import("@prisma/client-runtime-utils").Decimal | null;
+            variation: import("@prisma/client-runtime-utils").Decimal | null;
+            daysRemaining: number | null;
+        }, "measurements"> & {
+            analytics: {
+                currentValue: number | null;
+                previousValue: number | null;
+                variation: number | null;
+                variationCalculationStatus: import("./enums/indicator-variation-status.enum").IndicatorVariationStatus;
+                targetAchievementPercentage: number | null;
+                targetDifference: number | null;
+                targetStatus: import("./enums/indicator-target-status.enum").IndicatorTargetStatus;
+                daysRemaining: number | null;
+                isOverdue: boolean;
+                lastMeasurementDate: string | null;
+            };
+        })[];
         pagination: {
             page: number;
             limit: number;

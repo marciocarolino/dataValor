@@ -34,6 +34,9 @@ let IndicatorsController = class IndicatorsController {
     async findDashboard() {
         return this.indicatorsService.findDashboard();
     }
+    async getDashboardSummary() {
+        return this.indicatorsService.getDashboardSummary();
+    }
     async getSummary() {
         return this.indicatorsService.getSummary();
     }
@@ -94,24 +97,39 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], IndicatorsController.prototype, "findDashboard", null);
 __decorate([
-    (0, common_1.Get)('summary'),
+    (0, common_1.Get)('dashboard/summary'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({
-        summary: 'Resumo dos indicadores',
-        description: 'Retorna contagens e categorias existentes de indicadores.',
+        summary: 'Dashboard summary',
+        description: 'Retorna totais de indicadores por status, ativo/inativo e número de categorias.',
     }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Resumo dos indicadores.',
+        description: 'Summary do dashboard.',
         schema: {
             example: {
                 total: 10,
                 active: 8,
                 inactive: 2,
-                categories: ['FINANCIAL', 'COMMERCIAL'],
+                categories: 4,
+                byStatus: { SUCCESS: 4, WARNING: 2, DANGER: 1, NEUTRAL: 3 },
             },
         },
     }),
+    (0, swagger_1.ApiUnauthorizedResponse)({ description: 'Token inválido ou ausente.' }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ description: 'Erro inesperado.' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], IndicatorsController.prototype, "getDashboardSummary", null);
+__decorate([
+    (0, common_1.Get)('summary'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Resumo dos indicadores (legado)',
+        description: 'Mantido por compatibilidade. Use /indicators/dashboard/summary.',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Resumo dos indicadores.' }),
     (0, swagger_1.ApiUnauthorizedResponse)({ description: 'Token inválido ou ausente.' }),
     (0, swagger_1.ApiInternalServerErrorResponse)({ description: 'Erro inesperado.' }),
     __metadata("design:type", Function),

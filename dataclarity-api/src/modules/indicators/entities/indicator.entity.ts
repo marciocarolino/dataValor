@@ -70,6 +70,14 @@ export class IndicatorEntity {
   @ApiPropertyOptional({ type: String, format: 'date-time', nullable: true })
   endDate!: string | null;
 
+  @ApiPropertyOptional({
+    type: Number,
+    nullable: true,
+    description:
+      'Dias restantes até o prazo (calculado automaticamente pelo cron). Negativo = prazo encerrado.',
+  })
+  daysRemaining!: number | null;
+
   @ApiProperty({ example: true })
   isActive!: boolean;
 

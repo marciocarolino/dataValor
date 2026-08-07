@@ -15,8 +15,8 @@ const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
+const indicator_desired_direction_enum_1 = require("../enums/indicator-desired-direction.enum");
 const indicator_period_enum_1 = require("../enums/indicator-period.enum");
-const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const trim = ({ value }) => typeof value === 'string' ? value.trim() : value;
 class CreateIndicatorDto {
     name;
@@ -25,14 +25,13 @@ class CreateIndicatorDto {
     formula;
     unit;
     goalValue;
-    currentValue;
-    previousValue;
+    minimumGoalValue;
+    maximumGoalValue;
+    desiredDirection;
     previousPeriod;
-    variation;
-    status;
+    chartType;
     color;
     icon;
-    chartType;
     startDate;
     endDate;
     isActive;
@@ -86,44 +85,60 @@ __decorate([
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "unit", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 3000000 }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 3000,
+        description: 'Meta principal (usado em HIGHER_IS_BETTER e LOWER_IS_BETTER).',
+    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNumber)({ maxDecimalPlaces: 2 }),
     __metadata("design:type", Number)
 ], CreateIndicatorDto.prototype, "goalValue", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 2400000 }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 900,
+        description: 'Valor mínimo da faixa (obrigatório para RANGE_IS_BETTER).',
+    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNumber)({ maxDecimalPlaces: 2 }),
+    (0, class_validator_1.ValidateIf)((o) => o.desiredDirection === indicator_desired_direction_enum_1.IndicatorDesiredDirection.RANGE_IS_BETTER),
     __metadata("design:type", Number)
-], CreateIndicatorDto.prototype, "currentValue", void 0);
+], CreateIndicatorDto.prototype, "minimumGoalValue", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 2100000 }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 1200,
+        description: 'Valor máximo da faixa (obrigatório para RANGE_IS_BETTER).',
+    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNumber)({ maxDecimalPlaces: 2 }),
+    (0, class_validator_1.ValidateIf)((o) => o.desiredDirection === indicator_desired_direction_enum_1.IndicatorDesiredDirection.RANGE_IS_BETTER),
     __metadata("design:type", Number)
-], CreateIndicatorDto.prototype, "previousValue", void 0);
+], CreateIndicatorDto.prototype, "maximumGoalValue", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_desired_direction_enum_1.IndicatorDesiredDirection,
+        example: indicator_desired_direction_enum_1.IndicatorDesiredDirection.HIGHER_IS_BETTER,
+        default: indicator_desired_direction_enum_1.IndicatorDesiredDirection.HIGHER_IS_BETTER,
+        description: 'Define se maior é melhor (ex: receita), menor é melhor (ex: custo) ou faixa (ex: glicemia).',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(indicator_desired_direction_enum_1.IndicatorDesiredDirection),
+    __metadata("design:type", String)
+], CreateIndicatorDto.prototype, "desiredDirection", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         enum: indicator_period_enum_1.IndicatorPeriod,
         example: indicator_period_enum_1.IndicatorPeriod.PREVIOUS_MONTH,
-        description: 'Indica o período de referência do valor anterior: mês anterior, trimestre anterior, semestre anterior, ano anterior ou personalizado.',
+        description: 'Período de referência do valor anterior (informativo).',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(indicator_period_enum_1.IndicatorPeriod),
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "previousPeriod", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 14.28 }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateIndicatorDto.prototype, "variation", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ enum: indicator_status_enum_1.IndicatorStatus, example: indicator_status_enum_1.IndicatorStatus.NEUTRAL }),
-    (0, class_validator_1.IsEnum)(indicator_status_enum_1.IndicatorStatus),
+    (0, swagger_1.ApiProperty)({ enum: indicator_chart_type_enum_1.IndicatorChartType, example: indicator_chart_type_enum_1.IndicatorChartType.NUMBER }),
+    (0, class_validator_1.IsEnum)(indicator_chart_type_enum_1.IndicatorChartType),
     __metadata("design:type", String)
-], CreateIndicatorDto.prototype, "status", void 0);
+], CreateIndicatorDto.prototype, "chartType", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: '#4c6ef5', maxLength: 30, nullable: true }),
     (0, class_validator_1.IsOptional)(),
@@ -145,16 +160,11 @@ __decorate([
     __metadata("design:type", Object)
 ], CreateIndicatorDto.prototype, "icon", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: indicator_chart_type_enum_1.IndicatorChartType, example: indicator_chart_type_enum_1.IndicatorChartType.NUMBER }),
-    (0, class_validator_1.IsEnum)(indicator_chart_type_enum_1.IndicatorChartType),
-    __metadata("design:type", String)
-], CreateIndicatorDto.prototype, "chartType", void 0);
-__decorate([
     (0, swagger_1.ApiPropertyOptional)({
         type: String,
         format: 'date-time',
         example: '2026-01-01T00:00:00.000Z',
-        description: 'Data de início do período de acompanhamento do indicador.',
+        description: 'Data de início do período de acompanhamento.',
         nullable: true,
     }),
     (0, class_validator_1.IsOptional)(),
@@ -166,7 +176,7 @@ __decorate([
         type: String,
         format: 'date-time',
         example: '2026-12-31T23:59:59.000Z',
-        description: 'Data de término do período de acompanhamento do indicador (prazo para bater a meta).',
+        description: 'Prazo final para atingir a meta. Não pode ser anterior a startDate.',
         nullable: true,
     }),
     (0, class_validator_1.IsOptional)(),

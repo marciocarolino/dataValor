@@ -836,6 +836,34 @@
   }
 }
 
+// ── Variação automática (formulário) ───────────────────────────────────────
+.variation-auto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-xs;
+  background: #f8f9fb;
+  min-height: 40px;
+  justify-content: center;
+
+  &__value {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__value--pos { color: #2f9e44; }
+  &__value--neg { color: #e03131; }
+
+  &__hint {
+    font-size: 10px;
+    color: #868e96;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+}
+
 // ── Details field — dias ────────────────────────────────────────────────────
 .details-field__value--days {
   font-size: 15px;

@@ -13,18 +13,70 @@
       "tips": [
         "Escolha indicadores que estejam diretamente ligados aos seus objetivos de negócio.",
         "Mantenha os indicadores atualizados para decisões mais precisas.",
-        "Use a variação (%) para comparar com o período anterior."
+        "A variação percentual é calculada automaticamente quando você preenche o Valor Atual e o Valor Anterior."
       ]
     },
     {
       "id": "new-indicator-btn",
       "title": "Botão 'Novo Indicador'",
       "icon": "add_circle_outline",
-      "content": "Localizado no canto superior direito da tela, o botão '+ Novo Indicador' abre um formulário para cadastrar um novo KPI.\n\nAo clicar, você poderá preencher: nome, categoria, tipo de gráfico, valor atual, meta, variação e outras configurações.",
+      "content": "Localizado no canto superior direito da tela, o botão '+ Novo Indicador' abre um formulário para cadastrar um novo KPI.\n\nAo clicar, você poderá preencher: nome, categoria, tipo de gráfico, valor atual, meta, valor anterior, datas de acompanhamento e outras configurações.\n\nA variação percentual e os dias restantes são calculados automaticamente pelo sistema.",
       "tips": [
         "Dê nomes claros e objetivos aos seus indicadores.",
         "Preencha o campo 'Meta' para acompanhar o progresso.",
+        "Informe o 'Valor Anterior' para que a variação percentual seja calculada automaticamente.",
+        "Defina 'Data Fim (prazo da meta)' para acompanhar quantos dias faltam para bater a meta.",
         "Marque 'Exibir no Dashboard' para que o indicador apareça nos cards principais."
+      ]
+    },
+    {
+      "id": "variation",
+      "title": "Variação % (Automática)",
+      "icon": "trending_up",
+      "content": "A variação percentual mede quanto o indicador cresceu ou diminuiu em relação ao período anterior.\n\nFórmula: Variação = ((Valor Atual - Valor Anterior) / |Valor Anterior|) × 100\n\nExemplo: Valor Atual = 1.590, Valor Anterior = 1.300\n→ ((1590 - 1300) / 1300) × 100 = +22,31%\n\nO sistema calcula automaticamente a variação ao salvar, com base nos valores informados. No formulário, um indicador visual mostra a variação em tempo real enquanto você digita.",
+      "items": [
+        {
+          "name": "▲ Variação positiva (verde)",
+          "description": "O Valor Atual é maior que o Valor Anterior. Indica crescimento ou melhoria."
+        },
+        {
+          "name": "▼ Variação negativa (vermelho)",
+          "description": "O Valor Atual é menor que o Valor Anterior. Indica queda ou piora."
+        },
+        {
+          "name": "– Sem variação",
+          "description": "Calculada como zero, ou os valores Atual e Anterior não foram informados."
+        }
+      ],
+      "tips": [
+        "Preencha sempre o 'Valor Anterior' e o 'Período de Referência' para obter a variação automaticamente.",
+        "A variação é recalculada toda vez que você editar e salvar o indicador.",
+        "O campo 'Período de Referência' documenta se a comparação é com o mês anterior, trimestre etc."
+      ]
+    },
+    {
+      "id": "dates-deadline",
+      "title": "Datas e Dias Restantes",
+      "icon": "event",
+      "content": "Cada indicador pode ter um prazo de acompanhamento definido pelos campos 'Data Início' e 'Data Fim (prazo da meta)'.\n\nO campo 'Dias Restantes' é calculado automaticamente pelo sistema (sem precisar preencher) com base na Data Fim informada. Um cron job atualiza os dias restantes de todos os indicadores 3 vezes ao dia: às 06:00, 13:00 e 20:00 (horário de Brasília).",
+      "items": [
+        {
+          "name": "Data Início",
+          "description": "Data em que o acompanhamento do indicador começou ou o período de referência foi iniciado."
+        },
+        {
+          "name": "Data Fim (prazo da meta)",
+          "description": "Prazo final para atingir a meta. O sistema usa esta data para calcular quantos dias faltam."
+        },
+        {
+          "name": "Dias Restantes (automático)",
+          "description": "Calculado automaticamente: verde quando há mais de 7 dias, amarelo com 7 dias ou menos, vermelho quando o prazo encerrou."
+        }
+      ],
+      "tips": [
+        "Defina uma Data Fim para todos os indicadores que têm prazo (metas mensais, trimestrais etc.).",
+        "O campo 'Dias Restantes' é atualizado 3× ao dia automaticamente — não é necessário editar manualmente.",
+        "Quando o prazo encerrar, a coluna exibirá 'Encerrado' em vermelho como alerta."
       ]
     },
     {
@@ -95,7 +147,7 @@
         },
         {
           "name": "Categoria",
-          "description": "A categoria do indicador, exibida como um badge colorido (ex: Financeiro em azul)."
+          "description": "A categoria do indicador, exibida como um badge colorido (ex: Comercial em azul)."
         },
         {
           "name": "Valor Atual",
@@ -111,28 +163,37 @@
         },
         {
           "name": "Variação",
-          "description": "Percentual de mudança em relação ao período anterior. Um seta verde para cima indica crescimento; vermelha para baixo indica queda."
+          "description": "Percentual de mudança calculado automaticamente com base no Valor Atual e Valor Anterior. Seta verde para cima = crescimento; vermelha para baixo = queda. Fórmula: ((Atual - Anterior) / Anterior) × 100."
         },
         {
           "name": "Tipo de Gráfico",
-          "description": "Define como o indicador será visualizado quando executado: Linha, Barra, Área, Rosca, Pizza, Velocímetro ou Número."
+          "description": "Define como o indicador será visualizado: Linha, Barra, Área, Rosca, Pizza, Velocímetro ou Número."
         },
         {
           "name": "Ativo",
           "description": "Indica se o indicador está ativo (Sim) ou inativo (Não). Somente indicadores ativos aparecem no Dashboard."
+        },
+        {
+          "name": "Dias Restantes",
+          "description": "Quantos dias faltam para a Data Fim (prazo da meta). Verde = mais de 7 dias, amarelo = 7 dias ou menos, vermelho = prazo encerrado. Atualizado automaticamente 3× ao dia."
         }
       ],
       "tips": [
         "Clique no cabeçalho 'Valor Atual' para ordenar do maior para o menor.",
-        "Use a ordenação por 'Status' para ver primeiro os indicadores críticos."
+        "Use a ordenação por 'Status' para ver primeiro os indicadores críticos.",
+        "Monitore a coluna 'Dias Restantes' para agir antes dos prazos das metas."
       ]
     },
     {
       "id": "actions",
       "title": "Ações por Indicador",
       "icon": "settings",
-      "content": "Cada linha da tabela possui dois botões de ação no lado direito.",
+      "content": "Cada linha da tabela possui botões de ação no lado direito.",
       "items": [
+        {
+          "name": "Gráfico (ícone de barra)",
+          "description": "Abre a visualização do gráfico do indicador, exibindo valor realizado, meta, percentual atingido e dias restantes."
+        },
         {
           "name": "Editar (ícone de lápis)",
           "description": "Abre o formulário de edição pré-preenchido com os dados do indicador. Você pode alterar qualquer campo e salvar."
@@ -144,7 +205,8 @@
       ],
       "tips": [
         "Prefira desativar um indicador (campo 'Ativo = Não') em vez de excluir, para manter o histórico.",
-        "A confirmação de exclusão existe para evitar remoções acidentais."
+        "A confirmação de exclusão existe para evitar remoções acidentais.",
+        "Use o botão de gráfico para ver o desempenho visual com totais e prazo restante."
       ]
     },
     {
@@ -154,11 +216,12 @@
       "content": "Recomendações para usar o módulo de Indicadores de forma eficiente.",
       "tips": [
         "Defina sempre uma Meta para cada indicador — isso permite calcular o progresso automaticamente.",
+        "Informe o Valor Anterior para que a variação percentual seja calculada automaticamente pelo sistema.",
+        "Defina uma Data Fim (prazo da meta) para acompanhar os dias restantes sem precisar calcular manualmente.",
         "Use a Categoria corretamente para facilitar a organização e os filtros.",
-        "Ative 'Exibir no Dashboard' apenas para os 4 indicadores mais importantes do negócio.",
+        "Ative 'Exibir no Dashboard' apenas para os indicadores mais importantes do negócio.",
         "Atualize o Valor Atual regularmente para manter as métricas confiáveis.",
-        "Use o campo 'Ícone' com nomes do Material Icons (ex: trending_up, savings) para tornar os cards mais visuais.",
-        "A Variação deve ser preenchida manualmente ou automaticamente por integrações futuras de dados."
+        "Use o campo 'Ícone' com nomes do Material Icons (ex: trending_up, savings) para tornar os cards mais visuais."
       ]
     }
   ]
