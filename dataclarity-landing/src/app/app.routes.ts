@@ -55,6 +55,14 @@ export const routes: Routes = [
         './features/dashboard/pages/dashboard-page/dashboard-page.component'
       ).then((m) => m.DashboardPageComponent),
   },
+  {
+    path: 'dashboard/indicadores',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './features/indicators/pages/indicators-page/indicators-page.component'
+      ).then((m) => m.IndicatorsPageComponent),
+  },
 
   // ── Fallback ──────────────────────────────────────────────────────────────
   { path: '**', redirectTo: '' },

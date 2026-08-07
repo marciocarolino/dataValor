@@ -19,7 +19,7 @@
 
       <!-- Metric Cards -->
       <section class="dashboard-page__metrics">
-        @for (metric of metrics; track metric.title) {
+        @for (metric of metrics(); track metric.title) {
           <app-metric-card
             [title]="metric.title"
             [value]="metric.value"

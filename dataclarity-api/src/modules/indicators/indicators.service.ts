@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access,
+   @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { CreateIndicatorDto } from './dto/create-indicator.dto';
@@ -26,12 +27,8 @@ export interface IndicatorSummary {
 export class IndicatorsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get db(): any {
-    return this.prisma as any;
-  }
-
-  async create(dto: CreateIndicatorDto): Promise<any> {
-    return await this.db.indicator.create({
+  async create(dto: CreateIndicatorDto) {
+    return await this.prisma.indicator.create({
       data: {
         name: dto.name,
         description: dto.description ?? null,
@@ -52,16 +49,16 @@ export class IndicatorsService {
     });
   }
 
-  async findAll(query: ListIndicatorsQueryDto): Promise<any> {
+  async findAll(query: ListIndicatorsQueryDto) {
     const page = query.page ?? 1;
     const limit = query.limit ?? 20;
 
-    const where: any = {
+    const where = {
       ...(query.category ? { category: query.category } : {}),
       ...(query.status ? { status: query.status } : {}),
       ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
       ...(query.name
-        ? { name: { contains: query.name, mode: 'insensitive' } }
+        ? { name: { contains: query.name, mode: 'insensitive' as const } }
         : {}),
     };
 
@@ -69,14 +66,14 @@ export class IndicatorsService {
       [query.sortBy ?? 'createdAt']: query.sortOrder ?? 'desc',
     };
 
-    const [items, totalItems]: [any[], number] = await Promise.all([
-      this.db.indicator.findMany({
+    const [items, totalItems] = await Promise.all([
+      this.prisma.indicator.findMany({
         where,
         orderBy,
         skip: (page - 1) * limit,
         take: limit,
       }),
-      this.db.indicator.count({ where }),
+      this.prisma.indicator.count({ where }),
     ]);
 
     const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / limit);
@@ -94,37 +91,32 @@ export class IndicatorsService {
     };
   }
 
-  async findOne(id: string): Promise<any> {
-    const indicator = await this.db.indicator.findUnique({ where: { id } });
+  async findOne(id: string) {
+    const indicator = await this.prisma.indicator.findUnique({ where: { id } });
     if (!indicator) throw new NotFoundException('Indicador não encontrado.');
     return indicator;
   }
 
-  async findDashboard(): Promise<any[]> {
-    return await this.db.indicator.findMany({
+  async findDashboard() {
+    return await this.prisma.indicator.findMany({
       where: { showOnDashboard: true, isActive: true },
       orderBy: { name: 'asc' },
     });
   }
 
-  async findByCategory(category: IndicatorCategory): Promise<any[]> {
-    return await this.db.indicator.findMany({
+  async findByCategory(category: IndicatorCategory) {
+    return await this.prisma.indicator.findMany({
       where: { category, isActive: true },
       orderBy: { name: 'asc' },
     });
   }
 
   async getSummary(): Promise<IndicatorSummary> {
-    const [total, active, inactive, grouped]: [
-      number,
-      number,
-      number,
-      Array<{ category: string }>,
-    ] = await Promise.all([
-      this.db.indicator.count(),
-      this.db.indicator.count({ where: { isActive: true } }),
-      this.db.indicator.count({ where: { isActive: false } }),
-      this.db.indicator.groupBy({
+    const [total, active, inactive, grouped] = await Promise.all([
+      this.prisma.indicator.count(),
+      this.prisma.indicator.count({ where: { isActive: true } }),
+      this.prisma.indicator.count({ where: { isActive: false } }),
+      this.prisma.indicator.groupBy({
         by: ['category'],
         _count: { category: true },
       }),
@@ -137,42 +129,48 @@ export class IndicatorsService {
     return { total, active, inactive, categories };
   }
 
-  async update(id: string, dto: UpdateIndicatorDto): Promise<any> {
-    const exists = await this.db.indicator.findUnique({
+  async update(id: string, dto: UpdateIndicatorDto) {
+    const exists = await this.prisma.indicator.findUnique({
       where: { id },
       select: { id: true },
     });
     if (!exists) throw new NotFoundException('Indicador não encontrado.');
 
-    const data: Record<string, any> = {};
-    if (dto.name !== undefined) data['name'] = dto.name;
-    if (dto.description !== undefined) data['description'] = dto.description;
-    if (dto.category !== undefined) data['category'] = dto.category;
-    if (dto.formula !== undefined) data['formula'] = dto.formula;
-    if (dto.unit !== undefined) data['unit'] = dto.unit;
-    if (dto.goalValue !== undefined) data['goalValue'] = dto.goalValue;
-    if (dto.currentValue !== undefined) data['currentValue'] = dto.currentValue;
-    if (dto.previousValue !== undefined)
-      data['previousValue'] = dto.previousValue;
-    if (dto.variation !== undefined) data['variation'] = dto.variation;
-    if (dto.status !== undefined) data['status'] = dto.status;
-    if (dto.color !== undefined) data['color'] = dto.color;
-    if (dto.icon !== undefined) data['icon'] = dto.icon;
-    if (dto.chartType !== undefined) data['chartType'] = dto.chartType;
-    if (dto.isActive !== undefined) data['isActive'] = dto.isActive;
-    if (dto.showOnDashboard !== undefined)
-      data['showOnDashboard'] = dto.showOnDashboard;
-
-    return this.db.indicator.update({ where: { id }, data });
+    return this.prisma.indicator.update({
+      where: { id },
+      data: {
+        ...(dto.name !== undefined && { name: dto.name }),
+        ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.category !== undefined && { category: dto.category }),
+        ...(dto.formula !== undefined && { formula: dto.formula }),
+        ...(dto.unit !== undefined && { unit: dto.unit }),
+        ...(dto.goalValue !== undefined && { goalValue: dto.goalValue }),
+        ...(dto.currentValue !== undefined && {
+          currentValue: dto.currentValue,
+        }),
+        ...(dto.previousValue !== undefined && {
+          previousValue: dto.previousValue,
+        }),
+        ...(dto.variation !== undefined && { variation: dto.variation }),
+        ...(dto.status !== undefined && { status: dto.status }),
+        ...(dto.color !== undefined && { color: dto.color }),
+        ...(dto.icon !== undefined && { icon: dto.icon }),
+        ...(dto.chartType !== undefined && { chartType: dto.chartType }),
+        ...(dto.isActive !== undefined && { isActive: dto.isActive }),
+        ...(dto.showOnDashboard !== undefined && {
+          showOnDashboard: dto.showOnDashboard,
+        }),
+      },
+    });
   }
 
-  async remove(id: string): Promise<any> {
-    const exists = await this.db.indicator.findUnique({
+  async remove(id: string) {
+    const exists = await this.prisma.indicator.findUnique({
       where: { id },
       select: { id: true },
     });
     if (!exists) throw new NotFoundException('Indicador não encontrado.');
 
-    return this.db.indicator.delete({ where: { id } });
+    return this.prisma.indicator.delete({ where: { id } });
   }
 }
