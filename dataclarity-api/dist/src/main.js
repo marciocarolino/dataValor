@@ -21,7 +21,10 @@ async function bootstrap() {
     const env = env_schema_1.envSchema.parse(process.env);
     app.setGlobalPrefix('/api/v1');
     app.enableCors({
-        origin: env.FRONTEND_URL,
+        origin: [
+            env.FRONTEND_URL,
+            /^http:\/\/localhost:\d+$/,
+        ],
         credentials: true,
     });
     app.use((0, helmet_1.default)());

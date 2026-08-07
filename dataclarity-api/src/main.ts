@@ -20,7 +20,11 @@ async function bootstrap() {
   app.setGlobalPrefix('/api/v1');
 
   app.enableCors({
-    origin: env.FRONTEND_URL,
+    origin: [
+      env.FRONTEND_URL,
+      // Aceita qualquer porta local do Angular em desenvolvimento
+      /^http:\/\/localhost:\d+$/,
+    ],
     credentials: true,
   });
 

@@ -57,6 +57,7 @@ export class AuthService {
         email: normalizedEmail,
         passwordHash,
         name: input.name,
+        isActive: false,
         emailVerified: false,
         emailVerificationToken: verificationToken,
         emailVerificationExpiresAt: verificationExpiresAt,
@@ -107,6 +108,7 @@ export class AuthService {
     await this.prisma.user.update({
       where: { id: user.id },
       data: {
+        isActive: true,
         emailVerified: true,
         emailVerificationToken: null,
         emailVerificationExpiresAt: null,
