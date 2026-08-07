@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test Dashboard Access</title>
+    <script>
+      localStorage.setItem(
+        'dc_access_token',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJlbWFpbCI6InRlc3RAZGF0YWNsYXJpdHkuY29tIiwiaWF0IjoxNzU0NTI5MDAwLCJleHAiOjk5OTk5OTk5OTl9.fake-signature',
+      );
+      localStorage.setItem('dc_refresh_token', 'fake-refresh-token');
+      window.location.href = '/dashboard';
+    </script>
+  </head>
+  <body>
+    <p>Redirecionando para o dashboard...</p>
+  </body>
+</html>

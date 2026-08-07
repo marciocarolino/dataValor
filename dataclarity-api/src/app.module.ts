@@ -8,6 +8,7 @@ import { ContactsModule } from './modules/contacts/contacts.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { IndicatorsModule } from './modules/indicators/indicators.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     ContactsModule,
     AuthModule,
     UsersModule,
+    IndicatorsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test Dashboard Access</title>
+    <script>
+      localStorage.setItem('dc_access_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test');
+      localStorage.setItem('dc_refresh_token', 'fake-refresh-token');
+      window.location.href = '/dashboard';
+    </script>
+  </head>
+  <body>
+    <p>Redirecionando para o dashboard...</p>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<header class="top-bar">
+  <!-- Search -->
+  <div class="top-bar__search">
+    <span class="top-bar__search-icon material-icons">search</span>
+    <input
+      class="top-bar__search-input"
+      type="text"
+      placeholder="Search..."
+      [(ngModel)]="searchQuery"
+    />
+  </div>
+
+  <!-- Actions -->
+  <div class="top-bar__actions">
+    <!-- Notificações -->
+    <button class="top-bar__icon-btn" aria-label="Notificações">
+      <span class="material-icons">notifications</span>
+      <span class="top-bar__badge">3</span>
+    </button>
+
+    <!-- Avatar -->
+    <button class="top-bar__avatar" aria-label="Perfil" (click)="logout()">
+      <div class="top-bar__avatar-circle">
+        <span class="material-icons">person</span>
+      </div>
+    </button>
+  </div>
+</header>

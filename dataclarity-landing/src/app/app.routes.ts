@@ -50,11 +50,10 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    // Placeholder — substituir pelo componente de dashboard quando existir
     loadComponent: () =>
-      import('./features/home/pages/home-page/home-page.component').then(
-        (m) => m.HomePageComponent,
-      ),
+      import(
+        './features/dashboard/pages/dashboard-page/dashboard-page.component'
+      ).then((m) => m.DashboardPageComponent),
   },
 
   // ── Fallback ──────────────────────────────────────────────────────────────

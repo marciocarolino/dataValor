@@ -17,6 +17,7 @@ const contacts_module_1 = require("./modules/contacts/contacts.module");
 const prisma_module_1 = require("./prisma/prisma.module");
 const auth_module_1 = require("./modules/auth/auth.module");
 const users_module_1 = require("./modules/users/users.module");
+const indicators_module_1 = require("./modules/indicators/indicators.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
             contacts_module_1.ContactsModule,
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
+            indicators_module_1.IndicatorsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

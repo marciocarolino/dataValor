@@ -1,0 +1,40 @@
+<div class="clients-table">
+  <div class="clients-table__header">
+    <h3 class="clients-table__title">Top 10 Clients</h3>
+    <button class="clients-table__view-all">View All</button>
+  </div>
+
+  <div class="clients-table__wrapper">
+    <table class="clients-table__table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Receita</th>
+          <th>Última Compra</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (client of clients; track client.name) {
+          <tr>
+            <td class="clients-table__name">
+              <div class="clients-table__avatar">
+                {{ client.name.charAt(0) }}
+              </div>
+              {{ client.name }}
+            </td>
+            <td class="clients-table__revenue">{{ client.revenue }}</td>
+            <td class="clients-table__date">
+              {{ client.lastPurchase | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>
+              <span class="badge" [class]="statusClass(client.status)">
+                {{ client.status }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

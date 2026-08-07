@@ -1,0 +1,23 @@
+<div class="revenue-chart">
+  <div class="revenue-chart__header">
+    <h3 class="revenue-chart__title">Monthly Revenue Trend</h3>
+    <button class="revenue-chart__menu-btn" aria-label="Opções">
+      <span class="material-icons">more_vert</span>
+    </button>
+  </div>
+
+  <div class="revenue-chart__legend">
+    <span class="revenue-chart__legend-item revenue-chart__legend-item--current">
+      <span class="revenue-chart__legend-dot"></span>
+      Ano Atual
+    </span>
+    <span class="revenue-chart__legend-item revenue-chart__legend-item--last">
+      <span class="revenue-chart__legend-dot revenue-chart__legend-dot--last"></span>
+      Ano Anterior
+    </span>
+  </div>
+
+  <div class="revenue-chart__canvas-wrap">
+    <canvas #chartCanvas></canvas>
+  </div>
+</div>

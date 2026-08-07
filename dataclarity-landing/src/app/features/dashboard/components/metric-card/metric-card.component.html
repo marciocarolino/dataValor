@@ -1,0 +1,24 @@
+<div class="metric-card">
+  <div class="metric-card__header">
+    <span class="metric-card__title">{{ title }}</span>
+    <div class="metric-card__icon" [style.background]="iconBg">
+      <span class="material-icons" [style.color]="iconColor">{{ icon }}</span>
+    </div>
+  </div>
+
+  <div class="metric-card__value">{{ value }}</div>
+
+  <div class="metric-card__footer">
+    <span
+      class="metric-card__change"
+      [class.metric-card__change--positive]="changePositive"
+      [class.metric-card__change--negative]="!changePositive"
+    >
+      <span class="material-icons metric-card__change-icon">
+        {{ changePositive ? 'trending_up' : 'trending_down' }}
+      </span>
+      {{ change }}
+    </span>
+    <span class="metric-card__period">vs last month</span>
+  </div>
+</div>

@@ -58,3 +58,58 @@ enum ContactStatus {
   QUALIFIED
   ARCHIVED
 }
+
+// ─── Indicators ───────────────────────────────────────────────────────────────
+
+model Indicator {
+  id             String              @id @default(uuid())
+  name           String
+  description    String?
+  category       IndicatorCategory
+  formula        String?
+  unit           String?
+  goalValue      Float?
+  currentValue   Float?
+  previousValue  Float?
+  variation      Float?
+  status         IndicatorStatus     @default(NEUTRAL)
+  color          String?
+  icon           String?
+  chartType      IndicatorChartType  @default(NUMBER)
+  isActive       Boolean             @default(true)
+  showOnDashboard Boolean            @default(false)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([category])
+  @@index([status])
+  @@index([isActive])
+  @@index([showOnDashboard])
+  @@index([createdAt])
+}
+
+enum IndicatorCategory {
+  FINANCIAL
+  COMMERCIAL
+  OPERATIONAL
+  MARKETING
+  CUSTOMER
+  CUSTOM
+}
+
+enum IndicatorChartType {
+  LINE
+  BAR
+  AREA
+  DONUT
+  PIE
+  GAUGE
+  NUMBER
+}
+
+enum IndicatorStatus {
+  SUCCESS
+  WARNING
+  DANGER
+  NEUTRAL
+}

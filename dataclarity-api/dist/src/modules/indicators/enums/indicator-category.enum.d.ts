@@ -1,0 +1,8 @@
+export declare enum IndicatorCategory {
+    FINANCIAL = "FINANCIAL",
+    COMMERCIAL = "COMMERCIAL",
+    OPERATIONAL = "OPERATIONAL",
+    MARKETING = "MARKETING",
+    CUSTOMER = "CUSTOMER",
+    CUSTOM = "CUSTOM"
+}

@@ -1,0 +1,52 @@
+<aside class="sidebar">
+  <!-- Logo -->
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-icon">DV</div>
+    <div class="sidebar__logo-text">
+      <span class="sidebar__logo-title">DataValor</span>
+      <span class="sidebar__logo-sub">BI Intelligence</span>
+    </div>
+  </div>
+
+  <!-- Nav principal -->
+  <nav class="sidebar__nav">
+    <ul class="sidebar__nav-list">
+      @for (item of navItems; track item.label) {
+        <li>
+          <button
+            class="sidebar__nav-item"
+            [class.sidebar__nav-item--active]="activeItem === item.label"
+            (click)="selectItem(item)"
+          >
+            <span class="sidebar__nav-icon material-icons">{{ item.icon }}</span>
+            <span class="sidebar__nav-label">{{ item.label }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Bottom items -->
+  <div class="sidebar__bottom">
+    <ul class="sidebar__nav-list">
+      @for (item of bottomItems; track item.label) {
+        <li>
+          <button
+            class="sidebar__nav-item"
+            [class.sidebar__nav-item--active]="activeItem === item.label"
+            (click)="selectItem(item)"
+          >
+            <span class="sidebar__nav-icon material-icons">{{ item.icon }}</span>
+            <span class="sidebar__nav-label">{{ item.label }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+
+    <!-- Botão Sair -->
+    <button class="sidebar__logout-btn" (click)="logout()">
+      <span class="material-icons sidebar__nav-icon">logout</span>
+      <span class="sidebar__nav-label">Sair</span>
+    </button>
+  </div>
+</aside>

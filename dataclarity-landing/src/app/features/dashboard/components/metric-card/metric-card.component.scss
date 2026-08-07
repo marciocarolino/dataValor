@@ -1,0 +1,87 @@
+@use '../../../../../styles/tokens' as *;
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid $color-border-light;
+  border-radius: $radius-md;
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: $shadow-1;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 500;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
+
+  &__value {
+    font-size: 32px;
+    font-weight: 800;
+    color: $color-text-dark;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__change {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+
+    &--positive {
+      background: #d3f9d8;
+      color: #2f9e44;
+    }
+
+    &--negative {
+      background: #ffe3e3;
+      color: #e03131;
+    }
+  }
+
+  &__change-icon {
+    font-size: 14px !important;
+  }
+
+  &__period {
+    font-size: 12px;
+    color: $color-text-muted;
+  }
+}

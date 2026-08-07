@@ -1,0 +1,56 @@
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <app-sidebar class="dashboard-layout__sidebar"></app-sidebar>
+
+  <!-- Main area -->
+  <div class="dashboard-layout__main">
+    <!-- Top Bar -->
+    <app-top-bar></app-top-bar>
+
+    <!-- Content -->
+    <main class="dashboard-layout__content">
+      <!-- Page Header -->
+      <div class="dashboard-page__header">
+        <h1 class="dashboard-page__title">Dashboard Overview</h1>
+        <p class="dashboard-page__subtitle">
+          Welcome back. Here is the latest overview of your business metrics.
+        </p>
+      </div>
+
+      <!-- Metric Cards -->
+      <section class="dashboard-page__metrics">
+        @for (metric of metrics; track metric.title) {
+          <app-metric-card
+            [title]="metric.title"
+            [value]="metric.value"
+            [change]="metric.change"
+            [changePositive]="metric.changePositive"
+            [icon]="metric.icon"
+            [iconBg]="metric.iconBg"
+            [iconColor]="metric.iconColor"
+          ></app-metric-card>
+        }
+      </section>
+
+      <!-- Charts Row -->
+      <section class="dashboard-page__charts">
+        <div class="dashboard-page__chart-main">
+          <app-revenue-chart></app-revenue-chart>
+        </div>
+        <div class="dashboard-page__chart-side">
+          <app-revenue-dist-chart></app-revenue-dist-chart>
+        </div>
+      </section>
+
+      <!-- Bottom Row: Table + AI Insight -->
+      <section class="dashboard-page__bottom">
+        <div class="dashboard-page__table">
+          <app-top-clients-table></app-top-clients-table>
+        </div>
+        <div class="dashboard-page__insight">
+          <app-ai-insight-card></app-ai-insight-card>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>

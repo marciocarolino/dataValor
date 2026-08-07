@@ -1,0 +1,114 @@
+@use '../../../../../styles/tokens' as *;
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-4 $space-7;
+  background: #ffffff;
+  border-bottom: 1px solid $color-border-light;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: $space-4;
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: $color-bg-soft;
+    border: 1px solid $color-border-light;
+    border-radius: 50px;
+    padding: 8px $space-4;
+    flex: 1;
+    max-width: 400px;
+  }
+
+  &__search-icon {
+    font-size: 18px;
+    color: $color-text-muted;
+    flex-shrink: 0;
+  }
+
+  &__search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: $color-text-dark;
+    width: 100%;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__icon-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid $color-border-light;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    .material-icons {
+      font-size: 20px;
+      color: $color-text-muted;
+    }
+
+    &:hover {
+      background: $color-bg-soft;
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fa5252;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  &__avatar {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b5bdb, #4c6ef5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    .material-icons {
+      font-size: 22px;
+      color: #fff;
+    }
+  }
+}

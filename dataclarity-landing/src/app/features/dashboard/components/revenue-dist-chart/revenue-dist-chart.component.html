@@ -1,0 +1,23 @@
+<div class="dist-chart">
+  <h3 class="dist-chart__title">Revenue Dist.</h3>
+
+  <div class="dist-chart__donut-wrap">
+    <canvas #donutCanvas></canvas>
+    <div class="dist-chart__donut-center">
+      <span class="dist-chart__donut-label">Total</span>
+      <span class="dist-chart__donut-value">100%</span>
+    </div>
+  </div>
+
+  <ul class="dist-chart__legend">
+    @for (item of items; track item.label) {
+      @if (item.label !== 'Outros') {
+        <li class="dist-chart__legend-item">
+          <span class="dist-chart__legend-dot" [style.background]="item.color"></span>
+          <span class="dist-chart__legend-label">{{ item.label }}</span>
+          <span class="dist-chart__legend-value">{{ item.value }}%</span>
+        </li>
+      }
+    }
+  </ul>
+</div>
