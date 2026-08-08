@@ -108,7 +108,6 @@ const mockSummary = {
     [IndicatorStatus.WARNING]: 0,
     [IndicatorStatus.DANGER]: 0,
     [IndicatorStatus.NEUTRAL]: 0,
-    [IndicatorStatus.INACTIVE]: 0,
   },
 };
 
@@ -207,21 +206,6 @@ describe('Indicators (e2e)', () => {
       expect(res.body).toHaveProperty('id', MOCK_ID);
       expect(res.body.name).toBe('Receita Total');
       expect(mockIndicatorsService.create).toHaveBeenCalledTimes(1);
-    });
-
-    it('normal: deve aceitar status INACTIVE → 201', async () => {
-      const inactiveIndicator = {
-        ...mockIndicator,
-        status: IndicatorStatus.INACTIVE,
-      };
-      mockIndicatorsService.create.mockResolvedValueOnce(inactiveIndicator);
-
-      const res = await request(app.getHttpServer())
-        .post('/api/v1/indicators')
-        .send({ ...validBody, status: 'INACTIVE' })
-        .expect(HttpStatus.CREATED);
-
-      expect(res.body.status).toBe(IndicatorStatus.INACTIVE);
     });
 
     it('normal: deve aceitar todos os valores do enum IndicatorStatus', async () => {
@@ -367,17 +351,17 @@ describe('Indicators (e2e)', () => {
       );
     });
 
-    it('normal: deve filtrar por status=INACTIVE → 200', async () => {
+    it('normal: deve filtrar por status=WARNING → 200', async () => {
       mockIndicatorsService.findAll.mockResolvedValueOnce({
         ...mockPaginated,
-        items: [{ ...mockIndicator, status: IndicatorStatus.INACTIVE }],
+        items: [{ ...mockIndicator, status: IndicatorStatus.WARNING }],
       });
 
       const res = await request(app.getHttpServer())
-        .get('/api/v1/indicators?status=INACTIVE')
+        .get('/api/v1/indicators?status=WARNING')
         .expect(HttpStatus.OK);
 
-      expect(res.body.items[0].status).toBe(IndicatorStatus.INACTIVE);
+      expect(res.body.items[0].status).toBe(IndicatorStatus.WARNING);
     });
 
     it('boundary: deve retornar lista vazia → 200', async () => {
@@ -511,19 +495,19 @@ describe('Indicators (e2e)', () => {
       );
     });
 
-    it('normal: deve atualizar status para INACTIVE → 200', async () => {
-      const inactiveIndicator = {
+    it('normal: deve atualizar status para DANGER → 200', async () => {
+      const dangerIndicator = {
         ...mockIndicator,
-        status: IndicatorStatus.INACTIVE,
+        status: IndicatorStatus.DANGER,
       };
-      mockIndicatorsService.update.mockResolvedValueOnce(inactiveIndicator);
+      mockIndicatorsService.update.mockResolvedValueOnce(dangerIndicator);
 
       const res = await request(app.getHttpServer())
         .patch(`/api/v1/indicators/${MOCK_ID}`)
-        .send({ status: 'INACTIVE' })
+        .send({ status: 'DANGER' })
         .expect(HttpStatus.OK);
 
-      expect(res.body.status).toBe(IndicatorStatus.INACTIVE);
+      expect(res.body.status).toBe(IndicatorStatus.DANGER);
     });
 
     it('normal: deve atualizar goalValue e desiredDirection → 200', async () => {
@@ -630,7 +614,7 @@ describe('Indicators (e2e)', () => {
       expect(res.body).toHaveProperty('total', 1);
       expect(res.body).toHaveProperty('active', 1);
       expect(res.body).toHaveProperty('byStatus');
-      expect(res.body.byStatus).toHaveProperty(IndicatorStatus.INACTIVE);
+      expect(res.body.byStatus).toHaveProperty(IndicatorStatus.NEUTRAL);
     });
   });
 });

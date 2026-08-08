@@ -61,6 +61,7 @@
           }
         </select>
 
+        <!-- Filtro de Status de resultado (sem Inativo) -->
         <select class="filters-bar__select" (change)="onStatusFilter($any($event.target).value)">
           <option value="">Todos status</option>
           @for (st of statuses; track st) {
@@ -68,6 +69,7 @@
           }
         </select>
 
+        <!-- Filtro operacional: Ativo / Inativo -->
         <select class="filters-bar__select" (change)="onActiveFilter($any($event.target).value)">
           <option value="">Todos</option>
           <option value="true">Ativos</option>
@@ -141,10 +143,9 @@
             </thead>
             <tbody>
               @for (ind of indicators(); track ind.id) {
-                <tr [class.row--inactive]="ind.status === 'INACTIVE'">
+                <tr>
                   <td class="cell-name">
                     @if (ind.icon && !ind.icon.includes(' ')) {
-                      <!-- Com ícone: mostra o ícone colorido -->
                       <span
                         class="material-icons cell-icon cell-icon--colored"
                         [style.color]="ind.color ?? undefined"
@@ -152,7 +153,6 @@
                         >{{ ind.icon }}</span
                       >
                     } @else if (ind.color) {
-                      <!-- Sem ícone: mostra bolinha colorida -->
                       <span class="cell-color-dot" [style.background]="ind.color"></span>
                     }
                     {{ ind.name }}

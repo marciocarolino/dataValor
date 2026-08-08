@@ -15,7 +15,7 @@ export type IndicatorChartType =
   | 'GAUGE'
   | 'NUMBER';
 
-export type IndicatorStatus = 'SUCCESS' | 'WARNING' | 'DANGER' | 'NEUTRAL' | 'INACTIVE';
+export type IndicatorStatus = 'SUCCESS' | 'WARNING' | 'DANGER' | 'NEUTRAL';
 
 export type IndicatorDesiredDirection =
   | 'HIGHER_IS_BETTER'
@@ -129,7 +129,7 @@ export interface CreateIndicatorPayload {
   maximumGoalValue?: number;
   desiredDirection?: IndicatorDesiredDirection;
   previousPeriod?: IndicatorPeriod;
-  /** Status inicial — use INACTIVE para indicadores pausados manualmente */
+  /** Status do resultado: SUCCESS, WARNING, DANGER ou NEUTRAL */
   status?: IndicatorStatus;
   color?: string | null | undefined;
   icon?: string | null | undefined;
@@ -158,7 +158,6 @@ export const INDICATOR_STATUS_LABELS: Record<IndicatorStatus, string> = {
   WARNING: 'Atenção',
   DANGER: 'Crítico',
   NEUTRAL: 'Neutro',
-  INACTIVE: 'Inativo',
 };
 
 export const INDICATOR_CHART_TYPE_LABELS: Record<IndicatorChartType, string> = {

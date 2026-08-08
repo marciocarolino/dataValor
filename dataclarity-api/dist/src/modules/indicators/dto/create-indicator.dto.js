@@ -219,7 +219,7 @@ __decorate([
         enum: indicator_status_enum_1.IndicatorStatus,
         example: indicator_status_enum_1.IndicatorStatus.NEUTRAL,
         default: indicator_status_enum_1.IndicatorStatus.NEUTRAL,
-        description: 'Status inicial do indicador. Quando medições são adicionadas, o backend recalcula automaticamente o status. Use INACTIVE para indicadores pausados.',
+        description: 'Status do resultado do indicador: SUCCESS, WARNING, DANGER ou NEUTRAL. O backend recalcula automaticamente ao adicionar medições.',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(indicator_status_enum_1.IndicatorStatus),

@@ -7,6 +7,5 @@ var IndicatorStatus;
     IndicatorStatus["WARNING"] = "WARNING";
     IndicatorStatus["DANGER"] = "DANGER";
     IndicatorStatus["NEUTRAL"] = "NEUTRAL";
-    IndicatorStatus["INACTIVE"] = "INACTIVE";
 })(IndicatorStatus || (exports.IndicatorStatus = IndicatorStatus = {}));
 //# sourceMappingURL=indicator-status.enum.js.map

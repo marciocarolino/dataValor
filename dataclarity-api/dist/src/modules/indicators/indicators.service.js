@@ -154,14 +154,8 @@ let IndicatorsService = class IndicatorsService {
     async getDashboardSummary() {
         const [total, active, inactive, byStatusRaw, catRaw] = await Promise.all([
             this.prisma.indicator.count(),
-            this.prisma.indicator.count({
-                where: { isActive: true, status: { not: indicator_status_enum_1.IndicatorStatus.INACTIVE } },
-            }),
-            this.prisma.indicator.count({
-                where: {
-                    OR: [{ isActive: false }, { status: indicator_status_enum_1.IndicatorStatus.INACTIVE }],
-                },
-            }),
+            this.prisma.indicator.count({ where: { isActive: true } }),
+            this.prisma.indicator.count({ where: { isActive: false } }),
             this.prisma.indicator.groupBy({
                 by: ['status'],
                 _count: { status: true },
@@ -176,10 +170,11 @@ let IndicatorsService = class IndicatorsService {
             [indicator_status_enum_1.IndicatorStatus.WARNING]: 0,
             [indicator_status_enum_1.IndicatorStatus.DANGER]: 0,
             [indicator_status_enum_1.IndicatorStatus.NEUTRAL]: 0,
-            [indicator_status_enum_1.IndicatorStatus.INACTIVE]: 0,
         };
         for (const row of byStatusRaw) {
-            byStatus[row.status] = row._count.status;
+            if (row.status in byStatus) {
+                byStatus[row.status] = row._count.status;
+            }
         }
         return {
             total,
@@ -269,9 +264,6 @@ let IndicatorsService = class IndicatorsService {
                     dashboardSlot: dto.dashboardSlot ?? null,
                 }),
                 ...(dto.status !== undefined && { status: dto.status }),
-                ...(dto.status === indicator_status_enum_1.IndicatorStatus.INACTIVE && { isActive: false }),
-                ...(dto.status !== undefined &&
-                    dto.status !== indicator_status_enum_1.IndicatorStatus.INACTIVE && { isActive: true }),
             },
         });
     }

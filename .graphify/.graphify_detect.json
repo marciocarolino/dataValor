@@ -15,6 +15,7 @@
       "dataclarity-api/prisma/migrations/20260807160000_add_days_remaining/migration.sql",
       "dataclarity-api/prisma/migrations/20260807170000_add_measurements_and_direction/migration.sql",
       "dataclarity-api/prisma/migrations/20260807190000_add_indicator_status_inactive/migration.sql",
+      "dataclarity-api/prisma/migrations/20260807235500_add_dashboard_slot/migration.sql",
       "dataclarity-api/src/app.controller.spec.ts",
       "dataclarity-api/src/app.controller.ts",
       "dataclarity-api/src/app.module.ts",
@@ -65,6 +66,7 @@
       "dataclarity-api/src/modules/indicators/dto/update-indicator.dto.ts",
       "dataclarity-api/src/modules/indicators/dto/update-measurement.dto.ts",
       "dataclarity-api/src/modules/indicators/entities/indicator.entity.ts",
+      "dataclarity-api/src/modules/indicators/enums/dashboard-slot.enum.ts",
       "dataclarity-api/src/modules/indicators/enums/indicator-category.enum.ts",
       "dataclarity-api/src/modules/indicators/enums/indicator-chart-type.enum.ts",
       "dataclarity-api/src/modules/indicators/enums/indicator-desired-direction.enum.ts",
@@ -162,10 +164,10 @@
     "image": [],
     "video": []
   },
-  "total_files": 155,
-  "total_words": 32431,
+  "total_files": 157,
+  "total_words": 33014,
   "needs_graph": false,
-  "warning": "Corpus is ~32.431 words - fits in a single context window. You may not need a graph.",
+  "warning": "Corpus is ~33.014 words - fits in a single context window. You may not need a graph.",
   "skipped_sensitive": [
     "dataclarity-api/src/modules/auth/dto/auth-tokens.dto.ts",
     "dataclarity-landing/src/styles/_tokens.scss"
@@ -173,7 +175,7 @@
   "graphifyignore_patterns": 52,
   "git": {
     "source_owner": "git",
-    "source_hash": "c91e2a7db432d120a99448d408e52afb271aebc2",
+    "source_hash": "f16c4b4eb2bbb8719a48f265b2463dc15f95b43b",
     "branches": [
       "master"
     ],
@@ -186,11 +188,11 @@
     "source": "default-auto",
     "root": ".",
     "git_root": ".",
-    "head": "c91e2a7db432d120a99448d408e52afb271aebc2",
-    "candidate_count": 746,
-    "included_count": 155,
-    "excluded_untracked_count": 0,
-    "excluded_ignored_count": 69506,
+    "head": "f16c4b4eb2bbb8719a48f265b2463dc15f95b43b",
+    "candidate_count": 751,
+    "included_count": 157,
+    "excluded_untracked_count": 1,
+    "excluded_ignored_count": 69532,
     "excluded_sensitive_count": 2,
     "missing_committed_count": 0,
     "warnings": [],

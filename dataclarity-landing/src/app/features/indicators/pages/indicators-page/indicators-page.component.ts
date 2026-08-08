@@ -53,7 +53,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly periods: IndicatorPeriod[] = [
     'PREVIOUS_MONTH', 'PREVIOUS_QUARTER', 'PREVIOUS_SEMESTER', 'PREVIOUS_YEAR', 'CUSTOM',
   ];
-  readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL', 'INACTIVE'];
+  readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'];
   readonly chartTypes: IndicatorChartType[] = [
     'LINE', 'BAR', 'AREA', 'DONUT', 'PIE', 'GAUGE', 'NUMBER',
   ];
@@ -508,7 +508,6 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       WARNING: 'badge--warning',
       DANGER: 'badge--danger',
       NEUTRAL: 'badge--neutral',
-      INACTIVE: 'badge--inactive',
     };
     return map[status] ?? '';
   }

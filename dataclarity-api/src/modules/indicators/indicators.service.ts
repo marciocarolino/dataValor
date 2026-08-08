@@ -19,6 +19,8 @@ export interface IndicatorSummary {
   byStatus: Record<IndicatorStatus, number>;
 }
 
+type ByStatusMap = Record<IndicatorStatus, number>;
+
 @Injectable()
 export class IndicatorsService {
   constructor(
@@ -184,16 +186,10 @@ export class IndicatorsService {
   async getDashboardSummary(): Promise<IndicatorSummary> {
     const [total, active, inactive, byStatusRaw, catRaw] = await Promise.all([
       this.prisma.indicator.count(),
-      // Ativo = isActive=true E status diferente de INACTIVE
-      this.prisma.indicator.count({
-        where: { isActive: true, status: { not: IndicatorStatus.INACTIVE } },
-      }),
-      // Inativo = isActive=false OU status=INACTIVE
-      this.prisma.indicator.count({
-        where: {
-          OR: [{ isActive: false }, { status: IndicatorStatus.INACTIVE }],
-        },
-      }),
+      // Ativo = isActive=true
+      this.prisma.indicator.count({ where: { isActive: true } }),
+      // Inativo = isActive=false
+      this.prisma.indicator.count({ where: { isActive: false } }),
       this.prisma.indicator.groupBy({
         by: ['status'],
         _count: { status: true },
@@ -204,16 +200,17 @@ export class IndicatorsService {
       }),
     ]);
 
-    const byStatus = {
+    const byStatus: ByStatusMap = {
       [IndicatorStatus.SUCCESS]: 0,
       [IndicatorStatus.WARNING]: 0,
       [IndicatorStatus.DANGER]: 0,
       [IndicatorStatus.NEUTRAL]: 0,
-      [IndicatorStatus.INACTIVE]: 0,
-    } as Record<IndicatorStatus, number>;
+    };
 
     for (const row of byStatusRaw) {
-      byStatus[row.status as IndicatorStatus] = row._count.status;
+      if (row.status in byStatus) {
+        byStatus[row.status as IndicatorStatus] = row._count.status;
+      }
     }
 
     return {
@@ -315,14 +312,9 @@ export class IndicatorsService {
         ...('dashboardSlot' in dto && {
           dashboardSlot: dto.dashboardSlot ?? null,
         }),
-        // status: aceito do DTO apenas quando explicitamente enviado (ex: INACTIVE)
+        // status: aceito do DTO quando explicitamente enviado
         // após cada medição, syncIndicatorCache recalcula e pode sobrescrever
         ...(dto.status !== undefined && { status: dto.status }),
-        // Ao marcar como INACTIVE, desativa automaticamente
-        ...(dto.status === IndicatorStatus.INACTIVE && { isActive: false }),
-        // Ao sair do status INACTIVE para qualquer outro, reativa automaticamente
-        ...(dto.status !== undefined &&
-          dto.status !== IndicatorStatus.INACTIVE && { isActive: true }),
         // currentValue, previousValue, variation:
         // são ignorados do DTO — calculados pelo analytics após cada medição
       },

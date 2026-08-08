@@ -146,7 +146,6 @@ enum IndicatorStatus {
   WARNING
   DANGER
   NEUTRAL
-  INACTIVE
 }
 
 enum IndicatorPeriod {

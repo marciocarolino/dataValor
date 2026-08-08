@@ -191,7 +191,7 @@ export class CreateIndicatorDto {
     example: IndicatorStatus.NEUTRAL,
     default: IndicatorStatus.NEUTRAL,
     description:
-      'Status inicial do indicador. Quando medições são adicionadas, o backend recalcula automaticamente o status. Use INACTIVE para indicadores pausados.',
+      'Status do resultado do indicador: SUCCESS, WARNING, DANGER ou NEUTRAL. O backend recalcula automaticamente ao adicionar medições.',
   })
   @IsOptional()
   @IsEnum(IndicatorStatus)

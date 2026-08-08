@@ -8,8 +8,8 @@ export declare class MeasurementsController {
     constructor(measurementsService: MeasurementsService, indicatorsService: IndicatorsService);
     create(indicatorId: string, dto: CreateMeasurementDto): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
@@ -20,8 +20,8 @@ export declare class MeasurementsController {
     }>;
     upsert(indicatorId: string, dto: CreateMeasurementDto): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
@@ -32,8 +32,8 @@ export declare class MeasurementsController {
     }>;
     findAll(indicatorId: string, startDate?: string, endDate?: string): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
@@ -44,8 +44,8 @@ export declare class MeasurementsController {
     }[]>;
     update(indicatorId: string, measurementId: string, dto: UpdateMeasurementDto): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
@@ -56,8 +56,8 @@ export declare class MeasurementsController {
     }>;
     remove(indicatorId: string, measurementId: string): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
@@ -69,8 +69,8 @@ export declare class MeasurementsController {
     getAnalytics(indicatorId: string): Promise<import("./indicator-analytics.service").AnalyticsResult>;
     getHistory(indicatorId: string, startDate?: string, endDate?: string): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;

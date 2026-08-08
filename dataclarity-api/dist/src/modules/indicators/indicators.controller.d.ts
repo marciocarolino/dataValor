@@ -19,13 +19,8 @@ export declare class IndicatorsController {
                 referenceDate: Date;
             }[];
         } & {
-            status: import(".prisma/client").$Enums.IndicatorStatus;
             description: string | null;
             name: string;
-            createdAt: Date;
-            id: string;
-            updatedAt: Date;
-            isActive: boolean;
             category: import(".prisma/client").$Enums.IndicatorCategory;
             formula: string | null;
             unit: string | null;
@@ -39,12 +34,17 @@ export declare class IndicatorsController {
             icon: string | null;
             startDate: Date | null;
             endDate: Date | null;
+            isActive: boolean;
             showOnDashboard: boolean;
             dashboardSlot: string | null;
+            status: import(".prisma/client").$Enums.IndicatorStatus;
+            daysRemaining: number | null;
+            id: string;
             currentValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             variation: import("@prisma/client-runtime-utils").Decimal | null;
-            daysRemaining: number | null;
+            createdAt: Date;
+            updatedAt: Date;
         }, "measurements"> & {
             analytics: {
                 currentValue: number | null;
