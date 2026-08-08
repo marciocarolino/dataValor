@@ -18,6 +18,18 @@ export declare class MeasurementsController {
         source: string | null;
         notes: string | null;
     }>;
+    upsert(indicatorId: string, dto: CreateMeasurementDto): Promise<{
+        value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
+        referenceDate: Date;
+        indicatorId: string;
+        periodStart: Date | null;
+        periodEnd: Date | null;
+        source: string | null;
+        notes: string | null;
+    }>;
     findAll(indicatorId: string, startDate?: string, endDate?: string): Promise<{
         value: import("@prisma/client-runtime-utils").Decimal;
         createdAt: Date;

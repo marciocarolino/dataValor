@@ -71,6 +71,27 @@ export class MeasurementsController {
     return this.measurementsService.create(indicatorId, dto);
   }
 
+  // ─── POST /indicators/:indicatorId/measurements/upsert ──────────────────
+
+  @Post('measurements/upsert')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Criar ou atualizar medição (upsert)',
+    description:
+      'Se já existe uma medição para o indicador na data informada, atualiza o valor. Caso contrário, cria uma nova medição. Ideal para o fluxo de edição de indicador.',
+  })
+  @ApiParam({ name: 'indicatorId', format: 'uuid' })
+  @ApiBody({ type: CreateMeasurementDto })
+  @ApiResponse({ status: 200, description: 'Medição criada ou atualizada.' })
+  @ApiNotFoundResponse({ description: 'Indicador não encontrado.' })
+  @ApiUnauthorizedResponse({ description: 'Token inválido ou ausente.' })
+  async upsert(
+    @Param('indicatorId', uuidPipe) indicatorId: string,
+    @Body() dto: CreateMeasurementDto,
+  ) {
+    return this.measurementsService.upsert(indicatorId, dto);
+  }
+
   // ─── GET /indicators/:indicatorId/measurements ───────────────────────────
 
   @Get('measurements')

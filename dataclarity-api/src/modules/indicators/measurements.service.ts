@@ -54,6 +54,60 @@ export class MeasurementsService {
     }
   }
 
+  // ─── POST /indicators/:indicatorId/measurements/upsert ──────────────────
+
+  /**
+   * Cria ou atualiza uma medição para a data informada (upsert).
+   * Se já existe uma medição para o indicador naquela data, atualiza o valor.
+   * Se não existe, cria uma nova.
+   * Ideal para o fluxo de edição de indicador no frontend.
+   */
+  async upsert(indicatorId: string, dto: CreateMeasurementDto) {
+    const indicator = await this.ensureIndicator(indicatorId);
+    this.validateDates(dto.periodStart, dto.periodEnd);
+
+    const refDate = new Date(dto.referenceDate);
+
+    const existing = await this.prisma.indicatorMeasurement.findUnique({
+      where: {
+        indicatorId_referenceDate: { indicatorId, referenceDate: refDate },
+      },
+    });
+
+    if (existing) {
+      const updated = await this.prisma.indicatorMeasurement.update({
+        where: { id: existing.id },
+        data: {
+          value: dto.value,
+          ...(dto.periodStart !== undefined && {
+            periodStart: dto.periodStart ? new Date(dto.periodStart) : null,
+          }),
+          ...(dto.periodEnd !== undefined && {
+            periodEnd: dto.periodEnd ? new Date(dto.periodEnd) : null,
+          }),
+          ...(dto.source !== undefined && { source: dto.source ?? null }),
+          ...(dto.notes !== undefined && { notes: dto.notes ?? null }),
+        },
+      });
+      await this.syncIndicatorCache(indicatorId, indicator);
+      return updated;
+    } else {
+      const created = await this.prisma.indicatorMeasurement.create({
+        data: {
+          indicatorId,
+          value: dto.value,
+          referenceDate: refDate,
+          periodStart: dto.periodStart ? new Date(dto.periodStart) : null,
+          periodEnd: dto.periodEnd ? new Date(dto.periodEnd) : null,
+          source: dto.source ?? null,
+          notes: dto.notes ?? null,
+        },
+      });
+      await this.syncIndicatorCache(indicatorId, indicator);
+      return created;
+    }
+  }
+
   // ─── GET /indicators/:indicatorId/measurements ───────────────────────────
 
   async findAll(
