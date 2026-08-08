@@ -61,6 +61,9 @@ export interface Indicator {
   formula: string | null;
   unit: string | null;
   goalValue: number | null;
+  minimumGoalValue: number | null;
+  maximumGoalValue: number | null;
+  desiredDirection: IndicatorDesiredDirection;
   currentValue: number | null;
   previousValue: number | null;
   previousPeriod: IndicatorPeriod | null;

@@ -295,6 +295,9 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       formula: indicator.formula ?? '',
       unit: indicator.unit ?? '',
       goalValue: indicator.goalValue,
+      minimumGoalValue: indicator.minimumGoalValue ?? null,
+      maximumGoalValue: indicator.maximumGoalValue ?? null,
+      desiredDirection: indicator.desiredDirection ?? 'HIGHER_IS_BETTER',
       // Usa analytics para currentValue/previousValue — fonte de verdade das medições
       currentValue: analyticsCurrentValue,
       previousValue: analyticsPreviousValue,
@@ -362,66 +365,76 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     const previousValue = raw['previousValue'] as number | null;
 
     const id = this.editingId();
-    const obs = id
-      ? this.svc.update(id, payload)
-      : this.svc.create(payload);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const toISO = (d: Date) => d.toISOString().substring(0, 10) + 'T00:00:00.000Z';
 
-    obs.subscribe({
-      next: (indicator) => {
-        const indicatorId = (indicator as { id: string }).id;
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-        const toISO = (d: Date) => d.toISOString().substring(0, 10) + 'T00:00:00.000Z';
+    const finalize = (): void => {
+      this.saving.set(false);
+      this.closeModal();
+      this.svc.loadList({ page: this.currentPage(), limit: 10 });
+      this.svc.loadSummary();
+    };
 
-        // Cria medições iniciais em sequência — previousValue primeiro (data anterior),
-        // depois currentValue (data atual), para o backend calcular a variação corretamente
-        const measurementChain = (): void => {
-          this.saving.set(false);
-          this.closeModal();
-          this.svc.loadList({ page: this.currentPage(), limit: 10 });
-          this.svc.loadSummary();
-        };
+    /**
+     * Envia as medições em sequência (previous → current) e chama onDone ao terminar.
+     */
+    const sendMeasurements = (indicatorId: string, isEdit: boolean, onDone: () => void): void => {
+      if (currentValue == null || currentValue === 0) {
+        onDone();
+        return;
+      }
+      const measurements: CreateMeasurementPayload[] = [];
+      if (previousValue != null && previousValue !== currentValue) {
+        measurements.push({ value: previousValue, referenceDate: toISO(yesterday) });
+      }
+      measurements.push({ value: currentValue, referenceDate: toISO(today) });
 
-        if (currentValue != null && currentValue !== 0) {
-          const measurements: CreateMeasurementPayload[] = [];
+      const sendFn = (m: CreateMeasurementPayload) =>
+        isEdit ? this.svc.upsertMeasurement(indicatorId, m) : this.svc.createMeasurement(indicatorId, m);
 
-          // Valor anterior: cria com data de ontem se diferente do current
-          if (previousValue != null && previousValue !== currentValue) {
-            measurements.push({ value: previousValue, referenceDate: toISO(yesterday) });
-          }
-          // Valor atual: data de hoje
-          measurements.push({ value: currentValue, referenceDate: toISO(today) });
-
-          // No modo de edição usa upsert (cria ou atualiza sem 409);
-          // no modo de criação usa create (POST padrão).
-          const isEdit = !!id;
-          const sendMeasurement = (payload: CreateMeasurementPayload) =>
-            isEdit
-              ? this.svc.upsertMeasurement(indicatorId, payload)
-              : this.svc.createMeasurement(indicatorId, payload);
-
-          // Dispara em sequência (previous → current) para garantir ordem correta
-          const runNext = (index: number): void => {
-            if (index >= measurements.length) {
-              measurementChain();
-              return;
-            }
-            sendMeasurement(measurements[index]).subscribe({
-              next: () => runNext(index + 1),
-              error: () => runNext(index + 1),
-            });
-          };
-          runNext(0);
-        } else {
-          measurementChain();
+      const runNext = (index: number): void => {
+        if (index >= measurements.length) {
+          onDone();
+          return;
         }
-      },
-      error: (err: Error) => {
-        this.saving.set(false);
-        this.saveError.set(err.message);
-      },
-    });
+        sendFn(measurements[index]).subscribe({
+          next: () => runNext(index + 1),
+          error: () => runNext(index + 1),
+        });
+      };
+      runNext(0);
+    };
+
+    if (id) {
+      // ── Modo EDIÇÃO ──────────────────────────────────────────────────────────
+      // Sequência: upsert medições → PATCH indicador.
+      // O PATCH vem por último para que o status/campos do usuário sobrescrevam
+      // o computedStatus gerado pelo syncIndicatorCache no upsert das medições.
+      sendMeasurements(id, true, () => {
+        this.svc.update(id, payload).subscribe({
+          next: () => finalize(),
+          error: (err: Error) => {
+            this.saving.set(false);
+            this.saveError.set(err.message);
+          },
+        });
+      });
+    } else {
+      // ── Modo CRIAÇÃO ─────────────────────────────────────────────────────────
+      // Sequência: cria indicador → cria medições.
+      this.svc.create(payload).subscribe({
+        next: (indicator) => {
+          const indicatorId = (indicator as { id: string }).id;
+          sendMeasurements(indicatorId, false, finalize);
+        },
+        error: (err: Error) => {
+          this.saving.set(false);
+          this.saveError.set(err.message);
+        },
+      });
+    }
   }
 
   openDetails(ind: Indicator): void {
