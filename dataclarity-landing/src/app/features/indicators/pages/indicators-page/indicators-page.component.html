@@ -361,9 +361,9 @@
             </div>
           </div>
 
-          <!-- Row 3: Valores numéricos -->
+          <!-- Row 3: Valor Atual | Meta (linha inteira) -->
           <div class="form-row">
-            <div class="form-group">
+            <div class="form-group form-group--lg">
               <label>Valor Atual</label>
               <input
                 appCurrencyBrl
@@ -373,7 +373,7 @@
                 inputmode="decimal"
               />
             </div>
-            <div class="form-group">
+            <div class="form-group form-group--lg">
               <label>Meta</label>
               <input
                 appCurrencyBrl
@@ -383,8 +383,57 @@
                 inputmode="decimal"
               />
             </div>
+          </div>
+
+          <!-- Row 3b: Valor Anterior | Período de Referência | Variação % -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Valor Anterior</label>
+              <input
+                appCurrencyBrl
+                formControlName="previousValue"
+                type="text"
+                placeholder="0,00"
+                inputmode="decimal"
+              />
+            </div>
+            <div class="form-group">
+              <label>Período de Referência</label>
+              <select formControlName="previousPeriod" class="select--period">
+                <option [value]="null">Não informado</option>
+                @for (p of periods; track p) {
+                  <option [value]="p">{{ periodLabels[p] }}</option>
+                }
+              </select>
+            </div>
             <div class="form-group form-group--auto">
-              <label>Variação %</label>
+              <label class="label--with-help">
+                Variação %
+                <span
+                  class="help-icon"
+                  [class.help-icon--active]="showVariationHelp"
+                  (click)="showVariationHelp = !showVariationHelp"
+                  title="O que é Variação %?"
+                >
+                  <span class="material-icons">help_outline</span>
+                </span>
+              </label>
+              @if (showVariationHelp) {
+                <div class="help-tooltip">
+                  <p>
+                    A <strong>Variação %</strong> mede o crescimento ou queda do valor atual em
+                    relação ao valor anterior.
+                  </p>
+                  <p class="help-tooltip__formula">
+                    <code>((Valor Atual − Valor Anterior) / |Valor Anterior|) × 100</code>
+                  </p>
+                  <p>
+                    Exemplo: Valor Atual = 1.500, Valor Anterior = 1.000 → Variação =
+                    <strong>+50%</strong>
+                  </p>
+                  <p class="help-tooltip__note">Preencha o Valor Anterior para ver a prévia.</p>
+                </div>
+              }
               <div class="variation-auto">
                 @if (autoVariation() !== null) {
                   <span
@@ -394,15 +443,14 @@
                   >
                     {{ autoVariation()! >= 0 ? '▲' : '▼' }} {{ autoVariation()!.toFixed(2) }}%
                   </span>
-                  <span class="variation-auto__hint">calculado automaticamente</span>
                 } @else {
-                  <span class="variation-auto__hint">Preencha Valor Atual e Anterior</span>
+                  <span class="variation-auto__hint">–</span>
                 }
               </div>
             </div>
           </div>
 
-          <!-- Row 3b: Datas de acompanhamento -->
+          <!-- Row 3c: Datas de acompanhamento -->
           <div class="form-row">
             <div class="form-group">
               <label>Data Início</label>
@@ -436,29 +484,6 @@
                 </div>
               </div>
             }
-          </div>
-
-          <!-- Row 3c: Valor Anterior + Período de Referência -->
-          <div class="form-row form-row--previous">
-            <div class="form-group">
-              <label>Valor Anterior</label>
-              <input
-                appCurrencyBrl
-                formControlName="previousValue"
-                type="text"
-                placeholder="0,00"
-                inputmode="decimal"
-              />
-            </div>
-            <div class="form-group">
-              <label>Período de Referência</label>
-              <select formControlName="previousPeriod" class="select--period">
-                <option [value]="null">Não informado</option>
-                @for (p of periods; track p) {
-                  <option [value]="p">{{ periodLabels[p] }}</option>
-                }
-              </select>
-            </div>
           </div>
           @if (form.get('previousValue')?.value !== null && !form.get('previousPeriod')?.value) {
             <p class="form-hint">

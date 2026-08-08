@@ -15,7 +15,12 @@ export type IndicatorChartType =
   | 'GAUGE'
   | 'NUMBER';
 
-export type IndicatorStatus = 'SUCCESS' | 'WARNING' | 'DANGER' | 'NEUTRAL';
+export type IndicatorStatus = 'SUCCESS' | 'WARNING' | 'DANGER' | 'NEUTRAL' | 'INACTIVE';
+
+export type IndicatorDesiredDirection =
+  | 'HIGHER_IS_BETTER'
+  | 'LOWER_IS_BETTER'
+  | 'RANGE_IS_BETTER';
 
 export type IndicatorPeriod =
   | 'PREVIOUS_MONTH'
@@ -31,6 +36,19 @@ export const INDICATOR_PERIOD_LABELS: Record<IndicatorPeriod, string> = {
   PREVIOUS_YEAR: 'Ano anterior',
   CUSTOM: 'Personalizado',
 };
+
+export interface IndicatorAnalytics {
+  currentValue: number | null;
+  previousValue: number | null;
+  variation: number | null;
+  variationCalculationStatus: string;
+  targetAchievementPercentage: number | null;
+  targetDifference: number | null;
+  targetStatus: string;
+  daysRemaining: number | null;
+  isOverdue: boolean;
+  lastMeasurementDate: string | null;
+}
 
 export interface Indicator {
   id: string;
@@ -55,6 +73,8 @@ export interface Indicator {
   showOnDashboard: boolean;
   createdAt: string;
   updatedAt: string;
+  /** Analytics calculados em tempo real a partir das medições (fonte de verdade) */
+  analytics?: IndicatorAnalytics;
 }
 
 export interface IndicatorSummary {
@@ -98,8 +118,10 @@ export interface CreateIndicatorPayload {
   goalValue?: number;
   minimumGoalValue?: number;
   maximumGoalValue?: number;
-  desiredDirection?: 'HIGHER_IS_BETTER' | 'LOWER_IS_BETTER' | 'RANGE_IS_BETTER';
+  desiredDirection?: IndicatorDesiredDirection;
   previousPeriod?: IndicatorPeriod;
+  /** Status inicial — use INACTIVE para indicadores pausados manualmente */
+  status?: IndicatorStatus;
   color?: string | null | undefined;
   icon?: string | null | undefined;
   chartType: IndicatorChartType;
@@ -125,6 +147,7 @@ export const INDICATOR_STATUS_LABELS: Record<IndicatorStatus, string> = {
   WARNING: 'Atenção',
   DANGER: 'Crítico',
   NEUTRAL: 'Neutro',
+  INACTIVE: 'Inativo',
 };
 
 export const INDICATOR_CHART_TYPE_LABELS: Record<IndicatorChartType, string> = {

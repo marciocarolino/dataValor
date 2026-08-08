@@ -27,6 +27,7 @@ import {
   type IndicatorPeriod,
   type IndicatorQueryParams,
   type CreateIndicatorPayload,
+  type IndicatorDesiredDirection,
 } from '../../../../core/models/indicator.model';
 
 @Component({
@@ -52,7 +53,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly periods: IndicatorPeriod[] = [
     'PREVIOUS_MONTH', 'PREVIOUS_QUARTER', 'PREVIOUS_SEMESTER', 'PREVIOUS_YEAR', 'CUSTOM',
   ];
-  readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'];
+  readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL', 'INACTIVE'];
   readonly chartTypes: IndicatorChartType[] = [
     'LINE', 'BAR', 'AREA', 'DONUT', 'PIE', 'GAUGE', 'NUMBER',
   ];
@@ -92,6 +93,9 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly confirmDeleteId = signal<string | null>(null);
   readonly deleting = signal(false);
 
+  // ── Tooltip de ajuda — Variação % ─────────────────────────────────────────
+  showVariationHelp = false;
+
   // ── Formulário reativo ─────────────────────────────────────────────────────
   readonly form: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
@@ -103,10 +107,11 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     minimumGoalValue: [null],
     maximumGoalValue: [null],
     desiredDirection: ['HIGHER_IS_BETTER'],
-    // currentValue e previousValue são capturados aqui apenas para criar medições iniciais
-    // O backend calcula esses campos a partir das medições — não são enviados no payload do indicador
+    // currentValue e previousValue: capturados para criar medições iniciais
+    // status pode ser definido manualmente (ex: INACTIVE); variation é calculada pelo backend
     currentValue: [null],
     previousValue: [null],
+    status: ['NEUTRAL', Validators.required],
     previousPeriod: [null],
     color: ['', Validators.maxLength(30)],
     icon: ['', Validators.maxLength(60)],
@@ -213,9 +218,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     this.form.reset({
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
       goalValue: null, minimumGoalValue: null, maximumGoalValue: null,
-      desiredDirection: 'HIGHER_IS_BETTER',
-      currentValue: null, previousValue: null,
-      previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
+      desiredDirection: 'HIGHER_IS_BETTER', currentValue: null, previousValue: null,
+      status: 'NEUTRAL', previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
       startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
     });
@@ -230,6 +234,11 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     const rawIcon = indicator.icon ?? '';
     const normalizedIcon = rawIcon.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
 
+    // Prefere analytics.currentValue/previousValue (computados ao vivo das medições)
+    // em vez dos campos cacheados do Prisma, que podem estar desatualizados
+    const analyticsCurrentValue = indicator.analytics?.currentValue ?? indicator.currentValue;
+    const analyticsPreviousValue = indicator.analytics?.previousValue ?? indicator.previousValue;
+
     this.form.patchValue({
       name: indicator.name,
       description: indicator.description ?? '',
@@ -237,10 +246,10 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       formula: indicator.formula ?? '',
       unit: indicator.unit ?? '',
       goalValue: indicator.goalValue,
-      // currentValue e previousValue: preenchidos para exibir os valores atuais na edição
-      // Se alterados e salvos, criarão novas medições no backend
-      currentValue: indicator.currentValue,
-      previousValue: indicator.previousValue,
+      // Usa analytics para currentValue/previousValue — fonte de verdade das medições
+      currentValue: analyticsCurrentValue,
+      previousValue: analyticsPreviousValue,
+      status: indicator.status ?? 'NEUTRAL',
       previousPeriod: indicator.previousPeriod ?? null,
       color: indicator.color ?? '',
       icon: normalizedIcon,
@@ -281,13 +290,13 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       goalValue: (raw['goalValue'] as number) ?? undefined,
       minimumGoalValue: (raw['minimumGoalValue'] as number) ?? undefined,
       maximumGoalValue: (raw['maximumGoalValue'] as number) ?? undefined,
-      desiredDirection: (raw['desiredDirection'] as
-        | 'HIGHER_IS_BETTER'
-        | 'LOWER_IS_BETTER'
-        | 'RANGE_IS_BETTER') ?? undefined,
+      desiredDirection: (raw['desiredDirection'] as IndicatorDesiredDirection) ?? undefined,
       previousPeriod: (raw['previousPeriod'] as IndicatorPeriod) || undefined,
-      // currentValue / previousValue / variation / status:
-      // são calculados no backend e NÃO devem ser enviados no POST (ValidationPipe)
+      // status: enviado para o backend quando é INACTIVE (indicador pausado manualmente)
+      // Se for SUCCESS/WARNING/DANGER, o backend recalcula a partir das medições
+      status: (raw['status'] as IndicatorStatus) || undefined,
+      // currentValue / previousValue / variation:
+      // NÃO enviados no payload — calculados pelo analytics após cada medição
       color: (raw['color'] as string) || null,
       icon: (raw['icon'] as string) || null,
       chartType: raw['chartType'] as IndicatorChartType,
@@ -430,6 +439,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       WARNING: 'badge--warning',
       DANGER: 'badge--danger',
       NEUTRAL: 'badge--neutral',
+      INACTIVE: 'badge--inactive',
     };
     return map[status] ?? '';
   }

@@ -34,14 +34,41 @@ function normalizeIcon(icon: unknown): string | null {
 }
 
 function parseIndicator(raw: Record<string, unknown>): Indicator {
+  // analytics contém os valores calculados em tempo real das medições
+  const analyticsRaw = raw['analytics'] as Record<string, unknown> | undefined;
+
   return {
     ...(raw as unknown as Indicator),
-    currentValue: parseDecimal(raw['currentValue']),
-    previousValue: parseDecimal(raw['previousValue']),
+    // Prefere os valores do analytics (calculados das medições) sobre o cache do Prisma
+    currentValue: analyticsRaw
+      ? parseDecimal(analyticsRaw['currentValue'])
+      : parseDecimal(raw['currentValue']),
+    previousValue: analyticsRaw
+      ? parseDecimal(analyticsRaw['previousValue'])
+      : parseDecimal(raw['previousValue']),
+    variation: analyticsRaw
+      ? parseDecimal(analyticsRaw['variation'])
+      : parseDecimal(raw['variation']),
     goalValue: parseDecimal(raw['goalValue']),
-    variation: parseDecimal(raw['variation']),
     // Normaliza ícone ao receber da API — corrige valores com espaços/maiúsculas
     icon: normalizeIcon(raw['icon']),
+    // Preserva o objeto analytics tipado para uso no openEdit
+    analytics: analyticsRaw
+      ? {
+          currentValue: parseDecimal(analyticsRaw['currentValue']),
+          previousValue: parseDecimal(analyticsRaw['previousValue']),
+          variation: parseDecimal(analyticsRaw['variation']),
+          variationCalculationStatus: String(analyticsRaw['variationCalculationStatus'] ?? ''),
+          targetAchievementPercentage: parseDecimal(analyticsRaw['targetAchievementPercentage']),
+          targetDifference: parseDecimal(analyticsRaw['targetDifference']),
+          targetStatus: String(analyticsRaw['targetStatus'] ?? ''),
+          daysRemaining: typeof analyticsRaw['daysRemaining'] === 'number'
+            ? analyticsRaw['daysRemaining']
+            : null,
+          isOverdue: Boolean(analyticsRaw['isOverdue']),
+          lastMeasurementDate: analyticsRaw['lastMeasurementDate'] as string | null,
+        }
+      : undefined,
   };
 }
 
