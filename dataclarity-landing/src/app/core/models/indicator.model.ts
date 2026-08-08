@@ -81,7 +81,8 @@ export interface IndicatorSummary {
   total: number;
   active: number;
   inactive: number;
-  categories: IndicatorCategory[];
+  /** Número de categorias distintas com indicadores */
+  categories: number;
 }
 
 export interface PaginationMeta {

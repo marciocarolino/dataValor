@@ -36,7 +36,7 @@
           </div>
           <div class="summary-card summary-card--categories">
             <span class="summary-card__label">Categorias</span>
-            <span class="summary-card__value">{{ summary()!.categories.length }}</span>
+            <span class="summary-card__value">{{ summary()!.categories }}</span>
           </div>
         </section>
       }
@@ -357,7 +357,12 @@
             </div>
             <div class="form-group">
               <label>Unidade</label>
-              <input formControlName="unit" type="text" placeholder="Ex: BRL, %" />
+              <select formControlName="unit">
+                <option value="">Selecione...</option>
+                @for (cur of currencies; track cur.code) {
+                  <option [value]="cur.code">{{ cur.name }}</option>
+                }
+              </select>
             </div>
           </div>
 
