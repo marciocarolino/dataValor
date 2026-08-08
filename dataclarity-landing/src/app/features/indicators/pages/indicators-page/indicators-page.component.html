@@ -141,7 +141,7 @@
             </thead>
             <tbody>
               @for (ind of indicators(); track ind.id) {
-                <tr [class.row--inactive]="!ind.isActive">
+                <tr [class.row--inactive]="ind.status === 'INACTIVE'">
                   <td class="cell-name">
                     @if (ind.icon && !ind.icon.includes(' ')) {
                       <!-- Com ícone: mostra o ícone colorido -->

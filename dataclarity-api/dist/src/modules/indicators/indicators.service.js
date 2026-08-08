@@ -270,6 +270,8 @@ let IndicatorsService = class IndicatorsService {
                 }),
                 ...(dto.status !== undefined && { status: dto.status }),
                 ...(dto.status === indicator_status_enum_1.IndicatorStatus.INACTIVE && { isActive: false }),
+                ...(dto.status !== undefined &&
+                    dto.status !== indicator_status_enum_1.IndicatorStatus.INACTIVE && { isActive: true }),
             },
         });
     }

@@ -318,8 +318,11 @@ export class IndicatorsService {
         // status: aceito do DTO apenas quando explicitamente enviado (ex: INACTIVE)
         // após cada medição, syncIndicatorCache recalcula e pode sobrescrever
         ...(dto.status !== undefined && { status: dto.status }),
-        // Ao marcar como INACTIVE, o indicador também é desativado automaticamente
+        // Ao marcar como INACTIVE, desativa automaticamente
         ...(dto.status === IndicatorStatus.INACTIVE && { isActive: false }),
+        // Ao sair do status INACTIVE para qualquer outro, reativa automaticamente
+        ...(dto.status !== undefined &&
+          dto.status !== IndicatorStatus.INACTIVE && { isActive: true }),
         // currentValue, previousValue, variation:
         // são ignorados do DTO — calculados pelo analytics após cada medição
       },
