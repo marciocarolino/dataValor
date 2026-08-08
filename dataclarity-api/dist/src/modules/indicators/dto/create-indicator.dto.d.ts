@@ -1,3 +1,4 @@
+import { DashboardSlot } from '../enums/dashboard-slot.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
@@ -21,5 +22,6 @@ export declare class CreateIndicatorDto {
     endDate?: string | null;
     isActive?: boolean;
     showOnDashboard?: boolean;
+    dashboardSlot?: DashboardSlot | null;
     status?: IndicatorStatus;
 }

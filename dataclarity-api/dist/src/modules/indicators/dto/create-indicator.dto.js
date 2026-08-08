@@ -13,6 +13,7 @@ exports.CreateIndicatorDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const dashboard_slot_enum_1 = require("../enums/dashboard-slot.enum");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
 const indicator_desired_direction_enum_1 = require("../enums/indicator-desired-direction.enum");
@@ -37,6 +38,7 @@ class CreateIndicatorDto {
     endDate;
     isActive;
     showOnDashboard;
+    dashboardSlot;
     status;
 }
 exports.CreateIndicatorDto = CreateIndicatorDto;
@@ -201,6 +203,17 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateIndicatorDto.prototype, "showOnDashboard", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: dashboard_slot_enum_1.DashboardSlot,
+        example: dashboard_slot_enum_1.DashboardSlot.REVENUE,
+        nullable: true,
+        description: 'Slot fixo do card no Dashboard: REVENUE, PROFIT, CUSTOMERS ou GROWTH. Deixe em branco para não vincular a nenhum card fixo.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(dashboard_slot_enum_1.DashboardSlot),
+    __metadata("design:type", Object)
+], CreateIndicatorDto.prototype, "dashboardSlot", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         enum: indicator_status_enum_1.IndicatorStatus,

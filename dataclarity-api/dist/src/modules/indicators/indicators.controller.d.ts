@@ -40,6 +40,7 @@ export declare class IndicatorsController {
             startDate: Date | null;
             endDate: Date | null;
             showOnDashboard: boolean;
+            dashboardSlot: string | null;
             currentValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             variation: import("@prisma/client-runtime-utils").Decimal | null;

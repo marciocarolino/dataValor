@@ -86,6 +86,8 @@ model Indicator {
   startDate        DateTime?
   endDate          DateTime?
   daysRemaining    Int?
+  // ── Dashboard slot (mapeamento aos 4 cards: REVENUE, PROFIT, CUSTOMERS, GROWTH) ─
+  dashboardSlot    String?                   // null = não exibir em slot fixo; "REVENUE", "PROFIT", "CUSTOMERS", "GROWTH"
   // ── Controle ────────────────────────────────────────────────────────────
   isActive         Boolean                   @default(true)
   showOnDashboard  Boolean                   @default(false)

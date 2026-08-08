@@ -49,6 +49,7 @@ let IndicatorsService = class IndicatorsService {
                 daysRemaining,
                 isActive: dto.isActive ?? true,
                 showOnDashboard: dto.showOnDashboard ?? false,
+                dashboardSlot: dto.dashboardSlot ?? null,
             },
         });
     }
@@ -263,6 +264,9 @@ let IndicatorsService = class IndicatorsService {
                 ...(dto.isActive !== undefined && { isActive: dto.isActive }),
                 ...(dto.showOnDashboard !== undefined && {
                     showOnDashboard: dto.showOnDashboard,
+                }),
+                ...('dashboardSlot' in dto && {
+                    dashboardSlot: dto.dashboardSlot ?? null,
                 }),
                 ...(dto.status !== undefined && { status: dto.status }),
                 ...(dto.status === indicator_status_enum_1.IndicatorStatus.INACTIVE && { isActive: false }),

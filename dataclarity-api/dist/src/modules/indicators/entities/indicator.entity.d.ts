@@ -23,6 +23,7 @@ export declare class IndicatorEntity {
     daysRemaining: number | null;
     isActive: boolean;
     showOnDashboard: boolean;
+    dashboardSlot: string | null;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -84,6 +84,14 @@ export class IndicatorEntity {
   @ApiProperty({ example: false })
   showOnDashboard!: boolean;
 
+  @ApiPropertyOptional({
+    example: 'REVENUE',
+    nullable: true,
+    description:
+      'Slot fixo do dashboard ao qual este indicador está vinculado: REVENUE, PROFIT, CUSTOMERS ou GROWTH. Null = não aparece em nenhum card fixo.',
+  })
+  dashboardSlot!: string | null;
+
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt!: Date;
 

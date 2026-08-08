@@ -61,6 +61,7 @@ export class IndicatorsService {
         daysRemaining,
         isActive: dto.isActive ?? true,
         showOnDashboard: dto.showOnDashboard ?? false,
+        dashboardSlot: dto.dashboardSlot ?? null,
       },
     });
   }
@@ -310,6 +311,9 @@ export class IndicatorsService {
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
         ...(dto.showOnDashboard !== undefined && {
           showOnDashboard: dto.showOnDashboard,
+        }),
+        ...('dashboardSlot' in dto && {
+          dashboardSlot: dto.dashboardSlot ?? null,
         }),
         // status: aceito do DTO apenas quando explicitamente enviado (ex: INACTIVE)
         // após cada medição, syncIndicatorCache recalcula e pode sobrescrever

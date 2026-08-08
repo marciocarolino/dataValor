@@ -38,6 +38,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -71,6 +72,7 @@ export declare class IndicatorsService {
             startDate: Date | null;
             endDate: Date | null;
             showOnDashboard: boolean;
+            dashboardSlot: string | null;
             currentValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -125,6 +127,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -184,6 +187,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -229,6 +233,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -269,6 +274,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;
@@ -296,6 +302,7 @@ export declare class IndicatorsService {
         startDate: Date | null;
         endDate: Date | null;
         showOnDashboard: boolean;
+        dashboardSlot: string | null;
         currentValue: import("@prisma/client-runtime-utils").Decimal | null;
         previousValue: import("@prisma/client-runtime-utils").Decimal | null;
         variation: import("@prisma/client-runtime-utils").Decimal | null;

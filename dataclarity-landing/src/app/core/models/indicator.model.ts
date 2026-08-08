@@ -37,6 +37,9 @@ export const INDICATOR_PERIOD_LABELS: Record<IndicatorPeriod, string> = {
   CUSTOM: 'Personalizado',
 };
 
+/** Slot fixo do card no Dashboard principal (4 cards fixos). */
+export type DashboardSlot = 'REVENUE' | 'PROFIT' | 'CUSTOMERS' | 'GROWTH';
+
 export interface IndicatorAnalytics {
   currentValue: number | null;
   previousValue: number | null;
@@ -71,6 +74,8 @@ export interface Indicator {
   daysRemaining: number | null;
   isActive: boolean;
   showOnDashboard: boolean;
+  /** Slot fixo do card no Dashboard (REVENUE, PROFIT, CUSTOMERS, GROWTH) — null se não vinculado. */
+  dashboardSlot: DashboardSlot | null;
   createdAt: string;
   updatedAt: string;
   /** Analytics calculados em tempo real a partir das medições (fonte de verdade) */
@@ -130,6 +135,8 @@ export interface CreateIndicatorPayload {
   endDate?: string | null;
   isActive?: boolean;
   showOnDashboard?: boolean;
+  /** Slot fixo do card no Dashboard: REVENUE, PROFIT, CUSTOMERS ou GROWTH. */
+  dashboardSlot?: DashboardSlot | null;
 }
 
 export type UpdateIndicatorPayload = Partial<CreateIndicatorPayload>;

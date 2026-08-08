@@ -36,6 +36,7 @@ class IndicatorEntity {
     daysRemaining;
     isActive;
     showOnDashboard;
+    dashboardSlot;
     createdAt;
     updatedAt;
 }
@@ -138,6 +139,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: false }),
     __metadata("design:type", Boolean)
 ], IndicatorEntity.prototype, "showOnDashboard", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'REVENUE',
+        nullable: true,
+        description: 'Slot fixo do dashboard ao qual este indicador está vinculado: REVENUE, PROFIT, CUSTOMERS ou GROWTH. Null = não aparece em nenhum card fixo.',
+    }),
+    __metadata("design:type", Object)
+], IndicatorEntity.prototype, "dashboardSlot", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String, format: 'date-time' }),
     __metadata("design:type", Date)

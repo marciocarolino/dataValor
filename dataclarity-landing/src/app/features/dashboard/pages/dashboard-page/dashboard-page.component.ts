@@ -7,7 +7,10 @@ import { RevenueDistChartComponent } from '../../components/revenue-dist-chart/r
 import { TopClientsTableComponent } from '../../components/top-clients-table/top-clients-table.component';
 import { AiInsightCardComponent } from '../../components/ai-insight-card/ai-insight-card.component';
 import { IndicatorService } from '../../../../core/services/indicator.service';
-import type { Indicator } from '../../../../core/models/indicator.model';
+import type {
+  DashboardSlot,
+  Indicator,
+} from '../../../../core/models/indicator.model';
 
 interface MetricCard {
   title: string;
@@ -99,9 +102,12 @@ export class DashboardPageComponent implements OnInit {
   readonly loading = this.indicatorService.loading;
   readonly error = this.indicatorService.error;
 
-  // Slots fixos do dashboard — sempre exibidos, preenchidos pela API quando disponível
-  private readonly FIXED_SLOTS: MetricCard[] = [
+  // Slots fixos do dashboard — sempre exibidos, preenchidos pela API quando disponível.
+  // A ordem aqui define a ordem visual dos 4 cards; o `slot` é a chave usada
+  // para vincular ao campo `dashboardSlot` do indicador retornado pela API.
+  private readonly FIXED_SLOTS: (MetricCard & { slot: DashboardSlot })[] = [
     {
+      slot: 'REVENUE',
       title: 'Receita Total',
       value: '–',
       change: '0%',
@@ -111,6 +117,7 @@ export class DashboardPageComponent implements OnInit {
       iconColor: '#4c6ef5',
     },
     {
+      slot: 'PROFIT',
       title: 'Lucro',
       value: '–',
       change: '0%',
@@ -120,6 +127,7 @@ export class DashboardPageComponent implements OnInit {
       iconColor: '#2f9e44',
     },
     {
+      slot: 'CUSTOMERS',
       title: 'Clientes',
       value: '–',
       change: '0%',
@@ -129,6 +137,7 @@ export class DashboardPageComponent implements OnInit {
       iconColor: '#e03131',
     },
     {
+      slot: 'GROWTH',
       title: 'Crescimento %',
       value: '–',
       change: '0%',
@@ -142,10 +151,11 @@ export class DashboardPageComponent implements OnInit {
   readonly metrics = computed<MetricCard[]>(() => {
     const indicators = this.indicatorService.dashboardIndicators();
 
-    // Preenche os slots fixos com dados da API quando disponível
+    // Preenche os slots fixos com dados da API pelo campo dashboardSlot
+    // (fonte de verdade definida no cadastro do indicador — sem matching por nome).
     return this.FIXED_SLOTS.map((slot) => {
-      const apiMatch = indicators.find((ind) =>
-        ind.name.toLowerCase().includes(slot.title.toLowerCase().split(' ')[0]),
+      const apiMatch = indicators.find(
+        (ind) => ind.dashboardSlot === slot.slot,
       );
       if (!apiMatch) return slot;
 

@@ -11,6 +11,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
+import { DashboardSlot } from '../enums/dashboard-slot.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
@@ -173,6 +174,17 @@ export class CreateIndicatorDto {
   @IsOptional()
   @IsBoolean()
   showOnDashboard?: boolean;
+
+  @ApiPropertyOptional({
+    enum: DashboardSlot,
+    example: DashboardSlot.REVENUE,
+    nullable: true,
+    description:
+      'Slot fixo do card no Dashboard: REVENUE, PROFIT, CUSTOMERS ou GROWTH. Deixe em branco para não vincular a nenhum card fixo.',
+  })
+  @IsOptional()
+  @IsEnum(DashboardSlot)
+  dashboardSlot?: DashboardSlot | null;
 
   @ApiPropertyOptional({
     enum: IndicatorStatus,
