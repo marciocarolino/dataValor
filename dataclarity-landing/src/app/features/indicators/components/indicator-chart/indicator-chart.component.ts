@@ -62,41 +62,40 @@ Chart.register(
         </div>
       } @else {
         <canvas #chartCanvas></canvas>
-        @if (indicator.chartType === 'PIE' || indicator.chartType === 'DONUT') {
-          <div class="pie-totals">
-            <div class="pie-totals__item">
-              <span class="pie-totals__label">Realizado</span>
-              <span class="pie-totals__value" [style.color]="indicator.color ?? '#4c6ef5'">{{ formattedValueFull }}</span>
-            </div>
-            @if (indicator.goalValue) {
-              <div class="pie-totals__divider"></div>
-              <div class="pie-totals__item">
-                <span class="pie-totals__label">Meta</span>
-                <span class="pie-totals__value">{{ formattedGoalFull }}</span>
-              </div>
-              <div class="pie-totals__divider"></div>
-              <div class="pie-totals__item">
-                <span class="pie-totals__label">Atingido</span>
-                <span class="pie-totals__value pie-totals__value--pct" [style.color]="indicator.color ?? '#4c6ef5'">{{ progressPct.toFixed(1) }}%</span>
-              </div>
-            }
-            @if (indicator.endDate) {
-              <div class="pie-totals__divider"></div>
-              <div class="pie-totals__item">
-                <span class="pie-totals__label">Prazo</span>
-                <span class="pie-totals__value pie-totals__value--days"
-                  [class.days-ok]="daysLeft !== null && daysLeft > 7"
-                  [class.days-warn]="daysLeft !== null && daysLeft >= 0 && daysLeft <= 7"
-                  [class.days-exp]="daysLeft !== null && daysLeft < 0">
-                  @if (daysLeft === null) { – }
-                  @else if (daysLeft < 0) { Encerrado }
-                  @else if (daysLeft === 0) { Hoje! }
-                  @else { {{ daysLeft }}d }
-                </span>
-              </div>
-            }
+        <!-- Barra de métricas: exibida em todos os tipos de gráfico exceto NUMBER -->
+        <div class="pie-totals">
+          <div class="pie-totals__item">
+            <span class="pie-totals__label">Realizado</span>
+            <span class="pie-totals__value" [style.color]="indicator.color ?? '#4c6ef5'">{{ formattedValueFull }}</span>
           </div>
-        }
+          @if (indicator.goalValue) {
+            <div class="pie-totals__divider"></div>
+            <div class="pie-totals__item">
+              <span class="pie-totals__label">Meta</span>
+              <span class="pie-totals__value">{{ formattedGoalFull }}</span>
+            </div>
+            <div class="pie-totals__divider"></div>
+            <div class="pie-totals__item">
+              <span class="pie-totals__label">Atingido</span>
+              <span class="pie-totals__value pie-totals__value--pct" [style.color]="indicator.color ?? '#4c6ef5'">{{ progressPct.toFixed(1) }}%</span>
+            </div>
+          }
+          @if (indicator.endDate) {
+            <div class="pie-totals__divider"></div>
+            <div class="pie-totals__item">
+              <span class="pie-totals__label">Prazo</span>
+              <span class="pie-totals__value pie-totals__value--days"
+                [class.days-ok]="daysLeft !== null && daysLeft > 7"
+                [class.days-warn]="daysLeft !== null && daysLeft >= 0 && daysLeft <= 7"
+                [class.days-exp]="daysLeft !== null && daysLeft < 0">
+                @if (daysLeft === null) { – }
+                @else if (daysLeft < 0) { Encerrado }
+                @else if (daysLeft === 0) { Hoje! }
+                @else { {{ daysLeft }}d }
+              </span>
+            </div>
+          }
+        </div>
       }
     </div>
   `,
