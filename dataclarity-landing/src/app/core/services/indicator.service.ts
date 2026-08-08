@@ -134,6 +134,16 @@ export class IndicatorService {
       .pipe(catchError(this.handleError));
   }
 
+  /**
+   * Cria ou atualiza uma medição para a data informada (upsert).
+   * Usa POST /measurements/upsert — não retorna 409 se já existir.
+   */
+  upsertMeasurement(indicatorId: string, payload: CreateMeasurementPayload): Observable<unknown> {
+    return this.http
+      .post(`${API_URL}/indicators/${indicatorId}/measurements/upsert`, payload)
+      .pipe(catchError(this.handleError));
+  }
+
   getDashboardIndicators(): Observable<Indicator[]> {
     return this.http
       .get<Indicator[]>(`${API_URL}/indicators/dashboard`)

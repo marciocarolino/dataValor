@@ -393,15 +393,22 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
           // Valor atual: data de hoje
           measurements.push({ value: currentValue, referenceDate: toISO(today) });
 
+          // No modo de edição usa upsert (cria ou atualiza sem 409);
+          // no modo de criação usa create (POST padrão).
+          const isEdit = !!id;
+          const sendMeasurement = (payload: CreateMeasurementPayload) =>
+            isEdit
+              ? this.svc.upsertMeasurement(indicatorId, payload)
+              : this.svc.createMeasurement(indicatorId, payload);
+
           // Dispara em sequência (previous → current) para garantir ordem correta
           const runNext = (index: number): void => {
             if (index >= measurements.length) {
               measurementChain();
               return;
             }
-            this.svc.createMeasurement(indicatorId, measurements[index]).subscribe({
+            sendMeasurement(measurements[index]).subscribe({
               next: () => runNext(index + 1),
-              // Ignora conflito 409 (medição para essa data já existe) e continua
               error: () => runNext(index + 1),
             });
           };
