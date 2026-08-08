@@ -302,15 +302,19 @@ export class IndicatorAnalyticsService {
     isOverdue: boolean,
     currentValue: number | null,
   ): IndicatorStatus {
+    // Sem valor → sem status definido
     if (currentValue == null) return IndicatorStatus.NEUTRAL;
 
+    // Meta atingida ou dentro da faixa → verde
     if (
       targetStatus === IndicatorTargetStatus.TARGET_ACHIEVED ||
-      targetStatus === IndicatorTargetStatus.WITHIN_RANGE
+      targetStatus === IndicatorTargetStatus.WITHIN_RANGE ||
+      targetStatus === IndicatorTargetStatus.ON_TRACK
     ) {
       return IndicatorStatus.SUCCESS;
     }
 
+    // Fora dos trilhos, faixa violada ou prazo vencido → vermelho
     if (
       targetStatus === IndicatorTargetStatus.OFF_TRACK ||
       targetStatus === IndicatorTargetStatus.BELOW_RANGE ||
@@ -320,6 +324,7 @@ export class IndicatorAnalyticsService {
       return IndicatorStatus.DANGER;
     }
 
+    // Em risco ou prazo crítico (≤7 dias) → amarelo
     if (
       targetStatus === IndicatorTargetStatus.AT_RISK ||
       (daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 7)
@@ -327,14 +332,7 @@ export class IndicatorAnalyticsService {
       return IndicatorStatus.WARNING;
     }
 
-    if (
-      targetStatus === IndicatorTargetStatus.ON_TRACK ||
-      targetStatus === IndicatorTargetStatus.NO_GOAL ||
-      targetStatus === IndicatorTargetStatus.NO_DATA
-    ) {
-      return IndicatorStatus.NEUTRAL;
-    }
-
+    // Sem meta configurada ou sem dados → neutro
     return IndicatorStatus.NEUTRAL;
   }
 

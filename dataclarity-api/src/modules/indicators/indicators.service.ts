@@ -47,10 +47,11 @@ export class IndicatorsService {
         desiredDirection:
           dto.desiredDirection ?? IndicatorDesiredDirection.HIGHER_IS_BETTER,
         // campos calculados — inicialmente sem medições
+        // status inicial pode ser sobrescrito pelo DTO (ex: INACTIVE para indicadores pausados)
         currentValue: null,
         previousValue: null,
         variation: null,
-        status: IndicatorStatus.NEUTRAL,
+        status: dto.status ?? IndicatorStatus.NEUTRAL,
         previousPeriod: dto.previousPeriod ?? null,
         color: dto.color ?? null,
         icon: dto.icon ?? null,
@@ -301,7 +302,10 @@ export class IndicatorsService {
         ...(dto.showOnDashboard !== undefined && {
           showOnDashboard: dto.showOnDashboard,
         }),
-        // currentValue, previousValue, variation, status:
+        // status: aceito do DTO apenas quando explicitamente enviado (ex: INACTIVE)
+        // após cada medição, syncIndicatorCache recalcula e pode sobrescrever
+        ...(dto.status !== undefined && { status: dto.status }),
+        // currentValue, previousValue, variation:
         // são ignorados do DTO — calculados pelo analytics após cada medição
       },
     });

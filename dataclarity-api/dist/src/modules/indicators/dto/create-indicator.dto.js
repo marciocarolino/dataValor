@@ -17,6 +17,7 @@ const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
 const indicator_desired_direction_enum_1 = require("../enums/indicator-desired-direction.enum");
 const indicator_period_enum_1 = require("../enums/indicator-period.enum");
+const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const trim = ({ value }) => typeof value === 'string' ? value.trim() : value;
 class CreateIndicatorDto {
     name;
@@ -36,6 +37,7 @@ class CreateIndicatorDto {
     endDate;
     isActive;
     showOnDashboard;
+    status;
 }
 exports.CreateIndicatorDto = CreateIndicatorDto;
 __decorate([
@@ -199,4 +201,15 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateIndicatorDto.prototype, "showOnDashboard", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_status_enum_1.IndicatorStatus,
+        example: indicator_status_enum_1.IndicatorStatus.NEUTRAL,
+        default: indicator_status_enum_1.IndicatorStatus.NEUTRAL,
+        description: 'Status inicial do indicador. Quando medições são adicionadas, o backend recalcula automaticamente o status. Use INACTIVE para indicadores pausados.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(indicator_status_enum_1.IndicatorStatus),
+    __metadata("design:type", String)
+], CreateIndicatorDto.prototype, "status", void 0);
 //# sourceMappingURL=create-indicator.dto.js.map

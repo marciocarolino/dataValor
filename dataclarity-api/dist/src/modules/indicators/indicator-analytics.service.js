@@ -179,7 +179,8 @@ let IndicatorAnalyticsService = class IndicatorAnalyticsService {
         if (currentValue == null)
             return indicator_status_enum_1.IndicatorStatus.NEUTRAL;
         if (targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.TARGET_ACHIEVED ||
-            targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.WITHIN_RANGE) {
+            targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.WITHIN_RANGE ||
+            targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.ON_TRACK) {
             return indicator_status_enum_1.IndicatorStatus.SUCCESS;
         }
         if (targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.OFF_TRACK ||
@@ -191,11 +192,6 @@ let IndicatorAnalyticsService = class IndicatorAnalyticsService {
         if (targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.AT_RISK ||
             (daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 7)) {
             return indicator_status_enum_1.IndicatorStatus.WARNING;
-        }
-        if (targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.ON_TRACK ||
-            targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.NO_GOAL ||
-            targetStatus === indicator_target_status_enum_1.IndicatorTargetStatus.NO_DATA) {
-            return indicator_status_enum_1.IndicatorStatus.NEUTRAL;
         }
         return indicator_status_enum_1.IndicatorStatus.NEUTRAL;
     }

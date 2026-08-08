@@ -15,6 +15,7 @@ import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
 import { IndicatorPeriod } from '../enums/indicator-period.enum';
+import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 const trim = ({ value }: { value: unknown }): unknown =>
   typeof value === 'string' ? value.trim() : value;
@@ -172,4 +173,15 @@ export class CreateIndicatorDto {
   @IsOptional()
   @IsBoolean()
   showOnDashboard?: boolean;
+
+  @ApiPropertyOptional({
+    enum: IndicatorStatus,
+    example: IndicatorStatus.NEUTRAL,
+    default: IndicatorStatus.NEUTRAL,
+    description:
+      'Status inicial do indicador. Quando medições são adicionadas, o backend recalcula automaticamente o status. Use INACTIVE para indicadores pausados.',
+  })
+  @IsOptional()
+  @IsEnum(IndicatorStatus)
+  status?: IndicatorStatus;
 }

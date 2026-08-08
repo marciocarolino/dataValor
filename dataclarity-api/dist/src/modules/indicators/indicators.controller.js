@@ -179,7 +179,7 @@ __decorate([
     (0, swagger_1.ApiQuery)({
         name: 'status',
         required: false,
-        enum: ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'],
+        enum: ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL', 'INACTIVE'],
         description: 'Filtrar por status.',
     }),
     (0, swagger_1.ApiQuery)({

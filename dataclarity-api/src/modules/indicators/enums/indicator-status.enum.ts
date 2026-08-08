@@ -3,4 +3,5 @@ export enum IndicatorStatus {
   WARNING = 'WARNING',
   DANGER = 'DANGER',
   NEUTRAL = 'NEUTRAL',
+  INACTIVE = 'INACTIVE',
 }

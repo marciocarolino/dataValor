@@ -39,7 +39,7 @@ let IndicatorsService = class IndicatorsService {
                 currentValue: null,
                 previousValue: null,
                 variation: null,
-                status: indicator_status_enum_1.IndicatorStatus.NEUTRAL,
+                status: dto.status ?? indicator_status_enum_1.IndicatorStatus.NEUTRAL,
                 previousPeriod: dto.previousPeriod ?? null,
                 color: dto.color ?? null,
                 icon: dto.icon ?? null,
@@ -257,6 +257,7 @@ let IndicatorsService = class IndicatorsService {
                 ...(dto.showOnDashboard !== undefined && {
                     showOnDashboard: dto.showOnDashboard,
                 }),
+                ...(dto.status !== undefined && { status: dto.status }),
             },
         });
     }

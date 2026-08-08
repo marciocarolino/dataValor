@@ -171,7 +171,7 @@ export class IndicatorsController {
   @ApiQuery({
     name: 'status',
     required: false,
-    enum: ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'],
+    enum: ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL', 'INACTIVE'],
     description: 'Filtrar por status.',
   })
   @ApiQuery({
