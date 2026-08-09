@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
+import { IndicatorFrequency } from '../enums/indicator-frequency.enum';
 import { IndicatorPeriod } from '../enums/indicator-period.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 
@@ -40,6 +41,14 @@ export class IndicatorEntity {
 
   @ApiPropertyOptional({ example: 2100000, nullable: true })
   previousValue!: number | null;
+
+  @ApiProperty({
+    enum: IndicatorFrequency,
+    example: IndicatorFrequency.MONTHLY,
+    description:
+      'Periodicidade de Apuração: frequência com que o indicador gera um novo resultado.',
+  })
+  frequency!: IndicatorFrequency;
 
   @ApiPropertyOptional({
     enum: IndicatorPeriod,

@@ -15,6 +15,7 @@ import { DashboardSlot } from '../enums/dashboard-slot.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorDesiredDirection } from '../enums/indicator-desired-direction.enum';
+import { IndicatorFrequency } from '../enums/indicator-frequency.enum';
 import { IndicatorPeriod } from '../enums/indicator-period.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 
@@ -106,6 +107,18 @@ export class CreateIndicatorDto {
   @IsOptional()
   @IsEnum(IndicatorDesiredDirection)
   desiredDirection?: IndicatorDesiredDirection;
+
+  @ApiPropertyOptional({
+    enum: IndicatorFrequency,
+    example: IndicatorFrequency.MONTHLY,
+    default: IndicatorFrequency.MONTHLY,
+    description:
+      'Periodicidade de Apuração: frequência com que o indicador gera um novo resultado ' +
+      '(ex: MONTHLY = mensal). Não confundir com previousPeriod (Período de Referência).',
+  })
+  @IsOptional()
+  @IsEnum(IndicatorFrequency)
+  frequency?: IndicatorFrequency;
 
   @ApiPropertyOptional({
     enum: IndicatorPeriod,

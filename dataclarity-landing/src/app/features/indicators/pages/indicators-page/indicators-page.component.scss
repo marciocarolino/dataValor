@@ -114,6 +114,47 @@
   &--categories .summary-card__value { color: #3b5bdb; }
 }
 
+// ── Situação: abas Ativos / Inativos ────────────────────────────────────────────
+.segmented-tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: #f1f3f5;
+  border-radius: $radius-xs;
+  padding: 4px;
+  margin-bottom: $space-3;
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px $space-4;
+    border: none;
+    border-radius: $radius-xs;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-text-muted;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      color: $color-text-dark;
+    }
+
+    &--active {
+      background: #fff;
+      color: #3b5bdb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__count {
+    font-weight: 500;
+    opacity: 0.8;
+  }
+}
+
 // ── Filtros ───────────────────────────────────────────────────────────────────
 .filters-bar {
   display: flex;

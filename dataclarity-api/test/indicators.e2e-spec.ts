@@ -26,6 +26,7 @@ import { IndicatorChartType } from '../src/modules/indicators/enums/indicator-ch
 import { IndicatorDesiredDirection } from '../src/modules/indicators/enums/indicator-desired-direction.enum';
 import { IndicatorTargetStatus } from '../src/modules/indicators/enums/indicator-target-status.enum';
 import { IndicatorVariationStatus } from '../src/modules/indicators/enums/indicator-variation-status.enum';
+import { IndicatorFrequency } from '../src/modules/indicators/enums/indicator-frequency.enum';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -43,6 +44,7 @@ const mockIndicator = {
   minimumGoalValue: null,
   maximumGoalValue: null,
   desiredDirection: IndicatorDesiredDirection.HIGHER_IS_BETTER,
+  frequency: IndicatorFrequency.MONTHLY,
   currentValue: 1500,
   previousValue: 1000,
   previousPeriod: null,

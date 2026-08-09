@@ -29,6 +29,7 @@ export declare class IndicatorsController {
             minimumGoalValue: import("@prisma/client-runtime-utils").Decimal | null;
             maximumGoalValue: import("@prisma/client-runtime-utils").Decimal | null;
             desiredDirection: import(".prisma/client").$Enums.IndicatorDesiredDirection;
+            frequency: import(".prisma/client").$Enums.IndicatorFrequency;
             currentValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousPeriod: import(".prisma/client").$Enums.IndicatorPeriod | null;

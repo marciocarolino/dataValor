@@ -13,6 +13,7 @@ exports.IndicatorEntity = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
+const indicator_frequency_enum_1 = require("../enums/indicator-frequency.enum");
 const indicator_period_enum_1 = require("../enums/indicator-period.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 class IndicatorEntity {
@@ -25,6 +26,7 @@ class IndicatorEntity {
     goalValue;
     currentValue;
     previousValue;
+    frequency;
     previousPeriod;
     variation;
     status;
@@ -86,6 +88,14 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 2100000, nullable: true }),
     __metadata("design:type", Object)
 ], IndicatorEntity.prototype, "previousValue", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        enum: indicator_frequency_enum_1.IndicatorFrequency,
+        example: indicator_frequency_enum_1.IndicatorFrequency.MONTHLY,
+        description: 'Periodicidade de Apuração: frequência com que o indicador gera um novo resultado.',
+    }),
+    __metadata("design:type", String)
+], IndicatorEntity.prototype, "frequency", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         enum: indicator_period_enum_1.IndicatorPeriod,

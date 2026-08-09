@@ -41,6 +41,32 @@
         </section>
       }
 
+      <!-- Situação: Ativos / Inativos (abas) -->
+      <div class="segmented-tabs">
+        <button
+          type="button"
+          class="segmented-tabs__btn"
+          [class.segmented-tabs__btn--active]="filterActive() === 'true'"
+          (click)="onActiveFilter(filterActive() === 'true' ? '' : 'true')"
+        >
+          Ativos
+          @if (summary()) {
+            <span class="segmented-tabs__count">({{ summary()!.active }})</span>
+          }
+        </button>
+        <button
+          type="button"
+          class="segmented-tabs__btn"
+          [class.segmented-tabs__btn--active]="filterActive() === 'false'"
+          (click)="onActiveFilter(filterActive() === 'false' ? '' : 'false')"
+        >
+          Inativos
+          @if (summary()) {
+            <span class="segmented-tabs__count">({{ summary()!.inactive }})</span>
+          }
+        </button>
+      </div>
+
       <!-- Filtros -->
       <div class="filters-bar">
         <div class="filters-bar__search">
@@ -67,13 +93,6 @@
           @for (st of statuses; track st) {
             <option [value]="st">{{ statusLabels[st] }}</option>
           }
-        </select>
-
-        <!-- Filtro operacional: Ativo / Inativo -->
-        <select class="filters-bar__select" (change)="onActiveFilter($any($event.target).value)">
-          <option value="">Todos</option>
-          <option value="true">Ativos</option>
-          <option value="false">Inativos</option>
         </select>
       </div>
 
@@ -361,6 +380,14 @@
                 <option value="">Selecione...</option>
                 @for (cur of currencies; track cur.code) {
                   <option [value]="cur.code">{{ cur.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Periodicidade de Apuração *</label>
+              <select formControlName="frequency">
+                @for (freq of frequencies; track freq) {
+                  <option [value]="freq">{{ frequencyLabels[freq] }}</option>
                 }
               </select>
             </div>
@@ -755,6 +782,12 @@
                   : '–'
               }}
             </span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Periodicidade de Apuração</span>
+            <span class="details-field__value">{{
+              frequencyLabels[detailsIndicator()!.frequency]
+            }}</span>
           </div>
           <div class="details-field">
             <span class="details-field__label">Valor Anterior</span>

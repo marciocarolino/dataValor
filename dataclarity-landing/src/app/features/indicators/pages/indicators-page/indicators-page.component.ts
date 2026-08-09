@@ -20,11 +20,13 @@ import {
   INDICATOR_STATUS_LABELS,
   INDICATOR_CHART_TYPE_LABELS,
   INDICATOR_PERIOD_LABELS,
+  INDICATOR_FREQUENCY_LABELS,
   type Indicator,
   type IndicatorCategory,
   type IndicatorStatus,
   type IndicatorChartType,
   type IndicatorPeriod,
+  type IndicatorFrequency,
   type IndicatorQueryParams,
   type CreateIndicatorPayload,
   type IndicatorDesiredDirection,
@@ -46,12 +48,17 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly statusLabels = INDICATOR_STATUS_LABELS;
   readonly chartTypeLabels = INDICATOR_CHART_TYPE_LABELS;
   readonly periodLabels = INDICATOR_PERIOD_LABELS;
+  readonly frequencyLabels = INDICATOR_FREQUENCY_LABELS;
 
   readonly categories: IndicatorCategory[] = [
     'FINANCIAL', 'COMMERCIAL', 'OPERATIONAL', 'MARKETING', 'CUSTOMER', 'CUSTOM',
   ];
   readonly periods: IndicatorPeriod[] = [
     'PREVIOUS_MONTH', 'PREVIOUS_QUARTER', 'PREVIOUS_SEMESTER', 'PREVIOUS_YEAR', 'CUSTOM',
+  ];
+  /** Periodicidade de Apuração — frequência com que o indicador gera um novo resultado */
+  readonly frequencies: IndicatorFrequency[] = [
+    'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'SEMESTERLY', 'YEARLY', 'CUSTOM',
   ];
   readonly statuses: IndicatorStatus[] = ['SUCCESS', 'WARNING', 'DANGER', 'NEUTRAL'];
   readonly chartTypes: IndicatorChartType[] = [
@@ -156,6 +163,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     minimumGoalValue: [null],
     maximumGoalValue: [null],
     desiredDirection: ['HIGHER_IS_BETTER'],
+    // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado
+    frequency: ['MONTHLY', Validators.required],
     // currentValue e previousValue: capturados para criar medições iniciais
     // status pode ser definido manualmente (ex: INACTIVE); variation é calculada pelo backend
     currentValue: [null],
@@ -267,7 +276,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     this.form.reset({
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
       goalValue: null, minimumGoalValue: null, maximumGoalValue: null,
-      desiredDirection: 'HIGHER_IS_BETTER', currentValue: null, previousValue: null,
+      desiredDirection: 'HIGHER_IS_BETTER', frequency: 'MONTHLY', currentValue: null, previousValue: null,
       status: 'NEUTRAL', previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
       startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
@@ -298,6 +307,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       minimumGoalValue: indicator.minimumGoalValue ?? null,
       maximumGoalValue: indicator.maximumGoalValue ?? null,
       desiredDirection: indicator.desiredDirection ?? 'HIGHER_IS_BETTER',
+      frequency: indicator.frequency ?? 'MONTHLY',
       // Usa analytics para currentValue/previousValue — fonte de verdade das medições
       currentValue: analyticsCurrentValue,
       previousValue: analyticsPreviousValue,
@@ -343,6 +353,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       minimumGoalValue: (raw['minimumGoalValue'] as number) ?? undefined,
       maximumGoalValue: (raw['maximumGoalValue'] as number) ?? undefined,
       desiredDirection: (raw['desiredDirection'] as IndicatorDesiredDirection) ?? undefined,
+      frequency: (raw['frequency'] as IndicatorFrequency) ?? undefined,
       previousPeriod: (raw['previousPeriod'] as IndicatorPeriod) || undefined,
       // status: enviado para o backend quando é INACTIVE (indicador pausado manualmente)
       // Se for SUCCESS/WARNING/DANGER, o backend recalcula a partir das medições

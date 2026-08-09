@@ -5,6 +5,7 @@ import {
   IndicatorAnalyticsService,
 } from './indicator-analytics.service';
 import { IndicatorDesiredDirection } from './enums/indicator-desired-direction.enum';
+import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
 import type { CreateIndicatorDto } from './dto/create-indicator.dto';
 import type { UpdateIndicatorDto } from './dto/update-indicator.dto';
@@ -54,6 +55,8 @@ export class IndicatorsService {
         previousValue: null,
         variation: null,
         status: dto.status ?? IndicatorStatus.NEUTRAL,
+        // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado
+        frequency: dto.frequency ?? IndicatorFrequency.MONTHLY,
         previousPeriod: dto.previousPeriod ?? null,
         color: dto.color ?? null,
         icon: dto.icon ?? null,
@@ -292,6 +295,7 @@ export class IndicatorsService {
         ...(dto.desiredDirection !== undefined && {
           desiredDirection: dto.desiredDirection,
         }),
+        ...(dto.frequency !== undefined && { frequency: dto.frequency }),
         ...(dto.previousPeriod !== undefined && {
           previousPeriod: dto.previousPeriod,
         }),

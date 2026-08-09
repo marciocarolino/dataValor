@@ -37,6 +37,32 @@ export const INDICATOR_PERIOD_LABELS: Record<IndicatorPeriod, string> = {
   CUSTOM: 'Personalizado',
 };
 
+/**
+ * Periodicidade de Apuração — frequência com que o indicador gera um novo
+ * resultado (que futuramente poderá ser armazenado no Histórico).
+ *
+ * Não confundir com IndicatorPeriod (Período de Referência), que define
+ * o período utilizado como referência/comparação pelo indicador.
+ */
+export type IndicatorFrequency =
+  | 'DAILY'
+  | 'WEEKLY'
+  | 'MONTHLY'
+  | 'QUARTERLY'
+  | 'SEMESTERLY'
+  | 'YEARLY'
+  | 'CUSTOM';
+
+export const INDICATOR_FREQUENCY_LABELS: Record<IndicatorFrequency, string> = {
+  DAILY: 'Diário',
+  WEEKLY: 'Semanal',
+  MONTHLY: 'Mensal',
+  QUARTERLY: 'Trimestral',
+  SEMESTERLY: 'Semestral',
+  YEARLY: 'Anual',
+  CUSTOM: 'Personalizado',
+};
+
 /** Slot fixo do card no Dashboard principal (4 cards fixos). */
 export type DashboardSlot = 'REVENUE' | 'PROFIT' | 'CUSTOMERS' | 'GROWTH';
 
@@ -64,6 +90,8 @@ export interface Indicator {
   minimumGoalValue: number | null;
   maximumGoalValue: number | null;
   desiredDirection: IndicatorDesiredDirection;
+  /** Periodicidade de Apuração: frequência com que o indicador gera um novo resultado. */
+  frequency: IndicatorFrequency;
   currentValue: number | null;
   previousValue: number | null;
   previousPeriod: IndicatorPeriod | null;
@@ -128,6 +156,8 @@ export interface CreateIndicatorPayload {
   minimumGoalValue?: number;
   maximumGoalValue?: number;
   desiredDirection?: IndicatorDesiredDirection;
+  /** Periodicidade de Apuração: frequência com que o indicador gera um novo resultado. */
+  frequency?: IndicatorFrequency;
   previousPeriod?: IndicatorPeriod;
   /** Status do resultado: SUCCESS, WARNING, DANGER ou NEUTRAL */
   status?: IndicatorStatus;

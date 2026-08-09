@@ -1,5 +1,6 @@
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
+import { IndicatorFrequency } from '../enums/indicator-frequency.enum';
 import { IndicatorPeriod } from '../enums/indicator-period.enum';
 import { IndicatorStatus } from '../enums/indicator-status.enum';
 export declare class IndicatorEntity {
@@ -12,6 +13,7 @@ export declare class IndicatorEntity {
     goalValue: number | null;
     currentValue: number | null;
     previousValue: number | null;
+    frequency: IndicatorFrequency;
     previousPeriod: IndicatorPeriod | null;
     variation: number | null;
     status: IndicatorStatus;

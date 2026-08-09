@@ -17,6 +17,7 @@ const dashboard_slot_enum_1 = require("../enums/dashboard-slot.enum");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
 const indicator_desired_direction_enum_1 = require("../enums/indicator-desired-direction.enum");
+const indicator_frequency_enum_1 = require("../enums/indicator-frequency.enum");
 const indicator_period_enum_1 = require("../enums/indicator-period.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const trim = ({ value }) => typeof value === 'string' ? value.trim() : value;
@@ -30,6 +31,7 @@ class CreateIndicatorDto {
     minimumGoalValue;
     maximumGoalValue;
     desiredDirection;
+    frequency;
     previousPeriod;
     chartType;
     color;
@@ -128,6 +130,18 @@ __decorate([
     (0, class_validator_1.IsEnum)(indicator_desired_direction_enum_1.IndicatorDesiredDirection),
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "desiredDirection", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: indicator_frequency_enum_1.IndicatorFrequency,
+        example: indicator_frequency_enum_1.IndicatorFrequency.MONTHLY,
+        default: indicator_frequency_enum_1.IndicatorFrequency.MONTHLY,
+        description: 'Periodicidade de Apuração: frequência com que o indicador gera um novo resultado ' +
+            '(ex: MONTHLY = mensal). Não confundir com previousPeriod (Período de Referência).',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(indicator_frequency_enum_1.IndicatorFrequency),
+    __metadata("design:type", String)
+], CreateIndicatorDto.prototype, "frequency", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         enum: indicator_period_enum_1.IndicatorPeriod,

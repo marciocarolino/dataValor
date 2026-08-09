@@ -72,6 +72,9 @@ model Indicator {
   minimumGoalValue Decimal?                  @db.Decimal(18, 2)
   maximumGoalValue Decimal?                  @db.Decimal(18, 2)
   desiredDirection IndicatorDesiredDirection @default(HIGHER_IS_BETTER)
+  // ── Periodicidade de Apuração: frequência com que o indicador gera um novo
+  // resultado (não confundir com previousPeriod, que é o Período de Referência) ─
+  frequency        IndicatorFrequency        @default(MONTHLY)
   // ── Cache fields (fonte de verdade: IndicatorMeasurement) ───────────────
   currentValue     Decimal?                  @db.Decimal(18, 2)
   previousValue    Decimal?                  @db.Decimal(18, 2)
@@ -153,6 +156,17 @@ enum IndicatorPeriod {
   PREVIOUS_QUARTER
   PREVIOUS_SEMESTER
   PREVIOUS_YEAR
+  CUSTOM
+}
+
+// Periodicidade de Apuração — frequência com que o indicador gera um novo resultado
+enum IndicatorFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMESTERLY
+  YEARLY
   CUSTOM
 }
 
