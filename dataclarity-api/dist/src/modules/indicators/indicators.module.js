@@ -18,6 +18,7 @@ const indicator_history_service_1 = require("./indicator-history.service");
 const measurements_service_1 = require("./measurements.service");
 const measurements_controller_1 = require("./measurements.controller");
 const period_resolver_service_1 = require("./period-resolver.service");
+const indicator_period_closing_service_1 = require("./indicator-period-closing.service");
 let IndicatorsModule = class IndicatorsModule {
 };
 exports.IndicatorsModule = IndicatorsModule;
@@ -36,6 +37,7 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             measurements_service_1.MeasurementsService,
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
+            indicator_period_closing_service_1.IndicatorPeriodClosingService,
         ],
         exports: [
             indicators_service_1.IndicatorsService,
@@ -43,6 +45,7 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             measurements_service_1.MeasurementsService,
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
+            indicator_period_closing_service_1.IndicatorPeriodClosingService,
         ],
     })
 ], IndicatorsModule);
