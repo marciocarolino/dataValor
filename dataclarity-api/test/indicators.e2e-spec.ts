@@ -406,6 +406,32 @@ describe('Indicators (e2e)', () => {
         expect.objectContaining({ isActive: true }),
       );
     });
+
+    it('normal: deve filtrar por isActive=false (aba Inativos) → 200', async () => {
+      mockIndicatorsService.findAll.mockResolvedValueOnce({
+        ...mockPaginated,
+        items: [{ ...mockIndicator, isActive: false }],
+      });
+
+      const res = await request(app.getHttpServer())
+        .get('/api/v1/indicators?isActive=false')
+        .expect(HttpStatus.OK);
+
+      expect(mockIndicatorsService.findAll).toHaveBeenCalledWith(
+        expect.objectContaining({ isActive: false }),
+      );
+      expect(res.body.items[0].isActive).toBe(false);
+    });
+
+    it('unaffected: filtro isActive não deve exigir nem alterar o filtro de status', async () => {
+      await request(app.getHttpServer())
+        .get('/api/v1/indicators?isActive=false&status=SUCCESS')
+        .expect(HttpStatus.OK);
+
+      expect(mockIndicatorsService.findAll).toHaveBeenCalledWith(
+        expect.objectContaining({ isActive: false, status: 'SUCCESS' }),
+      );
+    });
   });
 
   // ── GET /api/v1/indicators/:id ─────────────────────────────────────────────
@@ -562,6 +588,54 @@ describe('Indicators (e2e)', () => {
         .expect(HttpStatus.OK);
 
       expect(res.body.category).toBe(IndicatorCategory.MARKETING);
+    });
+
+    it('normal: desativar indicador (isActive=false) preserva status, frequency e valores → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        isActive: false,
+        // status, frequency, currentValue, goalValue permanecem inalterados (não enviados no PATCH)
+      });
+
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ isActive: false })
+        .expect(HttpStatus.OK);
+
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.objectContaining({ isActive: false }),
+      );
+      // Garante que o PATCH de isActive não envia/força status junto
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.not.objectContaining({ status: expect.anything() }),
+      );
+      expect(res.body.isActive).toBe(false);
+      expect(res.body.status).toBe(IndicatorStatus.SUCCESS);
+      expect(res.body.frequency).toBe(IndicatorFrequency.MONTHLY);
+      expect(res.body.currentValue).toBe(mockIndicator.currentValue);
+      expect(res.body.goalValue).toBe(mockIndicator.goalValue);
+    });
+
+    it('normal: reativar indicador (isActive=true) preserva status, frequency e valores → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        isActive: true,
+      });
+
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ isActive: true })
+        .expect(HttpStatus.OK);
+
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.objectContaining({ isActive: true }),
+      );
+      expect(res.body.isActive).toBe(true);
+      expect(res.body.status).toBe(IndicatorStatus.SUCCESS);
+      expect(res.body.frequency).toBe(IndicatorFrequency.MONTHLY);
     });
   });
 
