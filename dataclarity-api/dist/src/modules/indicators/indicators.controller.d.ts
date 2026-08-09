@@ -15,13 +15,17 @@ export declare class IndicatorsController {
     findAll(query: ListIndicatorsQueryDto): Promise<{
         items: (Omit<{
             measurements: {
-                referenceDate: Date;
                 value: import("@prisma/client-runtime-utils").Decimal;
+                referenceDate: Date;
             }[];
         } & {
-            id: string;
-            name: string;
+            status: import(".prisma/client").$Enums.IndicatorStatus;
             description: string | null;
+            name: string;
+            createdAt: Date;
+            id: string;
+            updatedAt: Date;
+            isActive: boolean;
             category: import(".prisma/client").$Enums.IndicatorCategory;
             formula: string | null;
             unit: string | null;
@@ -30,22 +34,18 @@ export declare class IndicatorsController {
             maximumGoalValue: import("@prisma/client-runtime-utils").Decimal | null;
             desiredDirection: import(".prisma/client").$Enums.IndicatorDesiredDirection;
             frequency: import(".prisma/client").$Enums.IndicatorFrequency;
-            currentValue: import("@prisma/client-runtime-utils").Decimal | null;
-            previousValue: import("@prisma/client-runtime-utils").Decimal | null;
             previousPeriod: import(".prisma/client").$Enums.IndicatorPeriod | null;
-            variation: import("@prisma/client-runtime-utils").Decimal | null;
-            status: import(".prisma/client").$Enums.IndicatorStatus;
+            chartType: import(".prisma/client").$Enums.IndicatorChartType;
             color: string | null;
             icon: string | null;
-            chartType: import(".prisma/client").$Enums.IndicatorChartType;
             startDate: Date | null;
             endDate: Date | null;
-            daysRemaining: number | null;
-            dashboardSlot: string | null;
-            isActive: boolean;
             showOnDashboard: boolean;
-            createdAt: Date;
-            updatedAt: Date;
+            dashboardSlot: string | null;
+            currentValue: import("@prisma/client-runtime-utils").Decimal | null;
+            previousValue: import("@prisma/client-runtime-utils").Decimal | null;
+            variation: import("@prisma/client-runtime-utils").Decimal | null;
+            daysRemaining: number | null;
         }, "measurements"> & {
             analytics: {
                 currentValue: number | null;

@@ -22,6 +22,8 @@ import {
   INDICATOR_PERIOD_LABELS,
   INDICATOR_FREQUENCY_LABELS,
   type Indicator,
+  type IndicatorHistory,
+  type PaginatedIndicatorHistory,
   type IndicatorCategory,
   type IndicatorStatus,
   type IndicatorChartType,
@@ -148,6 +150,17 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   // ── Confirmação de exclusão ────────────────────────────────────────────────
   readonly confirmDeleteId = signal<string | null>(null);
   readonly deleting = signal(false);
+
+  // ── Aba Histórico ─────────────────────────────────────────────────────────
+  /** Modo de exibição: 'list' = listagem de indicadores; 'history' = aba Histórico */
+  readonly viewMode = signal<'list' | 'history'>('list');
+  readonly historyIndicatorId = signal<string | null>(null);
+  readonly historyIndicatorName = signal<string>('');
+  readonly historyItems = signal<IndicatorHistory[]>([]);
+  readonly historyPagination = signal<PaginatedIndicatorHistory['pagination'] | null>(null);
+  readonly historyLoading = signal(false);
+  readonly historyError = signal<string | null>(null);
+  readonly historyPage = signal(1);
 
   // ── Tooltip de ajuda — Variação % ─────────────────────────────────────────
   showVariationHelp = false;
@@ -580,5 +593,56 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return '–';
     return d.toLocaleDateString('pt-BR');
+  }
+
+  /** Formata um intervalo de período: "01/08/2026 – 31/08/2026" */
+  formatPeriod(start: string | null, end: string | null): string {
+    const s = this.formatDate(start);
+    const e = this.formatDate(end);
+    if (s === '–' && e === '–') return '–';
+    return `${s} – ${e}`;
+  }
+
+  // ── Ações da aba Histórico ─────────────────────────────────────────────────
+
+  /** Abre a aba Histórico para um indicador específico */
+  openHistory(ind: Indicator): void {
+    this.viewMode.set('history');
+    this.historyIndicatorId.set(ind.id);
+    this.historyIndicatorName.set(ind.name);
+    this.historyPage.set(1);
+    this.loadHistory(ind.id, 1);
+  }
+
+  /** Volta para a listagem principal */
+  backToList(): void {
+    this.viewMode.set('list');
+    this.historyIndicatorId.set(null);
+    this.historyItems.set([]);
+    this.historyPagination.set(null);
+    this.historyError.set(null);
+  }
+
+  /** Carrega o histórico de um indicador com paginação */
+  loadHistory(indicatorId: string, page = 1): void {
+    this.historyLoading.set(true);
+    this.historyError.set(null);
+    this.svc.getHistory(indicatorId, { page, limit: 20 }).subscribe({
+      next: (data) => {
+        this.historyItems.set(data.items);
+        this.historyPagination.set(data.pagination);
+        this.historyPage.set(page);
+        this.historyLoading.set(false);
+      },
+      error: (err: Error) => {
+        this.historyError.set(err.message);
+        this.historyLoading.set(false);
+      },
+    });
+  }
+
+  goToHistoryPage(page: number): void {
+    const id = this.historyIndicatorId();
+    if (id) this.loadHistory(id, page);
   }
 }

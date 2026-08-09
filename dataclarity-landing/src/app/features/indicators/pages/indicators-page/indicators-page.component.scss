@@ -361,6 +361,7 @@
 
   .material-icons { font-size: 16px; }
 
+  &--history { background: #f0fdf4; color: #16a34a; &:hover { background: #dcfce7; } }
   &--details { background: #f0f9ff; color: #0ea5e9; &:hover { background: #e0f2fe; } }
   &--chart { background: #f0f4ff; color: #3b5bdb; &:hover { background: #dbe4ff; } }
   &--edit { background: #eef2ff; color: #3b5bdb; &:hover { background: #dbe4ff; } }
@@ -912,6 +913,32 @@
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+// ── Vista Histórico ─────────────────────────────────────────────────────────
+.history-view {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: 18px;
+    font-weight: 700;
+    color: $color-text-dark;
+    margin: 0;
+
+    .material-icons { color: #3b5bdb; font-size: 20px; }
+  }
 }
 
 // ── Badge INACTIVE ──────────────────────────────────────────────────────────

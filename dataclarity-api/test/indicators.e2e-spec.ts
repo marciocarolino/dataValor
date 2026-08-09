@@ -18,6 +18,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { IndicatorsService } from '../src/modules/indicators/indicators.service';
 import { IndicatorAnalyticsService } from '../src/modules/indicators/indicator-analytics.service';
 import { IndicatorCronService } from '../src/modules/indicators/indicator-cron.service';
+import { IndicatorHistoryService } from '../src/modules/indicators/indicator-history.service';
 import { MeasurementsService } from '../src/modules/indicators/measurements.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
 import { IndicatorStatus } from '../src/modules/indicators/enums/indicator-status.enum';
@@ -148,6 +149,13 @@ describe('Indicators (e2e)', () => {
       .useValue({})
       .overrideProvider(MeasurementsService)
       .useValue({})
+      .overrideProvider(IndicatorHistoryService)
+      .useValue({
+        create: jest.fn(),
+        findAll: jest.fn(),
+        findOne: jest.fn(),
+        remove: jest.fn(),
+      })
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: () => true })
       .compile();

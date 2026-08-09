@@ -174,6 +174,44 @@ export interface CreateIndicatorPayload {
 
 export type UpdateIndicatorPayload = Partial<CreateIndicatorPayload>;
 
+// ── IndicatorHistory ───────────────────────────────────────────────────────────
+
+/**
+ * Resultado histórico consolidado de um período do Indicador.
+ * Diferente de IndicatorMeasurement (medição pontual).
+ */
+export interface IndicatorHistory {
+  id: string;
+  indicatorId: string;
+  periodStart: string;
+  periodEnd: string;
+  value: number | null;
+  goalValue: number | null;
+  previousValue: number | null;
+  variationPercent: number | null;
+  status: IndicatorStatus;
+  notes: string | null;
+  calculatedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedIndicatorHistory {
+  items: IndicatorHistory[];
+  pagination: PaginationMeta;
+}
+
+export interface CreateIndicatorHistoryPayload {
+  periodStart: string;
+  periodEnd: string;
+  value?: number;
+  goalValue?: number;
+  previousValue?: number;
+  variationPercent?: number;
+  status: IndicatorStatus;
+  notes?: string;
+}
+
 export const INDICATOR_CATEGORY_LABELS: Record<IndicatorCategory, string> = {
   FINANCIAL: 'Financeiro',
   COMMERCIAL: 'Comercial',

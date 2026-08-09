@@ -13,22 +13,37 @@ const indicators_controller_1 = require("./indicators.controller");
 const indicators_service_1 = require("./indicators.service");
 const indicator_analytics_service_1 = require("./indicator-analytics.service");
 const indicator_cron_service_1 = require("./indicator-cron.service");
+const indicator_history_controller_1 = require("./indicator-history.controller");
+const indicator_history_service_1 = require("./indicator-history.service");
 const measurements_service_1 = require("./measurements.service");
 const measurements_controller_1 = require("./measurements.controller");
+const period_resolver_service_1 = require("./period-resolver.service");
 let IndicatorsModule = class IndicatorsModule {
 };
 exports.IndicatorsModule = IndicatorsModule;
 exports.IndicatorsModule = IndicatorsModule = __decorate([
     (0, common_1.Module)({
         imports: [schedule_1.ScheduleModule.forRoot()],
-        controllers: [indicators_controller_1.IndicatorsController, measurements_controller_1.MeasurementsController],
+        controllers: [
+            indicators_controller_1.IndicatorsController,
+            measurements_controller_1.MeasurementsController,
+            indicator_history_controller_1.IndicatorHistoryController,
+        ],
         providers: [
             indicators_service_1.IndicatorsService,
             indicator_analytics_service_1.IndicatorAnalyticsService,
             indicator_cron_service_1.IndicatorCronService,
             measurements_service_1.MeasurementsService,
+            indicator_history_service_1.IndicatorHistoryService,
+            period_resolver_service_1.PeriodResolverService,
         ],
-        exports: [indicators_service_1.IndicatorsService, indicator_analytics_service_1.IndicatorAnalyticsService, measurements_service_1.MeasurementsService],
+        exports: [
+            indicators_service_1.IndicatorsService,
+            indicator_analytics_service_1.IndicatorAnalyticsService,
+            measurements_service_1.MeasurementsService,
+            indicator_history_service_1.IndicatorHistoryService,
+            period_resolver_service_1.PeriodResolverService,
+        ],
     })
 ], IndicatorsModule);
 //# sourceMappingURL=indicators.module.js.map

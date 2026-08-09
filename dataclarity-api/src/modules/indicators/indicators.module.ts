@@ -4,18 +4,33 @@ import { IndicatorsController } from './indicators.controller';
 import { IndicatorsService } from './indicators.service';
 import { IndicatorAnalyticsService } from './indicator-analytics.service';
 import { IndicatorCronService } from './indicator-cron.service';
+import { IndicatorHistoryController } from './indicator-history.controller';
+import { IndicatorHistoryService } from './indicator-history.service';
 import { MeasurementsService } from './measurements.service';
 import { MeasurementsController } from './measurements.controller';
+import { PeriodResolverService } from './period-resolver.service';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
-  controllers: [IndicatorsController, MeasurementsController],
+  controllers: [
+    IndicatorsController,
+    MeasurementsController,
+    IndicatorHistoryController,
+  ],
   providers: [
     IndicatorsService,
     IndicatorAnalyticsService,
     IndicatorCronService,
     MeasurementsService,
+    IndicatorHistoryService,
+    PeriodResolverService,
   ],
-  exports: [IndicatorsService, IndicatorAnalyticsService, MeasurementsService],
+  exports: [
+    IndicatorsService,
+    IndicatorAnalyticsService,
+    MeasurementsService,
+    IndicatorHistoryService,
+    PeriodResolverService,
+  ],
 })
 export class IndicatorsModule {}

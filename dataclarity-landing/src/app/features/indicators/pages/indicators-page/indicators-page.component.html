@@ -41,13 +41,13 @@
         </section>
       }
 
-      <!-- Situação: Ativos / Inativos (abas) -->
+      <!-- Situação: Ativos / Inativos / Histórico (abas) -->
       <div class="segmented-tabs">
         <button
           type="button"
           class="segmented-tabs__btn"
-          [class.segmented-tabs__btn--active]="filterActive() === 'true'"
-          (click)="onActiveFilter(filterActive() === 'true' ? '' : 'true')"
+          [class.segmented-tabs__btn--active]="viewMode() === 'list' && filterActive() === 'true'"
+          (click)="backToList(); onActiveFilter(filterActive() === 'true' ? '' : 'true')"
         >
           Ativos
           @if (summary()) {
@@ -57,256 +57,405 @@
         <button
           type="button"
           class="segmented-tabs__btn"
-          [class.segmented-tabs__btn--active]="filterActive() === 'false'"
-          (click)="onActiveFilter(filterActive() === 'false' ? '' : 'false')"
+          [class.segmented-tabs__btn--active]="viewMode() === 'list' && filterActive() === 'false'"
+          (click)="backToList(); onActiveFilter(filterActive() === 'false' ? '' : 'false')"
         >
           Inativos
           @if (summary()) {
             <span class="segmented-tabs__count">({{ summary()!.inactive }})</span>
           }
         </button>
+        <button
+          type="button"
+          class="segmented-tabs__btn"
+          [class.segmented-tabs__btn--active]="viewMode() === 'history'"
+          title="Selecione um indicador na tabela e clique no ícone de histórico"
+        >
+          <span class="material-icons" style="font-size: 15px; vertical-align: middle"
+            >history</span
+          >
+          Histórico
+          @if (viewMode() === 'history') {
+            <span class="segmented-tabs__count">— {{ historyIndicatorName() }}</span>
+          }
+        </button>
       </div>
 
-      <!-- Filtros -->
-      <div class="filters-bar">
-        <div class="filters-bar__search">
-          <span class="material-icons filters-bar__search-icon">search</span>
-          <input
-            class="filters-bar__input"
-            type="text"
-            placeholder="Buscar por nome..."
-            [value]="searchName()"
-            (input)="onSearch($any($event.target).value)"
-          />
-        </div>
-
-        <select class="filters-bar__select" (change)="onCategoryFilter($any($event.target).value)">
-          <option value="">Todas categorias</option>
-          @for (cat of categories; track cat) {
-            <option [value]="cat">{{ categoryLabels[cat] }}</option>
-          }
-        </select>
-
-        <!-- Filtro de Status de resultado (sem Inativo) -->
-        <select class="filters-bar__select" (change)="onStatusFilter($any($event.target).value)">
-          <option value="">Todos status</option>
-          @for (st of statuses; track st) {
-            <option [value]="st">{{ statusLabels[st] }}</option>
-          }
-        </select>
-      </div>
-
-      <!-- Error Banner -->
-      @if (error()) {
-        <div class="error-banner">
-          <span class="material-icons">error_outline</span>
-          {{ error() }}
-        </div>
-      }
-
-      <!-- Loading Skeleton -->
-      @if (loading()) {
-        <div class="skeleton-table">
-          @for (i of [1, 2, 3, 4, 5]; track i) {
-            <div class="skeleton-row"></div>
-          }
-        </div>
-      }
-
-      <!-- Tabela -->
-      @if (!loading()) {
-        <div class="table-wrapper">
-          <table class="indicators-table">
-            <thead>
-              <tr>
-                <th (click)="onSort('name')" class="sortable">
-                  Nome
-                  @if (sortBy() === 'name') {
-                    <span class="material-icons sort-icon">{{
-                      sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
-                    }}</span>
-                  }
-                </th>
-                <th (click)="onSort('category')" class="sortable">
-                  Categoria
-                  @if (sortBy() === 'category') {
-                    <span class="material-icons sort-icon">{{
-                      sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
-                    }}</span>
-                  }
-                </th>
-                <th (click)="onSort('currentValue')" class="sortable">
-                  Valor Atual
-                  @if (sortBy() === 'currentValue') {
-                    <span class="material-icons sort-icon">{{
-                      sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
-                    }}</span>
-                  }
-                </th>
-                <th>Meta</th>
-                <th (click)="onSort('status')" class="sortable">
-                  Status
-                  @if (sortBy() === 'status') {
-                    <span class="material-icons sort-icon">{{
-                      sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
-                    }}</span>
-                  }
-                </th>
-                <th>Variação</th>
-                <th>Tipo Gráfico</th>
-                <th>Ativo</th>
-                <th>Dias Restantes</th>
-                <th>Detalhes</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (ind of indicators(); track ind.id) {
-                <tr>
-                  <td class="cell-name">
-                    @if (ind.icon && !ind.icon.includes(' ')) {
-                      <span
-                        class="material-icons cell-icon cell-icon--colored"
-                        [style.color]="ind.color ?? undefined"
-                        [style.background]="ind.color ? ind.color + '22' : undefined"
-                        >{{ ind.icon }}</span
-                      >
-                    } @else if (ind.color) {
-                      <span class="cell-color-dot" [style.background]="ind.color"></span>
-                    }
-                    {{ ind.name }}
-                  </td>
-                  <td>
-                    <span class="badge badge--category">{{ categoryLabels[ind.category] }}</span>
-                  </td>
-                  <td class="cell-number">{{ formatNumber(ind.currentValue) }}</td>
-                  <td class="cell-number">{{ formatNumber(ind.goalValue) }}</td>
-                  <td>
-                    <span class="badge" [class]="statusClass(ind.status)">
-                      {{ statusLabels[ind.status] }}
-                    </span>
-                  </td>
-                  <td
-                    class="cell-variation"
-                    [class.positive]="(ind.variation ?? 0) >= 0"
-                    [class.negative]="(ind.variation ?? 0) < 0"
-                  >
-                    @if (ind.variation !== null) {
-                      <span class="material-icons variation-icon">{{
-                        (ind.variation ?? 0) >= 0 ? 'trending_up' : 'trending_down'
-                      }}</span>
-                      {{ (ind.variation ?? 0).toFixed(2) }}%
-                    } @else {
-                      –
-                    }
-                  </td>
-                  <td>
-                    <span class="badge badge--chart">{{ chartTypeLabels[ind.chartType] }}</span>
-                  </td>
-                  <td>
-                    <span
-                      class="active-dot"
-                      [class.active-dot--on]="ind.isActive"
-                      [class.active-dot--off]="!ind.isActive"
-                    >
-                      {{ ind.isActive ? 'Sim' : 'Não' }}
-                    </span>
-                  </td>
-                  <td class="cell-deadline">
-                    @if (ind.daysRemaining !== null && ind.daysRemaining !== undefined) {
-                      @if (ind.daysRemaining < 0) {
-                        <span class="deadline-badge deadline-badge--exp">Encerrado</span>
-                      } @else if (ind.daysRemaining === 0) {
-                        <span class="deadline-badge deadline-badge--warn">Hoje!</span>
-                      } @else if (ind.daysRemaining <= 7) {
-                        <span class="deadline-badge deadline-badge--warn"
-                          >{{ ind.daysRemaining }}d</span
-                        >
-                      } @else {
-                        <span class="deadline-badge deadline-badge--ok"
-                          >{{ ind.daysRemaining }}d</span
-                        >
-                      }
-                    } @else {
-                      <span class="cell-muted">–</span>
-                    }
-                  </td>
-                  <td class="cell-details">
-                    <button
-                      class="action-btn action-btn--details"
-                      (click)="openDetails(ind)"
-                      title="Ver detalhes"
-                    >
-                      <span class="material-icons">info_outline</span>
-                    </button>
-                  </td>
-                  <td class="cell-actions">
-                    <button
-                      class="action-btn action-btn--chart"
-                      (click)="openChart(ind)"
-                      title="Visualizar gráfico"
-                    >
-                      <span class="material-icons">bar_chart</span>
-                    </button>
-                    <button
-                      class="action-btn action-btn--edit"
-                      (click)="openEdit(ind)"
-                      title="Editar"
-                    >
-                      <span class="material-icons">edit</span>
-                    </button>
-                    <button
-                      class="action-btn action-btn--delete"
-                      (click)="requestDelete(ind.id)"
-                      title="Excluir"
-                    >
-                      <span class="material-icons">delete</span>
-                    </button>
-                  </td>
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="11" class="empty-state">
-                    <span class="material-icons">bar_chart</span>
-                    <p>Nenhum indicador encontrado.</p>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Paginação -->
-        @if (pagination() && pagination()!.totalPages > 1) {
-          <div class="pagination">
-            <button
-              class="pagination__btn"
-              [disabled]="!pagination()!.hasPreviousPage"
-              (click)="goToPage(currentPage() - 1)"
-            >
-              <span class="material-icons">chevron_left</span>
+      <!-- ── Vista Histórico ─────────────────────────────────────────────── -->
+      @if (viewMode() === 'history') {
+        <div class="history-view">
+          <div class="history-view__header">
+            <button type="button" class="btn btn--ghost" (click)="backToList()">
+              <span class="material-icons">arrow_back</span>
+              Voltar para lista
             </button>
+            <h2 class="history-view__title">
+              <span class="material-icons">history</span>
+              Histórico — {{ historyIndicatorName() }}
+            </h2>
+          </div>
 
-            @for (page of pageNumbers(); track page) {
+          @if (historyError()) {
+            <div class="error-banner">
+              <span class="material-icons">error_outline</span>
+              {{ historyError() }}
+            </div>
+          }
+
+          @if (historyLoading()) {
+            <div class="skeleton-table">
+              @for (i of [1, 2, 3, 4, 5]; track i) {
+                <div class="skeleton-row"></div>
+              }
+            </div>
+          }
+
+          @if (!historyLoading()) {
+            <div class="table-wrapper">
+              <table class="indicators-table">
+                <thead>
+                  <tr>
+                    <th>Período</th>
+                    <th>Valor</th>
+                    <th>Meta</th>
+                    <th>Valor Anterior</th>
+                    <th>Variação %</th>
+                    <th>Status</th>
+                    <th>Registrado em</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (h of historyItems(); track h.id) {
+                    <tr>
+                      <td class="cell-deadline">
+                        <span class="deadline-badge deadline-badge--ok">
+                          {{ formatPeriod(h.periodStart, h.periodEnd) }}
+                        </span>
+                      </td>
+                      <td class="cell-number">{{ formatNumber(h.value) }}</td>
+                      <td class="cell-number">{{ formatNumber(h.goalValue) }}</td>
+                      <td class="cell-number">{{ formatNumber(h.previousValue) }}</td>
+                      <td
+                        class="cell-variation"
+                        [class.positive]="(h.variationPercent ?? 0) >= 0"
+                        [class.negative]="(h.variationPercent ?? 0) < 0"
+                      >
+                        @if (h.variationPercent !== null) {
+                          <span class="material-icons variation-icon">{{
+                            (h.variationPercent ?? 0) >= 0 ? 'trending_up' : 'trending_down'
+                          }}</span>
+                          {{ (h.variationPercent ?? 0).toFixed(2) }}%
+                        } @else {
+                          –
+                        }
+                      </td>
+                      <td>
+                        <span class="badge" [class]="statusClass(h.status)">
+                          {{ statusLabels[h.status] }}
+                        </span>
+                      </td>
+                      <td class="cell-muted">{{ formatDate(h.calculatedAt) }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="7" class="empty-state">
+                        <span class="material-icons">history</span>
+                        <p>Nenhum resultado histórico registrado para este indicador.</p>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginação do histórico -->
+            @if (historyPagination() && historyPagination()!.totalPages > 1) {
+              <div class="pagination">
+                <button
+                  class="pagination__btn"
+                  [disabled]="!historyPagination()!.hasPreviousPage"
+                  (click)="goToHistoryPage(historyPage() - 1)"
+                >
+                  <span class="material-icons">chevron_left</span>
+                </button>
+                @for (p of [].constructor(historyPagination()!.totalPages); track $index) {
+                  <button
+                    class="pagination__btn"
+                    [class.pagination__btn--active]="$index + 1 === historyPage()"
+                    (click)="goToHistoryPage($index + 1)"
+                  >
+                    {{ $index + 1 }}
+                  </button>
+                }
+                <button
+                  class="pagination__btn"
+                  [disabled]="!historyPagination()!.hasNextPage"
+                  (click)="goToHistoryPage(historyPage() + 1)"
+                >
+                  <span class="material-icons">chevron_right</span>
+                </button>
+                <span class="pagination__info">
+                  {{ historyPagination()!.totalItems }} resultado(s)
+                </span>
+              </div>
+            }
+          }
+        </div>
+      }
+
+      <!-- ── Vista Listagem ──────────────────────────────────────────────── -->
+      @if (viewMode() === 'list') {
+        <!-- Filtros -->
+        <div class="filters-bar">
+          <div class="filters-bar__search">
+            <span class="material-icons filters-bar__search-icon">search</span>
+            <input
+              class="filters-bar__input"
+              type="text"
+              placeholder="Buscar por nome..."
+              [value]="searchName()"
+              (input)="onSearch($any($event.target).value)"
+            />
+          </div>
+
+          <select
+            class="filters-bar__select"
+            (change)="onCategoryFilter($any($event.target).value)"
+          >
+            <option value="">Todas categorias</option>
+            @for (cat of categories; track cat) {
+              <option [value]="cat">{{ categoryLabels[cat] }}</option>
+            }
+          </select>
+
+          <!-- Filtro de Status de resultado (sem Inativo) -->
+          <select class="filters-bar__select" (change)="onStatusFilter($any($event.target).value)">
+            <option value="">Todos status</option>
+            @for (st of statuses; track st) {
+              <option [value]="st">{{ statusLabels[st] }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Error Banner -->
+        @if (error()) {
+          <div class="error-banner">
+            <span class="material-icons">error_outline</span>
+            {{ error() }}
+          </div>
+        }
+
+        <!-- Loading Skeleton -->
+        @if (loading()) {
+          <div class="skeleton-table">
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <div class="skeleton-row"></div>
+            }
+          </div>
+        }
+
+        <!-- Tabela -->
+        @if (!loading()) {
+          <div class="table-wrapper">
+            <table class="indicators-table">
+              <thead>
+                <tr>
+                  <th (click)="onSort('name')" class="sortable">
+                    Nome
+                    @if (sortBy() === 'name') {
+                      <span class="material-icons sort-icon">{{
+                        sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
+                      }}</span>
+                    }
+                  </th>
+                  <th (click)="onSort('category')" class="sortable">
+                    Categoria
+                    @if (sortBy() === 'category') {
+                      <span class="material-icons sort-icon">{{
+                        sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
+                      }}</span>
+                    }
+                  </th>
+                  <th (click)="onSort('currentValue')" class="sortable">
+                    Valor Atual
+                    @if (sortBy() === 'currentValue') {
+                      <span class="material-icons sort-icon">{{
+                        sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
+                      }}</span>
+                    }
+                  </th>
+                  <th>Meta</th>
+                  <th (click)="onSort('status')" class="sortable">
+                    Status
+                    @if (sortBy() === 'status') {
+                      <span class="material-icons sort-icon">{{
+                        sortOrder() === 'asc' ? 'arrow_upward' : 'arrow_downward'
+                      }}</span>
+                    }
+                  </th>
+                  <th>Variação</th>
+                  <th>Tipo Gráfico</th>
+                  <th>Ativo</th>
+                  <th>Dias Restantes</th>
+                  <th>Detalhes</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (ind of indicators(); track ind.id) {
+                  <tr>
+                    <td class="cell-name">
+                      @if (ind.icon && !ind.icon.includes(' ')) {
+                        <span
+                          class="material-icons cell-icon cell-icon--colored"
+                          [style.color]="ind.color ?? undefined"
+                          [style.background]="ind.color ? ind.color + '22' : undefined"
+                          >{{ ind.icon }}</span
+                        >
+                      } @else if (ind.color) {
+                        <span class="cell-color-dot" [style.background]="ind.color"></span>
+                      }
+                      {{ ind.name }}
+                    </td>
+                    <td>
+                      <span class="badge badge--category">{{ categoryLabels[ind.category] }}</span>
+                    </td>
+                    <td class="cell-number">{{ formatNumber(ind.currentValue) }}</td>
+                    <td class="cell-number">{{ formatNumber(ind.goalValue) }}</td>
+                    <td>
+                      <span class="badge" [class]="statusClass(ind.status)">
+                        {{ statusLabels[ind.status] }}
+                      </span>
+                    </td>
+                    <td
+                      class="cell-variation"
+                      [class.positive]="(ind.variation ?? 0) >= 0"
+                      [class.negative]="(ind.variation ?? 0) < 0"
+                    >
+                      @if (ind.variation !== null) {
+                        <span class="material-icons variation-icon">{{
+                          (ind.variation ?? 0) >= 0 ? 'trending_up' : 'trending_down'
+                        }}</span>
+                        {{ (ind.variation ?? 0).toFixed(2) }}%
+                      } @else {
+                        –
+                      }
+                    </td>
+                    <td>
+                      <span class="badge badge--chart">{{ chartTypeLabels[ind.chartType] }}</span>
+                    </td>
+                    <td>
+                      <span
+                        class="active-dot"
+                        [class.active-dot--on]="ind.isActive"
+                        [class.active-dot--off]="!ind.isActive"
+                      >
+                        {{ ind.isActive ? 'Sim' : 'Não' }}
+                      </span>
+                    </td>
+                    <td class="cell-deadline">
+                      @if (ind.daysRemaining !== null && ind.daysRemaining !== undefined) {
+                        @if (ind.daysRemaining < 0) {
+                          <span class="deadline-badge deadline-badge--exp">Encerrado</span>
+                        } @else if (ind.daysRemaining === 0) {
+                          <span class="deadline-badge deadline-badge--warn">Hoje!</span>
+                        } @else if (ind.daysRemaining <= 7) {
+                          <span class="deadline-badge deadline-badge--warn"
+                            >{{ ind.daysRemaining }}d</span
+                          >
+                        } @else {
+                          <span class="deadline-badge deadline-badge--ok"
+                            >{{ ind.daysRemaining }}d</span
+                          >
+                        }
+                      } @else {
+                        <span class="cell-muted">–</span>
+                      }
+                    </td>
+                    <td class="cell-details">
+                      <button
+                        class="action-btn action-btn--details"
+                        (click)="openDetails(ind)"
+                        title="Ver detalhes"
+                      >
+                        <span class="material-icons">info_outline</span>
+                      </button>
+                    </td>
+                    <td class="cell-actions">
+                      <button
+                        class="action-btn action-btn--history"
+                        (click)="openHistory(ind)"
+                        title="Ver histórico de resultados"
+                      >
+                        <span class="material-icons">history</span>
+                      </button>
+                      <button
+                        class="action-btn action-btn--chart"
+                        (click)="openChart(ind)"
+                        title="Visualizar gráfico"
+                      >
+                        <span class="material-icons">bar_chart</span>
+                      </button>
+                      <button
+                        class="action-btn action-btn--edit"
+                        (click)="openEdit(ind)"
+                        title="Editar"
+                      >
+                        <span class="material-icons">edit</span>
+                      </button>
+                      <button
+                        class="action-btn action-btn--delete"
+                        (click)="requestDelete(ind.id)"
+                        title="Excluir"
+                      >
+                        <span class="material-icons">delete</span>
+                      </button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="11" class="empty-state">
+                      <span class="material-icons">bar_chart</span>
+                      <p>Nenhum indicador encontrado.</p>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginação -->
+          @if (pagination() && pagination()!.totalPages > 1) {
+            <div class="pagination">
               <button
                 class="pagination__btn"
-                [class.pagination__btn--active]="page === currentPage()"
-                (click)="goToPage(page)"
+                [disabled]="!pagination()!.hasPreviousPage"
+                (click)="goToPage(currentPage() - 1)"
               >
-                {{ page }}
+                <span class="material-icons">chevron_left</span>
               </button>
-            }
 
-            <button
-              class="pagination__btn"
-              [disabled]="!pagination()!.hasNextPage"
-              (click)="goToPage(currentPage() + 1)"
-            >
-              <span class="material-icons">chevron_right</span>
-            </button>
+              @for (page of pageNumbers(); track page) {
+                <button
+                  class="pagination__btn"
+                  [class.pagination__btn--active]="page === currentPage()"
+                  (click)="goToPage(page)"
+                >
+                  {{ page }}
+                </button>
+              }
 
-            <span class="pagination__info"> {{ pagination()!.totalItems }} indicadores </span>
-          </div>
+              <button
+                class="pagination__btn"
+                [disabled]="!pagination()!.hasNextPage"
+                (click)="goToPage(currentPage() + 1)"
+              >
+                <span class="material-icons">chevron_right</span>
+              </button>
+
+              <span class="pagination__info"> {{ pagination()!.totalItems }} indicadores </span>
+            </div>
+          }
         }
       }
     </main>
@@ -393,7 +542,7 @@
             </div>
           </div>
 
-          <!-- Row 3: Valor Atual | Meta (linha inteira) -->
+          <!-- Row 3: Valor Atual | Meta -->
           <div class="form-row">
             <div class="form-group form-group--lg">
               <label>Valor Atual</label>
@@ -482,7 +631,7 @@
             </div>
           </div>
 
-          <!-- Row 3c: Datas de acompanhamento -->
+          <!-- Row 3c: Datas -->
           <div class="form-row">
             <div class="form-group">
               <label>Data Início</label>
@@ -541,9 +690,9 @@
                 </a>
               </label>
               <div class="input-with-preview">
-                <span class="icon-preview material-icons">
-                  {{ form.get('icon')?.value || 'help_outline' }}
-                </span>
+                <span class="icon-preview material-icons">{{
+                  form.get('icon')?.value || 'help_outline'
+                }}</span>
                 <input
                   formControlName="icon"
                   type="text"
@@ -552,31 +701,25 @@
                 />
               </div>
               <p class="field-hint">
-                O nome deve ser em <strong>minúsculas com underscores</strong> (snake_case). No
-                site, copie o nome e o sistema converte automaticamente. Exemplos:
-                <code>trending_up</code>, <code>savings</code>, <code>group</code>,
-                <code>payments</code>, <code>percent</code>, <code>bar_chart</code>,
-                <code>arrow_right</code>
+                O nome deve ser em <strong>minúsculas com underscores</strong> (snake_case).
+                Exemplos: <code>trending_up</code>, <code>savings</code>, <code>bar_chart</code>
               </p>
             </div>
             <div class="form-group">
               <label>Cor (hex)</label>
               <div class="input-with-preview input-with-preview--color">
-                <!-- Preview clicável que abre o color picker nativo -->
                 <span
                   class="color-preview color-preview--clickable"
                   [style.background]="form.get('color')?.value || '#4c6ef5'"
                   (click)="colorPickerRef.click()"
                   title="Clique para abrir o seletor de cores"
                 ></span>
-                <!-- Input de texto para digitar o hex -->
                 <input
                   formControlName="color"
                   type="text"
                   placeholder="#4c6ef5"
                   (input)="syncColorPicker($any($event.target).value)"
                 />
-                <!-- Botão ícone paleta -->
                 <button
                   type="button"
                   class="color-picker-btn"
@@ -585,7 +728,6 @@
                 >
                   <span class="material-icons">palette</span>
                 </button>
-                <!-- Input color nativo oculto -->
                 <input
                   #colorPickerRef
                   type="color"
@@ -620,10 +762,8 @@
                 placeholder="Ex: SUM(receitas) - SUM(devoluções)"
               />
               <p class="field-hint">
-                Campo descritivo — documenta como o indicador é calculado. Será integrado à engine
-                de dados em versões futuras. Exemplos: <code>SUM(receitas)</code>,
-                <code>COUNT(clientes_ativos)</code>, <code>SUM(lucro) / SUM(receita) * 100</code>,
-                <code>AVG(ticket_medio)</code>
+                Campo descritivo — documenta como o indicador é calculado. Exemplos:
+                <code>SUM(receitas)</code>, <code>COUNT(clientes_ativos)</code>
               </p>
             </div>
           </div>
@@ -669,9 +809,7 @@
       <div class="modal__header">
         <div class="modal__header-info">
           <span class="modal__chart-badge">
-            <span class="material-icons">{{
-              chartTypeLabels[chartIndicator()!.chartType] ? 'bar_chart' : 'bar_chart'
-            }}</span>
+            <span class="material-icons">bar_chart</span>
             {{ chartTypeLabels[chartIndicator()!.chartType] }}
           </span>
           <h2 class="modal__title">{{ chartIndicator()!.name }}</h2>
@@ -739,19 +877,19 @@
         <div class="details-grid">
           <div class="details-field">
             <span class="details-field__label">Categoria</span>
-            <span class="details-field__value">
-              <span class="badge badge--category">{{
+            <span class="details-field__value"
+              ><span class="badge badge--category">{{
                 categoryLabels[detailsIndicator()!.category]
-              }}</span>
-            </span>
+              }}</span></span
+            >
           </div>
           <div class="details-field">
             <span class="details-field__label">Tipo de Gráfico</span>
-            <span class="details-field__value">
-              <span class="badge badge--chart">{{
+            <span class="details-field__value"
+              ><span class="badge badge--chart">{{
                 chartTypeLabels[detailsIndicator()!.chartType]
-              }}</span>
-            </span>
+              }}</span></span
+            >
           </div>
           <div class="details-field">
             <span class="details-field__label">Unidade</span>

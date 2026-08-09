@@ -53,7 +53,7 @@ let MeasurementsController = class MeasurementsController {
     async getAnalytics(indicatorId) {
         return this.indicatorsService.getAnalytics(indicatorId);
     }
-    async getHistory(indicatorId, startDate, endDate) {
+    async getMeasurementTimeline(indicatorId, startDate, endDate) {
         return this.indicatorsService.getHistory(indicatorId, startDate, endDate);
     }
 };
@@ -195,11 +195,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MeasurementsController.prototype, "getAnalytics", null);
 __decorate([
-    (0, common_1.Get)('history'),
+    (0, common_1.Get)('measurements/timeline'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({
-        summary: 'Histórico de medições',
-        description: 'Retorna todas as medições do indicador em ordem cronológica, com filtro de período opcional.',
+        summary: 'Timeline de medições (ordem cronológica)',
+        description: 'Retorna todas as medições pontuais do indicador em ordem cronológica. ' +
+            'Para o histórico consolidado por período, use GET /indicators/:indicatorId/history.',
     }),
     (0, swagger_1.ApiParam)({ name: 'indicatorId', format: 'uuid' }),
     (0, swagger_1.ApiQuery)({ name: 'startDate', required: false, example: '2026-01-01' }),
@@ -211,7 +212,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
-], MeasurementsController.prototype, "getHistory", null);
+], MeasurementsController.prototype, "getMeasurementTimeline", null);
 exports.MeasurementsController = MeasurementsController = __decorate([
     (0, swagger_1.ApiTags)('Indicator Measurements'),
     (0, swagger_1.ApiBearerAuth)(),

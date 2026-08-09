@@ -98,6 +98,7 @@ model Indicator {
   updatedAt        DateTime                  @updatedAt
 
   measurements IndicatorMeasurement[]
+  history      IndicatorHistory[]
 
   @@index([category])
   @@index([status])
@@ -157,6 +158,31 @@ enum IndicatorPeriod {
   PREVIOUS_SEMESTER
   PREVIOUS_YEAR
   CUSTOM
+}
+
+model IndicatorHistory {
+  id              String          @id @default(uuid())
+  indicatorId     String
+  // Janela temporal do resultado consolidado (ex: 2026-08-01 → 2026-08-31)
+  periodStart     DateTime
+  periodEnd       DateTime
+  // Resultado do período
+  value           Decimal?        @db.Decimal(18, 2)
+  goalValue       Decimal?        @db.Decimal(18, 2)
+  previousValue   Decimal?        @db.Decimal(18, 2)
+  variationPercent Decimal?       @db.Decimal(10, 4)
+  status          IndicatorStatus @default(NEUTRAL)
+  notes           String?
+  calculatedAt    DateTime        @default(now())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  indicator Indicator @relation(fields: [indicatorId], references: [id], onDelete: Cascade)
+
+  @@unique([indicatorId, periodStart, periodEnd])
+  @@index([indicatorId])
+  @@index([periodStart])
+  @@index([indicatorId, periodStart(sort: Desc)])
 }
 
 // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado

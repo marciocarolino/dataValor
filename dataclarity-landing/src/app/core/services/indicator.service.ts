@@ -4,10 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import type {
   Indicator,
+  IndicatorHistory,
   IndicatorSummary,
   PaginatedIndicators,
+  PaginatedIndicatorHistory,
   IndicatorQueryParams,
   CreateIndicatorPayload,
+  CreateIndicatorHistoryPayload,
   UpdateIndicatorPayload,
   IndicatorCategory,
 } from '../models/indicator.model';
@@ -159,6 +162,54 @@ export class IndicatorService {
   getSummary(): Observable<IndicatorSummary> {
     return this.http
       .get<IndicatorSummary>(`${API_URL}/indicators/summary`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // ── Histórico (IndicatorHistory) ───────────────────────────────────────────
+
+  /**
+   * Retorna o histórico de resultados consolidados por período de um indicador.
+   * Ordenado por periodStart decrescente (mais recente primeiro).
+   */
+  getHistory(
+    indicatorId: string,
+    params?: { page?: number; limit?: number; startDate?: string; endDate?: string },
+  ): Observable<PaginatedIndicatorHistory> {
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          httpParams = httpParams.set(key, String(value));
+        }
+      });
+    }
+    return this.http
+      .get<PaginatedIndicatorHistory>(
+        `${API_URL}/indicators/${indicatorId}/history`,
+        { params: httpParams },
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  /** Cria um resultado histórico para o período informado. */
+  createHistory(
+    indicatorId: string,
+    payload: CreateIndicatorHistoryPayload,
+  ): Observable<IndicatorHistory> {
+    return this.http
+      .post<IndicatorHistory>(
+        `${API_URL}/indicators/${indicatorId}/history`,
+        payload,
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  /** Remove um resultado histórico. */
+  deleteHistory(indicatorId: string, historyId: string): Observable<IndicatorHistory> {
+    return this.http
+      .delete<IndicatorHistory>(
+        `${API_URL}/indicators/${indicatorId}/history/${historyId}`,
+      )
       .pipe(catchError(this.handleError));
   }
 

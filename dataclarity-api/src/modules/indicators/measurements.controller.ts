@@ -202,20 +202,24 @@ export class MeasurementsController {
     return this.indicatorsService.getAnalytics(indicatorId);
   }
 
-  // ─── GET /indicators/:indicatorId/history ────────────────────────────────
+  // ─── GET /indicators/:indicatorId/measurements/timeline ─────────────────
+  // Nota: O endpoint /history foi movido para IndicatorHistoryController
+  // (resultados históricos consolidados por período). Este endpoint retorna
+  // as medições pontuais do indicador em ordem cronológica.
 
-  @Get('history')
+  @Get('measurements/timeline')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Histórico de medições',
+    summary: 'Timeline de medições (ordem cronológica)',
     description:
-      'Retorna todas as medições do indicador em ordem cronológica, com filtro de período opcional.',
+      'Retorna todas as medições pontuais do indicador em ordem cronológica. ' +
+      'Para o histórico consolidado por período, use GET /indicators/:indicatorId/history.',
   })
   @ApiParam({ name: 'indicatorId', format: 'uuid' })
   @ApiQuery({ name: 'startDate', required: false, example: '2026-01-01' })
   @ApiQuery({ name: 'endDate', required: false, example: '2026-12-31' })
   @ApiNotFoundResponse({ description: 'Indicador não encontrado.' })
-  async getHistory(
+  async getMeasurementTimeline(
     @Param('indicatorId', uuidPipe) indicatorId: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
