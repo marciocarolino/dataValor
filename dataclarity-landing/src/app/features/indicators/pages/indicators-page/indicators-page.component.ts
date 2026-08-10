@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../../dashboard/components/sidebar/sidebar.component';
 import { TopBarComponent } from '../../../dashboard/components/top-bar/top-bar.component';
 import { IndicatorChartComponent } from '../../components/indicator-chart/indicator-chart.component';
+import { IndicatorHistoryChartComponent } from '../../components/indicator-history-chart/indicator-history-chart.component';
 import { CurrencyBrlDirective } from '../../../../shared/directives/currency-brl.directive';
 import { IndicatorService, CreateMeasurementPayload } from '../../../../core/services/indicator.service';
 import {
@@ -39,7 +40,7 @@ import {
 @Component({
   selector: 'app-indicators-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SidebarComponent, TopBarComponent, IndicatorChartComponent, CurrencyBrlDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SidebarComponent, TopBarComponent, IndicatorChartComponent, IndicatorHistoryChartComponent, CurrencyBrlDirective],
   templateUrl: './indicators-page.component.html',
   styleUrls: ['./indicators-page.component.scss'],
 })
@@ -163,11 +164,15 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly viewMode = signal<'list' | 'history'>('list');
   readonly historyIndicatorId = signal<string | null>(null);
   readonly historyIndicatorName = signal<string>('');
+  /** Indicador completo sendo exibido na aba Histórico */
+  readonly historyIndicator = signal<Indicator | null>(null);
   readonly historyItems = signal<IndicatorHistory[]>([]);
   readonly historyPagination = signal<PaginatedIndicatorHistory['pagination'] | null>(null);
   readonly historyLoading = signal(false);
   readonly historyError = signal<string | null>(null);
   readonly historyPage = signal(1);
+  /** Período selecionado para exibir detalhes inline */
+  readonly selectedHistoryItem = signal<IndicatorHistory | null>(null);
 
   // ── Tooltip de ajuda — Variação % ─────────────────────────────────────────
   showVariationHelp = false;
@@ -622,6 +627,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     this.viewMode.set('history');
     this.historyIndicatorId.set(ind.id);
     this.historyIndicatorName.set(ind.name);
+    this.historyIndicator.set(ind);
+    this.selectedHistoryItem.set(null);
     this.historyPage.set(1);
     this.loadHistory(ind.id, 1);
   }
@@ -630,9 +637,18 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   backToList(): void {
     this.viewMode.set('list');
     this.historyIndicatorId.set(null);
+    this.historyIndicator.set(null);
     this.historyItems.set([]);
     this.historyPagination.set(null);
     this.historyError.set(null);
+    this.selectedHistoryItem.set(null);
+  }
+
+  /** Seleciona/deseleciona um período para exibir detalhes */
+  toggleHistoryDetail(h: IndicatorHistory): void {
+    this.selectedHistoryItem.set(
+      this.selectedHistoryItem()?.id === h.id ? null : h,
+    );
   }
 
   /** Carrega o histórico de um indicador com paginação */
@@ -656,5 +672,21 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   goToHistoryPage(page: number): void {
     const id = this.historyIndicatorId();
     if (id) this.loadHistory(id, page);
+  }
+
+  /** Formata valor com unidade do indicador atual */
+  formatHistoryValue(val: number | null): string {
+    if (val === null || val === undefined) return '–';
+    const unit = this.historyIndicator()?.unit ?? '';
+    const n = val.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    if (unit === 'BRL' || unit === 'R$') return `R$ ${n}`;
+    if (unit === '%') return `${n}%`;
+    return unit ? `${n} ${unit}` : n;
+  }
+
+  /** Retorna computed: primeiro item do histórico (período mais recente fechado) */
+  get latestHistoryItem(): IndicatorHistory | null {
+    const items = this.historyItems();
+    return items.length > 0 ? items[0] : null;
   }
 }

@@ -84,6 +84,7 @@
       <!-- ── Vista Histórico ─────────────────────────────────────────────── -->
       @if (viewMode() === 'history') {
         <div class="history-view">
+          <!-- Cabeçalho da aba -->
           <div class="history-view__header">
             <button type="button" class="btn btn--ghost" (click)="backToList()">
               <span class="material-icons">arrow_back</span>
@@ -95,24 +96,171 @@
             </h2>
           </div>
 
+          <!-- ── 1. Cabeçalho do indicador ───────────────────────────────── -->
+          @if (historyIndicator()) {
+            <div class="history-indicator-header">
+              <!-- Ícone + Nome + Status -->
+              <div class="history-indicator-header__identity">
+                @if (historyIndicator()!.icon) {
+                  <span
+                    class="material-icons history-indicator-header__icon"
+                    [style.color]="historyIndicator()!.color ?? '#3b5bdb'"
+                    [style.background]="(historyIndicator()!.color ?? '#3b5bdb') + '18'"
+                    >{{ historyIndicator()!.icon }}</span
+                  >
+                }
+                <div>
+                  <h3 class="history-indicator-header__name">{{ historyIndicator()!.name }}</h3>
+                  @if (historyIndicator()!.description) {
+                    <p class="history-indicator-header__desc">
+                      {{ historyIndicator()!.description }}
+                    </p>
+                  }
+                </div>
+                <span class="badge" [class]="statusClass(historyIndicator()!.status)">
+                  {{ statusLabels[historyIndicator()!.status] }}
+                </span>
+                <span class="badge badge--category">
+                  {{ categoryLabels[historyIndicator()!.category] }}
+                </span>
+              </div>
+
+              <!-- Métricas do indicador -->
+              <div class="history-indicator-header__metrics">
+                <div class="history-metric">
+                  <span class="history-metric__label">Valor Atual</span>
+                  <span
+                    class="history-metric__value"
+                    [style.color]="historyIndicator()!.color ?? '#3b5bdb'"
+                  >
+                    {{ formatHistoryValue(historyIndicator()!.currentValue) }}
+                  </span>
+                </div>
+                @if (historyIndicator()!.goalValue !== null) {
+                  <div class="history-metric">
+                    <span class="history-metric__label">Meta</span>
+                    <span class="history-metric__value">
+                      {{ formatHistoryValue(historyIndicator()!.goalValue) }}
+                    </span>
+                  </div>
+                }
+                <div class="history-metric">
+                  <span class="history-metric__label">Periodicidade</span>
+                  <span class="history-metric__value history-metric__value--sm">
+                    {{ frequencyLabels[historyIndicator()!.frequency] }}
+                  </span>
+                </div>
+                <div class="history-metric">
+                  <span class="history-metric__label">Método de Apuração</span>
+                  <span class="history-metric__value history-metric__value--sm">
+                    {{ aggregationTypeLabels[historyIndicator()!.aggregationType] }}
+                  </span>
+                </div>
+                @if (
+                  historyIndicator()!.aggregationType === 'FORMULA' && historyIndicator()!.formula
+                ) {
+                  <div class="history-metric history-metric--formula">
+                    <span class="history-metric__label">Fórmula</span>
+                    <code class="history-metric__formula">{{ historyIndicator()!.formula }}</code>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Erro -->
           @if (historyError()) {
             <div class="error-banner">
               <span class="material-icons">error_outline</span>
               {{ historyError() }}
+              <button
+                type="button"
+                class="btn btn--ghost"
+                style="margin-left: auto; padding: 4px 12px; font-size: 12px"
+                (click)="loadHistory(historyIndicatorId()!, historyPage())"
+              >
+                Tentar novamente
+              </button>
             </div>
           }
 
+          <!-- Loading skeleton -->
           @if (historyLoading()) {
             <div class="skeleton-table">
-              @for (i of [1, 2, 3, 4, 5]; track i) {
+              @for (i of [1, 2, 3, 4, 5, 6]; track i) {
                 <div class="skeleton-row"></div>
               }
             </div>
           }
 
-          @if (!historyLoading()) {
+          @if (!historyLoading() && !historyError()) {
+            <!-- ── 2. Resumo do período mais recente ───────────────────────── -->
+            @if (latestHistoryItem) {
+              <div class="history-latest">
+                <div class="history-latest__label">
+                  <span class="material-icons">event_available</span>
+                  Último período fechado
+                </div>
+                <div class="history-latest__body">
+                  <div class="history-latest__period">
+                    {{ formatPeriod(latestHistoryItem.periodStart, latestHistoryItem.periodEnd) }}
+                  </div>
+                  <div
+                    class="history-latest__value"
+                    [style.color]="historyIndicator()?.color ?? '#3b5bdb'"
+                  >
+                    {{ formatHistoryValue(latestHistoryItem.value) }}
+                  </div>
+                  @if (latestHistoryItem.variationPercent !== null) {
+                    <div
+                      class="history-latest__variation"
+                      [class.positive]="latestHistoryItem.variationPercent! >= 0"
+                      [class.negative]="latestHistoryItem.variationPercent! < 0"
+                    >
+                      <span class="material-icons">{{
+                        latestHistoryItem.variationPercent! >= 0 ? 'trending_up' : 'trending_down'
+                      }}</span>
+                      {{ latestHistoryItem.variationPercent! >= 0 ? '+' : ''
+                      }}{{ latestHistoryItem.variationPercent!.toFixed(2) }}%
+                    </div>
+                  } @else {
+                    <div class="history-latest__variation history-latest__variation--null">
+                      Primeira apuração
+                    </div>
+                  }
+                  <span class="badge" [class]="statusClass(latestHistoryItem.status)">
+                    {{ statusLabels[latestHistoryItem.status] }}
+                  </span>
+                  @if (latestHistoryItem.goalValue !== null) {
+                    <div class="history-latest__goal">
+                      Meta: {{ formatHistoryValue(latestHistoryItem.goalValue) }}
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- ── 3. Gráfico de evolução ──────────────────────────────────── -->
+            @if (historyIndicator() && historyItems().length > 0) {
+              <div class="history-chart-section">
+                <div class="history-chart-section__header">
+                  <span class="material-icons">show_chart</span>
+                  <span>Evolução dos Períodos</span>
+                  <span class="history-chart-section__count">
+                    {{ historyPagination()?.totalItems ?? historyItems().length }} período(s) no
+                    total
+                  </span>
+                </div>
+                <app-indicator-history-chart
+                  [indicator]="historyIndicator()!"
+                  [history]="historyItems()"
+                ></app-indicator-history-chart>
+              </div>
+            }
+
+            <!-- ── 4. Tabela de histórico ──────────────────────────────────── -->
             <div class="table-wrapper">
-              <table class="indicators-table">
+              <table class="indicators-table history-table">
                 <thead>
                   <tr>
                     <th>Período</th>
@@ -121,20 +269,33 @@
                     <th>Valor Anterior</th>
                     <th>Variação %</th>
                     <th>Status</th>
-                    <th>Registrado em</th>
+                    <th>Calculado em</th>
+                    <th aria-label="Detalhes"></th>
                   </tr>
                 </thead>
                 <tbody>
                   @for (h of historyItems(); track h.id) {
-                    <tr>
+                    <tr
+                      class="history-table__row"
+                      [class.history-table__row--selected]="selectedHistoryItem()?.id === h.id"
+                      (click)="toggleHistoryDetail(h)"
+                      (keydown.enter)="toggleHistoryDetail(h)"
+                      (keydown.space)="toggleHistoryDetail(h)"
+                      role="button"
+                      tabindex="0"
+                      [attr.aria-expanded]="selectedHistoryItem()?.id === h.id"
+                      [attr.aria-label]="
+                        'Ver detalhes do período ' + formatPeriod(h.periodStart, h.periodEnd)
+                      "
+                    >
                       <td class="cell-deadline">
                         <span class="deadline-badge deadline-badge--ok">
                           {{ formatPeriod(h.periodStart, h.periodEnd) }}
                         </span>
                       </td>
-                      <td class="cell-number">{{ formatNumber(h.value) }}</td>
-                      <td class="cell-number">{{ formatNumber(h.goalValue) }}</td>
-                      <td class="cell-number">{{ formatNumber(h.previousValue) }}</td>
+                      <td class="cell-number">{{ formatHistoryValue(h.value) }}</td>
+                      <td class="cell-number">{{ formatHistoryValue(h.goalValue) }}</td>
+                      <td class="cell-number">{{ formatHistoryValue(h.previousValue) }}</td>
                       <td
                         class="cell-variation"
                         [class.positive]="(h.variationPercent ?? 0) >= 0"
@@ -144,9 +305,10 @@
                           <span class="material-icons variation-icon">{{
                             (h.variationPercent ?? 0) >= 0 ? 'trending_up' : 'trending_down'
                           }}</span>
-                          {{ (h.variationPercent ?? 0).toFixed(2) }}%
+                          {{ h.variationPercent! >= 0 ? '+' : ''
+                          }}{{ h.variationPercent!.toFixed(2) }}%
                         } @else {
-                          –
+                          <span class="cell-muted">–</span>
                         }
                       </td>
                       <td>
@@ -155,12 +317,103 @@
                         </span>
                       </td>
                       <td class="cell-muted">{{ formatDate(h.calculatedAt) }}</td>
+                      <td class="cell-details">
+                        <span
+                          class="material-icons history-expand-icon"
+                          [class.history-expand-icon--open]="selectedHistoryItem()?.id === h.id"
+                        >
+                          {{ selectedHistoryItem()?.id === h.id ? 'expand_less' : 'expand_more' }}
+                        </span>
+                      </td>
                     </tr>
+
+                    <!-- ── Detalhes do período (linha expandida) ─────────── -->
+                    @if (selectedHistoryItem()?.id === h.id) {
+                      <tr class="history-detail-row">
+                        <td colspan="8">
+                          <div class="history-detail-panel">
+                            <div class="history-detail-panel__grid">
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Período Início</span>
+                                <span class="history-detail-field__value">{{
+                                  formatDate(h.periodStart)
+                                }}</span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Período Fim</span>
+                                <span class="history-detail-field__value">{{
+                                  formatDate(h.periodEnd)
+                                }}</span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Valor Apurado</span>
+                                <span
+                                  class="history-detail-field__value history-detail-field__value--highlight"
+                                  [style.color]="historyIndicator()?.color ?? '#3b5bdb'"
+                                >
+                                  {{ formatHistoryValue(h.value) }}
+                                </span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Meta do Período</span>
+                                <span class="history-detail-field__value">{{
+                                  formatHistoryValue(h.goalValue)
+                                }}</span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Valor Anterior</span>
+                                <span class="history-detail-field__value">{{
+                                  formatHistoryValue(h.previousValue)
+                                }}</span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Variação %</span>
+                                <span
+                                  class="history-detail-field__value"
+                                  [class.text--positive]="(h.variationPercent ?? 0) >= 0"
+                                  [class.text--negative]="(h.variationPercent ?? 0) < 0"
+                                >
+                                  @if (h.variationPercent !== null) {
+                                    {{ h.variationPercent! >= 0 ? '+' : ''
+                                    }}{{ h.variationPercent!.toFixed(2) }}%
+                                  } @else {
+                                    –
+                                  }
+                                </span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Status</span>
+                                <span class="history-detail-field__value">
+                                  <span class="badge" [class]="statusClass(h.status)">{{
+                                    statusLabels[h.status]
+                                  }}</span>
+                                </span>
+                              </div>
+                              <div class="history-detail-field">
+                                <span class="history-detail-field__label">Calculado em</span>
+                                <span class="history-detail-field__value">{{
+                                  formatDate(h.calculatedAt)
+                                }}</span>
+                              </div>
+                              @if (h.notes) {
+                                <div class="history-detail-field history-detail-field--full">
+                                  <span class="history-detail-field__label">Observações</span>
+                                  <span class="history-detail-field__value">{{ h.notes }}</span>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    }
                   } @empty {
                     <tr>
-                      <td colspan="7" class="empty-state">
+                      <td colspan="8" class="empty-state">
                         <span class="material-icons">history</span>
-                        <p>Nenhum resultado histórico registrado para este indicador.</p>
+                        <p>Este indicador ainda não possui períodos fechados.</p>
+                        <p style="font-size: 12px; color: #adb5bd; margin-top: 4px">
+                          Os períodos são fechados automaticamente pelo agendador.
+                        </p>
                       </td>
                     </tr>
                   }
