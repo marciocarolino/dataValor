@@ -17,6 +17,7 @@ import {
 } from './aggregation-engine.service';
 import { IndicatorHistoryService } from './indicator-history.service';
 import { IndicatorAnalyticsService } from './indicator-analytics.service';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 import { IndicatorStatus } from './enums/indicator-status.enum';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
@@ -156,6 +157,7 @@ export class IndicatorPeriodApurationService {
     private readonly aggregationEngine: AggregationEngineService,
     private readonly historyService: IndicatorHistoryService,
     private readonly analytics: IndicatorAnalyticsService,
+    private readonly currentStateService: IndicatorCurrentStateService,
   ) {}
 
   /**
@@ -379,6 +381,14 @@ export class IndicatorPeriodApurationService {
       previousValue: previousValue ?? undefined,
       variationPercent: variationPercent ?? undefined,
       status: indicatorStatus,
+    });
+
+    // 15. Sincronizar estado corrente do Indicator a partir do histórico criado.
+    //     Atualiza SOMENTE Indicator.currentValue e Indicator.status.
+    //     Nenhum outro campo é alterado.
+    await this.currentStateService.syncFromHistory(indicatorId, {
+      value: history.value,
+      status: history.status,
     });
 
     return {

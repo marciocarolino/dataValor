@@ -14,6 +14,7 @@ import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorPeriodApurationService } from './indicator-period-apuration.service';
 import { IndicatorPeriodBackfillService } from './indicator-period-backfill.service';
 import { IndicatorPeriodClosingScheduler } from './indicator-period-closing.scheduler';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 // Formula Engine
 import { FormulaTokenizerService } from './formula/formula-tokenizer.service';
 import { FormulaParserService } from './formula/formula-parser.service';
@@ -43,6 +44,7 @@ import { FormulaEngineService } from './formula/formula-engine.service';
     FormulaEvaluatorService,
     FormulaEngineService,
     AggregationEngineService,
+    IndicatorCurrentStateService,
     IndicatorPeriodApurationService,
     IndicatorPeriodBackfillService,
     IndicatorPeriodClosingScheduler,

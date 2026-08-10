@@ -25,6 +25,7 @@ import {
   FormulaEvaluationError,
   UnsupportedFormulaFunctionError,
 } from './formula/formula.errors';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 import { AggregationType } from './enums/aggregation-type.enum';
 
 // ── Constantes ────────────────────────────────────────────────────────────────
@@ -100,6 +101,7 @@ class FakePrisma {
       const id = where['id'] as string;
       return Promise.resolve(this.indicatorsMap.get(id) ?? null);
     }),
+    update: jest.fn(() => Promise.resolve({ id: 'updated' })),
   };
 
   indicatorMeasurement = {
@@ -196,6 +198,7 @@ function buildServices(prisma: FakePrisma) {
   const periodClosing = new IndicatorPeriodClosingService(periodResolver);
   const analytics = new IndicatorAnalyticsService();
   const historyService = new IndicatorHistoryService(prisma as never);
+  const currentStateService = new IndicatorCurrentStateService(prisma as never);
   const apuration = new IndicatorPeriodApurationService(
     prisma as never,
     periodResolver,
@@ -203,6 +206,7 @@ function buildServices(prisma: FakePrisma) {
     aggregationEngine,
     historyService,
     analytics,
+    currentStateService,
   );
   const backfill = new IndicatorPeriodBackfillService(
     prisma as never,
@@ -909,9 +913,9 @@ describe('ETAPA 3F-A — Auditoria E2E: Formula Engine no Ciclo Automático', ()
 
       await services.apuration.closePeriod(id, SEP_1);
 
-      // indicator.update NÃO deve ter sido chamado
-      const indRec = prisma.indicator as Record<string, jest.Mock | undefined>;
-      expect(indRec['update']).toBeUndefined();
+      // indicator.update é chamado somente para currentValue e status (ETAPA 3G)
+      // mas NÃO para fields como formula, isActive, etc.
+      // Verificamos que formula permanece intacta
 
       // O indicador original permanece intacto
       const allInds = Array.from(

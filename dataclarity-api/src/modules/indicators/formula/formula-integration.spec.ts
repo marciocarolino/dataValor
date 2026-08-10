@@ -41,6 +41,7 @@ import {
 import { PeriodResolverService } from '../period-resolver.service';
 import { IndicatorPeriodClosingService } from '../indicator-period-closing.service';
 import { IndicatorAnalyticsService } from '../indicator-analytics.service';
+import { IndicatorCurrentStateService } from '../indicator-current-state.service';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -232,6 +233,10 @@ describe('Integração: IndicatorPeriodApurationService + FormulaEngine', () => 
     const periodClosing = new IndicatorPeriodClosingService(periodResolver);
     const analytics = new IndicatorAnalyticsService();
 
+    const mockCurrentState = {
+      syncFromHistory: jest.fn().mockResolvedValue({ synced: true }),
+    };
+
     svc = new IndicatorPeriodApurationService(
       mockPrisma as never,
       periodResolver,
@@ -239,6 +244,7 @@ describe('Integração: IndicatorPeriodApurationService + FormulaEngine', () => 
       aggregationEngine,
       mockHistoryService as never,
       analytics,
+      mockCurrentState as unknown as IndicatorCurrentStateService,
     );
 
     mockPrisma.indicator.findUnique.mockResolvedValue(makeDbIndicator());

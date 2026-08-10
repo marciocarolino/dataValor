@@ -15,6 +15,7 @@ import { PeriodResolverService } from './period-resolver.service';
 import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorHistoryService } from './indicator-history.service';
 import { IndicatorAnalyticsService } from './indicator-analytics.service';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
@@ -106,6 +107,9 @@ describe('IndicatorPeriodBackfillService', () => {
     const aggregation = new AggregationEngineService();
     const analytics = new IndicatorAnalyticsService();
     const historyService = new IndicatorHistoryService(prisma as never);
+    const currentStateMock = {
+      syncFromHistory: jest.fn().mockResolvedValue({ synced: true }),
+    } as unknown as IndicatorCurrentStateService;
     apuration = new IndicatorPeriodApurationService(
       prisma as never,
       periodResolver,
@@ -113,6 +117,7 @@ describe('IndicatorPeriodBackfillService', () => {
       aggregation,
       historyService,
       analytics,
+      currentStateMock,
     );
     backfill = new IndicatorPeriodBackfillService(
       prisma as never,

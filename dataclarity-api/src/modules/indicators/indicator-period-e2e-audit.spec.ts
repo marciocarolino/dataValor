@@ -24,6 +24,7 @@ import { IndicatorAnalyticsService } from './indicator-analytics.service';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
@@ -125,6 +126,9 @@ describe('ETAPA 3E-A — Auditoria E2E do Fluxo Automático de Fechamento', () =
     historyService = new IndicatorHistoryService(prisma as never);
 
     // IndicatorPeriodApurationService usa todos os serviços
+    const mockCurrentState = {
+      syncFromHistory: jest.fn().mockResolvedValue({ synced: true }),
+    } as unknown as IndicatorCurrentStateService;
     apuration = new IndicatorPeriodApurationService(
       prisma as never,
       periodResolver,
@@ -132,10 +136,15 @@ describe('ETAPA 3E-A — Auditoria E2E do Fluxo Automático de Fechamento', () =
       aggregation,
       historyService,
       analytics,
+      mockCurrentState,
     );
 
     // Scheduler usa Prisma + Apuration
-    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration, { runBackfill: jest.fn().mockResolvedValue({}) } as never);
+    scheduler = new IndicatorPeriodClosingScheduler(
+      prisma as never,
+      apuration,
+      { runBackfill: jest.fn().mockResolvedValue({}) } as never,
+    );
 
     // Default: mock cria histórico com ID
     prisma.indicatorHistory.create.mockImplementation(

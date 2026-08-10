@@ -12,6 +12,7 @@ import { IndicatorPeriodClosingService } from './indicator-period-closing.servic
 import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorHistoryService } from './indicator-history.service';
 import { IndicatorAnalyticsService } from './indicator-analytics.service';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
@@ -88,6 +89,7 @@ describe('IndicatorPeriodApurationService', () => {
   let mockAggregationEngine: AggregationEngineService;
   let mockHistoryService: { create: jest.Mock };
   let mockAnalytics: IndicatorAnalyticsService;
+  let mockCurrentStateService: { syncFromHistory: jest.Mock };
 
   beforeEach(() => {
     mockPrisma = {
@@ -101,6 +103,9 @@ describe('IndicatorPeriodApurationService', () => {
     mockAggregationEngine = new AggregationEngineService();
     mockHistoryService = { create: jest.fn() };
     mockAnalytics = new IndicatorAnalyticsService();
+    mockCurrentStateService = {
+      syncFromHistory: jest.fn().mockResolvedValue({ synced: true }),
+    };
 
     svc = new IndicatorPeriodApurationService(
       mockPrisma as never,
@@ -109,6 +114,7 @@ describe('IndicatorPeriodApurationService', () => {
       mockAggregationEngine,
       mockHistoryService as never,
       mockAnalytics,
+      mockCurrentStateService as unknown as IndicatorCurrentStateService,
     );
 
     // Defaults: indicador MONTHLY/SUM, período encerrado, sem histórico, sem medições

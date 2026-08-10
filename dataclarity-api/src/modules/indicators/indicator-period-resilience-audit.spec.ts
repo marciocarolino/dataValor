@@ -24,6 +24,7 @@ import { IndicatorAnalyticsService } from './indicator-analytics.service';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 
 // ── Constantes de referência ──────────────────────────────────────────────────
 
@@ -99,6 +100,9 @@ describe('ETAPA 3E-B — Auditoria de Resiliência', () => {
     const aggregation = new AggregationEngineService();
     const analytics = new IndicatorAnalyticsService();
     const historyService = new IndicatorHistoryService(prisma as never);
+    const mockCurrentState = {
+      syncFromHistory: jest.fn().mockResolvedValue({ synced: true }),
+    } as unknown as IndicatorCurrentStateService;
     apuration = new IndicatorPeriodApurationService(
       prisma as never,
       periodResolver,
@@ -106,8 +110,13 @@ describe('ETAPA 3E-B — Auditoria de Resiliência', () => {
       aggregation,
       historyService,
       analytics,
+      mockCurrentState,
     );
-    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration, { runBackfill: jest.fn().mockResolvedValue({}) } as never);
+    scheduler = new IndicatorPeriodClosingScheduler(
+      prisma as never,
+      apuration,
+      { runBackfill: jest.fn().mockResolvedValue({}) } as never,
+    );
   };
 
   beforeEach(() => {
