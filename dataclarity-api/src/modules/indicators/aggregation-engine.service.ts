@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { AggregationType } from './enums/aggregation-type.enum';
+import { FormulaEngineService } from './formula/formula-engine.service';
 
 // ── Tipos de entrada ───────────────────────────────────────────────────────────
 
@@ -59,11 +60,21 @@ export interface FormulaAggregationResult {
 export type AggregationEngineResult =
   AggregationResult | FormulaAggregationResult;
 
-/** Guard de tipo: verifica se o resultado é do tipo FORMULA */
+/**
+ * Guard de tipo: verifica se o resultado é um placeholder FORMULA
+ * (aguardando FormulaEngine), não um resultado avaliado com sucesso.
+ *
+ * A distinção: FormulaAggregationResult (placeholder) tem `requiresFormulaEngine: true`.
+ * Um resultado FORMULA avaliado com sucesso retorna AggregationResult (sem essa propriedade).
+ */
 export function isFormulaResult(
   r: AggregationEngineResult,
 ): r is FormulaAggregationResult {
-  return r.aggregationType === AggregationType.FORMULA;
+  return (
+    r.aggregationType === AggregationType.FORMULA &&
+    'requiresFormulaEngine' in r &&
+    r.requiresFormulaEngine === true
+  );
 }
 
 // ── Serviço ────────────────────────────────────────────────────────────────────
@@ -78,14 +89,24 @@ export function isFormulaResult(
  * Fronteira do período: [periodStart, periodEnd) — periodEnd exclusivo.
  * Medição válida: valor numérico finito + referenceDate dentro do período.
  *
+ * Para aggregationType = FORMULA:
+ *   - Se FormulaEngineService estiver disponível e indicator.formula estiver definida:
+ *     → avalia a fórmula e retorna AggregationResult com o valor calculado.
+ *   - Se FormulaEngineService não estiver disponível ou formula for null/vazia:
+ *     → retorna FormulaAggregationResult (requiresFormulaEngine: true).
+ *   - Se a avaliação da fórmula lançar um erro (FormulaError):
+ *     → o erro é propagado ao chamador (não suprimido silenciosamente).
+ *
  * NÃO cria IndicatorHistory.
- * NÃO executa fórmulas (aggregationType = FORMULA retorna requiresFormulaEngine: true).
  * NÃO altera Indicator.status ou Indicator.isActive.
  * NÃO recalcula periodStart/periodEnd (recebe como argumento).
  * NÃO depende do PrismaService — pode ser instanciado com `new`.
  */
 @Injectable()
 export class AggregationEngineService {
+  constructor(
+    @Optional() private readonly formulaEngine?: FormulaEngineService,
+  ) {}
   /**
    * Calcula o valor consolidado das medições para um período.
    *
@@ -100,9 +121,28 @@ export class AggregationEngineService {
     periodEnd: Date,
     measurements: MeasurementInput[],
   ): AggregationEngineResult {
-    // FORMULA: não executa — aguarda Formula Engine
+    // FORMULA: delega ao FormulaEngineService quando disponível
     if (indicator.aggregationType === AggregationType.FORMULA) {
       const valid = this.filterAndConvert(measurements, periodStart, periodEnd);
+
+      // FormulaEngine disponível e fórmula definida → avaliar
+      if (this.formulaEngine && indicator.formula) {
+        // Pode lançar FormulaSyntaxError, FormulaValidationError,
+        // FormulaEvaluationError, DivisionByZeroError — propaga ao chamador
+        const result = this.formulaEngine.evaluateWithMeasurements(
+          indicator.formula,
+          valid,
+        );
+        return {
+          aggregationType: AggregationType.FORMULA,
+          value: result.value,
+          measurementCount: valid.length,
+          periodStart,
+          periodEnd,
+        };
+      }
+
+      // FormulaEngine não disponível ou fórmula ausente → retorna placeholder
       return {
         aggregationType: AggregationType.FORMULA,
         value: null,

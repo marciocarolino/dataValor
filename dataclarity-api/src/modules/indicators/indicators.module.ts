@@ -14,6 +14,12 @@ import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorPeriodApurationService } from './indicator-period-apuration.service';
 import { IndicatorPeriodBackfillService } from './indicator-period-backfill.service';
 import { IndicatorPeriodClosingScheduler } from './indicator-period-closing.scheduler';
+// Formula Engine
+import { FormulaTokenizerService } from './formula/formula-tokenizer.service';
+import { FormulaParserService } from './formula/formula-parser.service';
+import { FormulaValidatorService } from './formula/formula-validator.service';
+import { FormulaEvaluatorService } from './formula/formula-evaluator.service';
+import { FormulaEngineService } from './formula/formula-engine.service';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
@@ -30,6 +36,12 @@ import { IndicatorPeriodClosingScheduler } from './indicator-period-closing.sche
     IndicatorHistoryService,
     PeriodResolverService,
     IndicatorPeriodClosingService,
+    // Formula Engine (ordem de dependência: tokenizer → parser → validator → evaluator → engine)
+    FormulaTokenizerService,
+    FormulaParserService,
+    FormulaValidatorService,
+    FormulaEvaluatorService,
+    FormulaEngineService,
     AggregationEngineService,
     IndicatorPeriodApurationService,
     IndicatorPeriodBackfillService,
@@ -42,6 +54,7 @@ import { IndicatorPeriodClosingScheduler } from './indicator-period-closing.sche
     IndicatorHistoryService,
     PeriodResolverService,
     IndicatorPeriodClosingService,
+    FormulaEngineService,
     AggregationEngineService,
     IndicatorPeriodApurationService,
   ],

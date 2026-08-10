@@ -265,14 +265,18 @@ export class IndicatorPeriodApurationService {
       };
     }
 
-    // 6. FORMULA não executada
-    if (indicator.aggregationType === AggregationType.FORMULA) {
+    // 6. FORMULA sem fórmula definida → não há o que calcular
+    // Se a fórmula estiver definida, o AggregationEngine + FormulaEngine a avaliarão.
+    if (
+      indicator.aggregationType === AggregationType.FORMULA &&
+      !indicator.formula
+    ) {
       return {
         status: 'FORMULA_ENGINE_REQUIRED',
         indicatorId,
         periodStart,
         periodEnd,
-        formula: indicator.formula,
+        formula: null,
       };
     }
 
@@ -297,6 +301,7 @@ export class IndicatorPeriodApurationService {
     // 8. Agregar via AggregationEngineService
     const aggInput: IndicatorAggregationInput = {
       aggregationType: indicator.aggregationType as AggregationType,
+      formula: indicator.formula,
     };
 
     const aggResult = this.aggregationEngine.aggregate(
@@ -321,7 +326,10 @@ export class IndicatorPeriodApurationService {
 
     // 9. NO_DATA: sem medições e aggregationType != COUNT
     // Para COUNT: value=0 é semântico (0 eventos é um resultado válido)
-    if (value === null && indicator.aggregationType !== AggregationType.COUNT) {
+    if (
+      value === null &&
+      (indicator.aggregationType as AggregationType) !== AggregationType.COUNT
+    ) {
       return {
         status: 'NO_DATA',
         indicatorId,
