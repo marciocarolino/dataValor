@@ -432,8 +432,8 @@
     "hash": "367a1fdd3df5bf55673ba1bbf1a404b5"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/dto/create-indicator.dto.ts": {
-    "mtime": 1786198562110.5342,
-    "hash": "d30d8d72298c5bb1b7a86184857b5f5e"
+    "mtime": 1786311784641.5422,
+    "hash": "549fcde668f451ae6896cc7cc03d55d5"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/dto/list-indicators-query.dto.ts": {
     "mtime": 1786131105541.6733,
@@ -444,8 +444,8 @@
     "hash": "1bf8388e78fc323f73ff898eea9e39af"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/entities/indicator.entity.ts": {
-    "mtime": 1786158028618.7444,
-    "hash": "c9f94e10902d63eca0c2d12c271a74c4"
+    "mtime": 1786311241825.388,
+    "hash": "1ced8a32572fc2623169e1d50ce25452"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/enums/indicator-category.enum.ts": {
     "mtime": 1786104233387.9907,
@@ -464,16 +464,16 @@
     "hash": "a556d1da01e731926ecd7c8ce935d465"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicators.controller.ts": {
-    "mtime": 1786146970119.5845,
-    "hash": "6e9607707973867a5aab62d140c1cce0"
+    "mtime": 1786201131245.7087,
+    "hash": "681a039598efce3efe870cc5aa023cfb"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicators.module.ts": {
-    "mtime": 1786131218811.7302,
-    "hash": "7f252815750d6ffb9c35b11a3a75f15f"
+    "mtime": 1786357952563.16,
+    "hash": "903f9cf2d703bb2fb457c868eed60d26"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicators.service.ts": {
-    "mtime": 1786198495082.529,
-    "hash": "5e16a88dad0fde5600b558ff01694f91"
+    "mtime": 1786311346598.9036,
+    "hash": "014f0512fedc088bda5dd624fe2ee944"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/core/interceptors/auth.interceptor.ts": {
     "mtime": 1786105199336.572,
@@ -488,8 +488,8 @@
     "hash": "c437542a993161fe756f605e74a9b9bb"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/core/models/indicator.model.ts": {
-    "mtime": 1786198623097.2764,
-    "hash": "1161e40feef557dc06eb8f9e8965e88d"
+    "mtime": 1786311923906.258,
+    "hash": "d1fa834f3c1d2dad18c29790301a3a76"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/core/services/analysis.service.ts": {
     "mtime": 1786107411427.8882,
@@ -500,8 +500,8 @@
     "hash": "72930efaea188e7f1053d44476dc75df"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/core/services/indicator.service.ts": {
-    "mtime": 1786189626699.473,
-    "hash": "60374dd5a135659c18e72130134c1667"
+    "mtime": 1786306880277.7505,
+    "hash": "db8d852ab185d2f81d15c99b0ee84653"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/analysis/pages/analysis-list/analysis-list.component.ts": {
     "mtime": 1786112855023.2117,
@@ -544,8 +544,8 @@
     "hash": "70005b3bc2a885cd9edecb467f6a3897"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-landing/src/app/features/indicators/pages/indicators-page/indicators-page.component.ts": {
-    "mtime": 1786198678738.8044,
-    "hash": "1eba3a32127a096ae7684d416324bd6c"
+    "mtime": 1786312109811.4097,
+    "hash": "4a195e1001dda2fcc1f09c361aa81a2a"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260807150000_add_indicator_dates/migration.sql": {
     "mtime": 1786123962499.529,
@@ -604,8 +604,8 @@
     "hash": "a8cb2e2d8e969adec779a125626d8854"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/measurements.controller.ts": {
-    "mtime": 1786189593407.8748,
-    "hash": "094e41c0796b66cad2819bc02b2a155f"
+    "mtime": 1786306518051.91,
+    "hash": "5791235002df0eb600e187c70558399f"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/measurements.service.ts": {
     "mtime": 1786189558590.965,
@@ -616,8 +616,8 @@
     "hash": "e4092cde6de1c8f30122a6870ef831a3"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/test/indicators.e2e-spec.ts": {
-    "mtime": 1786147801480.6982,
-    "hash": "102ad26bd0952bded1ca83a08b6c08b4"
+    "mtime": 1786357952574.6829,
+    "hash": "b255694f0304050338ce38b0d9d00365"
   },
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260807235500_add_dashboard_slot/migration.sql": {
     "mtime": 1786157909019.8867,
@@ -626,5 +626,105 @@
   "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/enums/dashboard-slot.enum.ts": {
     "mtime": 1786158075173.5317,
     "hash": "2c0f8167e941927144abaf2c1e1ed895"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260808130000_remove_inactive_status/migration.sql": {
+    "mtime": 1786194798366.1287,
+    "hash": "2270eb6c3ab9c581a7a9e08eca22a741"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260808220000_add_indicator_frequency/migration.sql": {
+    "mtime": 1786230585920.642,
+    "hash": "980e2d6379e6c62825a365d3797d109e"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260809180000_add_indicator_history/migration.sql": {
+    "mtime": 1786304140996.481,
+    "hash": "60d4fb5aa42574fc2d3e031e6cc981d0"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/prisma/migrations/20260809230000_add_aggregation_type/migration.sql": {
+    "mtime": 1786310828794.6038,
+    "hash": "f37bc8ae54a396b95b40934732809709"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/aggregation-engine.service.spec.ts": {
+    "mtime": 1786323482575.4521,
+    "hash": "3d703532a356f827d3f6867349cf4602"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/aggregation-engine.service.ts": {
+    "mtime": 1786323275510.1272,
+    "hash": "a439f9b990f93b40c151381e2e96bad1"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/dto/create-indicator-history.dto.ts": {
+    "mtime": 1786304381281.1692,
+    "hash": "d7c30c23c78a48fed550e73292401fb5"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/entities/indicator-history.entity.ts": {
+    "mtime": 1786304409005.5144,
+    "hash": "8255dbf6860ce0f57fe9541dd0d21e15"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/enums/aggregation-type.enum.ts": {
+    "mtime": 1786310782663.2578,
+    "hash": "f8dd8bfa0e8240d64e9dfad1e9d76496"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/enums/indicator-frequency.enum.ts": {
+    "mtime": 1786230155453.7004,
+    "hash": "0e6c4edb66c06dc757aaa0ed943e64f5"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-history.controller.ts": {
+    "mtime": 1786306235562.5725,
+    "hash": "6afe4e25497b692af97d511bf5607da5"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-history.service.ts": {
+    "mtime": 1786306155204.4814,
+    "hash": "3afc2a09f88260922ca4fadf967501be"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-apuration.service.spec.ts": {
+    "mtime": 1786324941905.487,
+    "hash": "ed9aea9cd18d4b742d5df40d87c02865"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-apuration.service.ts": {
+    "mtime": 1786324578828.9128,
+    "hash": "185d7da99f6799b6c0f4b285478dd885"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-backfill.service.spec.ts": {
+    "mtime": 1786356987612.5444,
+    "hash": "2324887015a35e5daaeab46f68576e9f"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-backfill.service.ts": {
+    "mtime": 1786352273998.5667,
+    "hash": "9df01edd923a677933a08c77b1b6ab2d"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-closing.scheduler.spec.ts": {
+    "mtime": 1786357952537.0754,
+    "hash": "ec07f0f4fb89f9263bab8b400d3f6e86"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-closing.scheduler.ts": {
+    "mtime": 1786357952544.1968,
+    "hash": "2af568b38f8b5112affccd5923a20d5d"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-closing.service.spec.ts": {
+    "mtime": 1786310303836.218,
+    "hash": "d71744330b78cab301456c657a289ed6"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-closing.service.ts": {
+    "mtime": 1786310118396.094,
+    "hash": "960e63955b57c9e0a9a4ddc8765d438d"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-e2e-audit.spec.ts": {
+    "mtime": 1786357952549.864,
+    "hash": "83c9888d420579ce54c35ab4649ada35"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/indicator-period-resilience-audit.spec.ts": {
+    "mtime": 1786357952555.7512,
+    "hash": "5ebde6812e52f78ff091130cba8e9159"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/period-resolver.service.spec.ts": {
+    "mtime": 1786309455347.3242,
+    "hash": "1a2ebb55588a23b5b47659e6844b40b5"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/src/modules/indicators/period-resolver.service.ts": {
+    "mtime": 1786309191428.4155,
+    "hash": "99e1e3990e378025c5725ba0bb81be24"
+  },
+  "C:/Users/marci/Documents/Projetos/DataValor/dataclarity-api/test/indicator-history.e2e-spec.ts": {
+    "mtime": 1786357952570.7,
+    "hash": "2367998dcbffc7c1b957ae78b8ea7fd7"
   }
 }
