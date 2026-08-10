@@ -7,10 +7,10 @@ export declare class MeasurementsService {
     private readonly analytics;
     constructor(prisma: PrismaService, analytics: IndicatorAnalyticsService);
     create(indicatorId: string, dto: CreateMeasurementDto): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
         periodStart: Date | null;
@@ -19,10 +19,10 @@ export declare class MeasurementsService {
         notes: string | null;
     }>;
     upsert(indicatorId: string, dto: CreateMeasurementDto): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
         periodStart: Date | null;
@@ -34,10 +34,10 @@ export declare class MeasurementsService {
         startDate?: string;
         endDate?: string;
     }): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
         periodStart: Date | null;
@@ -46,10 +46,10 @@ export declare class MeasurementsService {
         notes: string | null;
     }[]>;
     update(indicatorId: string, measurementId: string, dto: UpdateMeasurementDto): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
         periodStart: Date | null;
@@ -58,10 +58,10 @@ export declare class MeasurementsService {
         notes: string | null;
     }>;
     remove(indicatorId: string, measurementId: string): Promise<{
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         value: import("@prisma/client-runtime-utils").Decimal;
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
         referenceDate: Date;
         indicatorId: string;
         periodStart: Date | null;

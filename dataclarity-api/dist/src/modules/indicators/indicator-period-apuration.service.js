@@ -17,6 +17,7 @@ const indicator_period_closing_service_1 = require("./indicator-period-closing.s
 const aggregation_engine_service_1 = require("./aggregation-engine.service");
 const indicator_history_service_1 = require("./indicator-history.service");
 const indicator_analytics_service_1 = require("./indicator-analytics.service");
+const indicator_current_state_service_1 = require("./indicator-current-state.service");
 const indicator_frequency_enum_1 = require("./enums/indicator-frequency.enum");
 const aggregation_type_enum_1 = require("./enums/aggregation-type.enum");
 const indicator_desired_direction_enum_1 = require("./enums/indicator-desired-direction.enum");
@@ -27,13 +28,15 @@ let IndicatorPeriodApurationService = class IndicatorPeriodApurationService {
     aggregationEngine;
     historyService;
     analytics;
-    constructor(prisma, periodResolver, periodClosing, aggregationEngine, historyService, analytics) {
+    currentStateService;
+    constructor(prisma, periodResolver, periodClosing, aggregationEngine, historyService, analytics, currentStateService) {
         this.prisma = prisma;
         this.periodResolver = periodResolver;
         this.periodClosing = periodClosing;
         this.aggregationEngine = aggregationEngine;
         this.historyService = historyService;
         this.analytics = analytics;
+        this.currentStateService = currentStateService;
     }
     async closePeriod(indicatorId, referenceDate = new Date(), timezone = period_resolver_service_1.BUSINESS_TIMEZONE) {
         const indicator = await this.prisma.indicator.findUnique({
@@ -103,13 +106,14 @@ let IndicatorPeriodApurationService = class IndicatorPeriodApurationService {
                 periodEnd,
             };
         }
-        if (indicator.aggregationType === aggregation_type_enum_1.AggregationType.FORMULA) {
+        if (indicator.aggregationType === aggregation_type_enum_1.AggregationType.FORMULA &&
+            !indicator.formula) {
             return {
                 status: 'FORMULA_ENGINE_REQUIRED',
                 indicatorId,
                 periodStart,
                 periodEnd,
-                formula: indicator.formula,
+                formula: null,
             };
         }
         const rawMeasurements = await this.prisma.indicatorMeasurement.findMany({
@@ -129,6 +133,7 @@ let IndicatorPeriodApurationService = class IndicatorPeriodApurationService {
         }));
         const aggInput = {
             aggregationType: indicator.aggregationType,
+            formula: indicator.formula,
         };
         const aggResult = this.aggregationEngine.aggregate(aggInput, periodStart, periodEnd, measurements);
         if ((0, aggregation_engine_service_1.isFormulaResult)(aggResult)) {
@@ -141,7 +146,8 @@ let IndicatorPeriodApurationService = class IndicatorPeriodApurationService {
             };
         }
         const value = aggResult.value;
-        if (value === null && indicator.aggregationType !== aggregation_type_enum_1.AggregationType.COUNT) {
+        if (value === null &&
+            indicator.aggregationType !== aggregation_type_enum_1.AggregationType.COUNT) {
             return {
                 status: 'NO_DATA',
                 indicatorId,
@@ -174,6 +180,10 @@ let IndicatorPeriodApurationService = class IndicatorPeriodApurationService {
             previousValue: previousValue ?? undefined,
             variationPercent: variationPercent ?? undefined,
             status: indicatorStatus,
+        });
+        await this.currentStateService.syncFromHistory(indicatorId, {
+            value: history.value,
+            status: history.status,
         });
         return {
             status: 'CLOSED',
@@ -227,6 +237,7 @@ exports.IndicatorPeriodApurationService = IndicatorPeriodApurationService = __de
         indicator_period_closing_service_1.IndicatorPeriodClosingService,
         aggregation_engine_service_1.AggregationEngineService,
         indicator_history_service_1.IndicatorHistoryService,
-        indicator_analytics_service_1.IndicatorAnalyticsService])
+        indicator_analytics_service_1.IndicatorAnalyticsService,
+        indicator_current_state_service_1.IndicatorCurrentStateService])
 ], IndicatorPeriodApurationService);
 //# sourceMappingURL=indicator-period-apuration.service.js.map

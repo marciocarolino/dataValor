@@ -1,0 +1,373 @@
+================================================================================
+  DATAVALOR / DATACLARITY — STATUS DO BACKEND (dataclarity-api)
+  Atualizado em: 10/08/2026
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STACK TÉCNICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Framework:       NestJS
+  Banco de dados:  PostgreSQL + Prisma ORM
+  Linguagem:       TypeScript
+  Testes:          Jest (unitários + integração + E2E)
+  Timezone negócio: America/Sao_Paulo (BRT = UTC-3)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ESTADO ATUAL DOS TESTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Total de testes:    691 passando
+  Falhas:             0
+  Regressões:         0
+  TypeScript:         zero erros
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MÓDULOS DE PRODUÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  src/modules/
+  ├── auth/           Autenticação JWT (login, register, refresh token,
+  │                   verificação de email, guards, interceptors)
+  ├── users/          Gestão de usuários
+  ├── contacts/       Módulo de contatos (formulário de contato do site)
+  ├── health/         Health check endpoint + throttler
+  ├── mail/           Serviço de envio de email
+  ├── analysis/       Análises e gráficos
+  └── indicators/     Módulo principal de indicadores (ver detalhes abaixo)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MÓDULO INDICATORS — DETALHAMENTO COMPLETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PIPELINE DE APURAÇÃO AUTOMÁTICA:
+
+  frequency (DAILY/WEEKLY/MONTHLY/QUARTERLY/SEMESTERLY/YEARLY/CUSTOM)
+    ↓
+  PeriodResolverService
+    ↓
+  IndicatorPeriodClosingService
+    ↓
+  AggregationEngineService (SUM/AVG/MIN/MAX/LAST/COUNT/FORMULA)
+    ↓
+  FormulaEngineService (quando aggregationType = FORMULA)
+    ↓
+  IndicatorPeriodApurationService
+    ↓
+  IndicatorHistoryService → IndicatorHistory (criado no banco)
+    ↓
+  IndicatorCurrentStateService → Indicator.currentValue + Indicator.status
+    ↑
+  IndicatorPeriodClosingScheduler (cron automático)
+    ↑
+  IndicatorPeriodBackfillService (recuperação de períodos perdidos)
+
+
+  ── SERVIÇOS IMPLEMENTADOS ──────────────────────────────────────────────────
+
+  PeriodResolverService
+    - Resolve o período [periodStart, periodEnd) a partir de uma referenceDate
+    - Suporta todas as frequências: DAILY, WEEKLY, MONTHLY, QUARTERLY,
+      SEMESTERLY, YEARLY
+    - Timezone: America/Sao_Paulo
+    - Fronteira: [periodStart, periodEnd) — periodEnd exclusivo
+
+  IndicatorPeriodClosingService
+    - Determina se um período já encerrou (isClosed = true/false)
+    - Usa referenceDate - 1ms para identificar o período encerrado
+
+  AggregationEngineService
+    - Agrega medições do período conforme o aggregationType
+    - SUM: soma de todas as medições válidas
+    - AVG: média aritmética
+    - MIN: menor valor
+    - MAX: maior valor
+    - LAST: valor da medição mais recente (desempate determinístico)
+    - COUNT: quantidade de medições válidas (COUNT=0 é semântico)
+    - FORMULA: delega ao FormulaEngineService
+    - Filtragem por período [periodStart, periodEnd)
+    - Duck-type Decimal para compatibilidade Prisma
+
+  FormulaEngineService (Formula Engine V1)
+    - Linguagem matemática própria e controlada
+    - NUNCA usa eval(), new Function(), vm.* ou execução dinâmica
+    - Pipeline: Tokenizer → Parser → AST → Validator → Evaluator
+    - Funções agregadas: SUM(), AVG(), MIN(), MAX(), LAST(), COUNT()
+    - Funções matemáticas: ABS(x), ROUND(x), FLOOR(x), CEIL(x)
+    - Operadores: + - * / %
+    - Precedência: parênteses > funções > * / % > + -
+    - Unário: -x, +x
+    - Limites: MAX_FORMULA_LENGTH=500, MAX_AST_DEPTH=20, MAX_AST_NODES=100
+    - DivisionByZeroError, FormulaSyntaxError, FormulaValidationError,
+      UnsupportedFormulaFunctionError, FormulaEvaluationError
+    - Whitelist de funções (não blacklist)
+
+  IndicatorPeriodApurationService
+    - Motor central de apuração de períodos
+    - Fluxo: resolve período → idempotência → busca medições →
+             agrega → calcula previousValue e variationPercent →
+             calcula status → cria IndicatorHistory → sincroniza Indicator
+    - Retornos: CLOSED, ALREADY_CLOSED, PERIOD_OPEN, NO_DATA,
+                FORMULA_ENGINE_REQUIRED, CUSTOM_FREQUENCY_NOT_SUPPORTED
+    - NÃO cria cron interno
+    - GARANTE idempotência via constraint @@unique
+
+  IndicatorCurrentStateService  ← NOVO (ETAPA 3G)
+    - Sincroniza estado corrente do Indicator após fechamento bem-sucedido
+    - Atualiza SOMENTE: Indicator.currentValue + Indicator.status
+    - Payload exato: { currentValue: history.value, status: history.status }
+    - NUNCA altera: previousValue, variation, isActive, goalValue, etc.
+    - Não recalcula status — usa diretamente o valor do IndicatorHistory
+
+  IndicatorPeriodClosingScheduler
+    - Executa ciclo automático (cron: todo minuto)
+    - Busca indicadores ativos, não-CUSTOM
+    - Protege contra execuções sobrepostas (_running flag)
+    - Inclui backfill automático após cada ciclo
+    - Resultado: closed, alreadyClosed, noData, formulaRequired,
+                 periodOpen, skipped, failed
+
+  IndicatorPeriodBackfillService
+    - Recupera períodos históricos pendentes em ordem cronológica
+    - Usa Indicator.createdAt como ponto de início
+    - Lookup O(1) via Set de periodStart existentes
+    - Estratégia de falha: interrompe o indicador (preserva chain de previousValue)
+    - MAX_PERIODS_PER_INDICATOR = 100 por execução
+    - Ignora CUSTOM; respeita isActive (configurável via includeInactive)
+
+  IndicatorHistoryService
+    - CRUD do IndicatorHistory
+    - Trata P2002 como ConflictException
+    - Snapshot de goalValue no momento da apuração
+
+  IndicatorAnalyticsService
+    - Cálculos analíticos: currentValue, previousValue, variation,
+      targetStatus, targetAchievementPercentage, daysRemaining, etc.
+    - Regras de status: SUCCESS, WARNING, DANGER, NEUTRAL
+    - Fonte: raw measurements (IndicatorMeasurement)
+    - NÃO usa IndicatorHistory (cálculo on-the-fly)
+
+  IndicatorsService
+    - CRUD de Indicator
+    - withAnalytics(): adiciona analytics on-the-fly às respostas da API
+    - currentValue/previousValue/variation são campos cache (fonte: IndicatorMeasurement)
+
+  MeasurementsService
+    - CRUD de IndicatorMeasurement
+
+
+  ── ENUMS E TIPOS ────────────────────────────────────────────────────────────
+
+  AggregationType:  SUM | AVG | MIN | MAX | LAST | COUNT | FORMULA
+  IndicatorFrequency: DAILY | WEEKLY | MONTHLY | QUARTERLY | SEMESTERLY |
+                      YEARLY | CUSTOM
+  IndicatorStatus:  SUCCESS | WARNING | DANGER | NEUTRAL
+  IndicatorDesiredDirection: HIGHER_IS_BETTER | LOWER_IS_BETTER | RANGE_IS_BETTER
+  IndicatorCategory: FINANCIAL | COMMERCIAL | OPERATIONAL | MARKETING |
+                     CUSTOMER | CUSTOM
+  IndicatorChartType: LINE | BAR | AREA | DONUT | PIE | GAUGE | NUMBER
+  IndicatorPeriod: PREVIOUS_MONTH | PREVIOUS_QUARTER | PREVIOUS_SEMESTER |
+                   PREVIOUS_YEAR | CUSTOM
+
+
+  ── MODELOS DE BANCO (PRISMA) ────────────────────────────────────────────────
+
+  Indicator
+    id, name, description, category, formula, unit
+    goalValue, minimumGoalValue, maximumGoalValue, desiredDirection
+    frequency, aggregationType
+    currentValue (cache), previousValue (cache), variation (cache)
+    previousPeriod, status
+    color, icon, chartType
+    startDate, endDate, daysRemaining
+    dashboardSlot, isActive, showOnDashboard
+    createdAt, updatedAt
+    → measurements: IndicatorMeasurement[]
+    → history: IndicatorHistory[]
+
+  IndicatorMeasurement
+    id, indicatorId, value, referenceDate
+    periodStart, periodEnd, source, notes
+    createdAt, updatedAt
+    @@unique([indicatorId, referenceDate])
+
+  IndicatorHistory
+    id, indicatorId
+    periodStart, periodEnd
+    value, goalValue, previousValue, variationPercent
+    status, notes, calculatedAt
+    createdAt, updatedAt
+    @@unique([indicatorId, periodStart, periodEnd])
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ETAPAS DO PROJETO (HISTÓRICO DE IMPLEMENTAÇÃO)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ETAPA 1   — Setup inicial (NestJS, Prisma, PostgreSQL, JWT, Rate Limit)
+  ETAPA 2   — IndicatorHistory: modelo, service, controller, migrations
+  ETAPA 3A  — PeriodResolverService: resolução de períodos por timezone BRT
+  ETAPA 3B  — IndicatorPeriodClosingService: verificação de fechamento
+  ETAPA 3C-0— AggregationType enum: SUM/AVG/MIN/MAX/LAST/COUNT/FORMULA
+  ETAPA 3C-1— AggregationEngineService: motor de agregação por período
+  ETAPA 3D  — IndicatorPeriodApurationService: motor central de apuração
+  ETAPA 3E  — IndicatorPeriodClosingScheduler: automação via cron
+  ETAPA 3E-A— Auditoria E2E do ciclo automático de fechamento
+  ETAPA 3E-B— Auditoria de resiliência (concorrência, restart, falhas)
+  ETAPA 3E-C— IndicatorPeriodBackfillService: recuperação de períodos perdidos
+  ETAPA 3F  — FormulaEngine seguro e declarativo (Tokenizer→Parser→AST→
+               Validator→Evaluator; sem eval/new Function/vm)
+  ETAPA 3F-A— Auditoria E2E do Formula Engine integrado ao ciclo
+  ETAPA 3G-0— Auditoria do contrato Indicator ↔ IndicatorHistory
+  ETAPA 3G  — IndicatorCurrentStateService: sincronização automática de
+               Indicator.currentValue e Indicator.status após fechamento
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SUÍTES DE TESTE (20 suítes — 691 testes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Unitários:
+    aggregation-engine.service.spec.ts         (55 testes)
+    period-resolver.service.spec.ts            (26 testes)
+    indicator-analytics.service.spec.ts        (24 testes)
+    indicator-period-closing.service.spec.ts   (~50 testes)
+    indicator-period-apuration.service.spec.ts (46 testes)
+    indicator-period-backfill.service.spec.ts  (35 testes)
+    indicator-period-closing.scheduler.spec.ts (23 testes)
+    indicator-current-state.service.spec.ts    (25 testes) ← NOVO
+    contacts.service.spec.ts                   (9 testes)
+    app.controller.spec.ts                     (1 teste)
+
+  Formula Engine (unitários):
+    formula-tokenizer.service.spec.ts          (36 testes)
+    formula-parser.service.spec.ts             (34 testes)
+    formula-validator.service.spec.ts          (28 testes)
+    formula-evaluator.service.spec.ts          (29 testes)
+    formula-engine.service.spec.ts             (30 testes)
+
+  Integração:
+    formula/formula-integration.spec.ts        (26 testes)
+    indicator-current-state.integration.spec.ts (12 testes) ← NOVO
+
+  Auditoria / E2E (in-memory, sem banco real):
+    indicator-period-e2e-audit.spec.ts         (37 testes) — ciclo automático
+    indicator-period-resilience-audit.spec.ts  (31 testes) — resiliência
+    formula-period-e2e-audit.spec.ts           (63 testes) — formula no ciclo
+    indicator-history-contract-audit.spec.ts   (50 testes) — contrato Indicator↔History
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MIGRATIONS DO BANCO DE DADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  0001_create_contacts/                    — tabela de contatos
+  20260806102024_add_auth/                 — tabelas de autenticação (users, etc.)
+  20260806130000_add_email_verification/   — verificação de email
+  20260807121229_add_indicators/           — tabela Indicator
+  20260807125155_add_analysis/             — tabela Analysis
+  20260807135458_add_indicator_period/     — campo period em Indicator
+  20260807150000_add_indicator_dates/      — startDate, endDate
+  20260807160000_add_days_remaining/       — daysRemaining
+  20260807170000_add_measurements_and_direction/ — IndicatorMeasurement +
+                                                   desiredDirection
+  20260807190000_add_indicator_status_inactive/  — status INACTIVE (depois removido)
+  20260807235500_add_dashboard_slot/       — dashboardSlot
+  20260808130000_remove_inactive_status/   — remove INACTIVE do enum
+  20260808220000_add_indicator_frequency/  — frequency + aggregationType
+  20260809180000_add_indicator_history/    — IndicatorHistory
+  20260809230000_add_aggregation_type/     — AggregationType enum completo
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ENDPOINTS DA API (principais)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Auth:
+    POST /auth/register            Cadastrar novo usuário
+    POST /auth/login               Login (retorna JWT)
+    POST /auth/refresh             Refresh do token
+    GET  /auth/verify-email        Verificar email via token
+    POST /auth/resend-verification Reenviar email de verificação
+
+  Indicators:
+    GET    /indicators             Listar indicadores do usuário
+    POST   /indicators             Criar indicador
+    GET    /indicators/:id         Buscar indicador por ID
+    PATCH  /indicators/:id         Atualizar indicador
+    DELETE /indicators/:id         Deletar indicador
+
+  Measurements:
+    GET    /indicators/:id/measurements        Listar medições
+    POST   /indicators/:id/measurements        Criar medição
+    PATCH  /indicators/:id/measurements/:mid   Atualizar medição
+    DELETE /indicators/:id/measurements/:mid   Deletar medição
+
+  History:
+    GET  /indicators/:id/history               Listar histórico
+    POST /indicators/:id/history               Criar histórico manual
+    GET  /indicators/:id/history/:hid          Buscar histórico por ID
+
+  Analysis:
+    GET  /analysis          Listar análises
+    POST /analysis          Criar análise
+    ...
+
+  Contacts:
+    POST /contacts          Criar contato (formulário do site)
+
+  Health:
+    GET  /health            Health check
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  O QUE FALTA / PRÓXIMAS ETAPAS (BACKEND)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ETAPA 3H  — Endpoint GET /indicators/:id/history?from=&to= com paginação
+               e filtros de período
+
+  ETAPA 3I  — Endpoint POST /indicators/:id/close-period (fechamento manual
+               via API — para CUSTOM frequency e retroativos)
+
+  ETAPA 3J  — Endpoint POST /indicators/backfill (trigger manual do backfill
+               via API com autenticação admin)
+
+  ETAPA 4   — Websockets / SSE para notificações em tempo real quando um
+               período é fechado
+
+  ETAPA 5   — Integração com fontes de dados externas (webhooks, importação
+               CSV, APIs externas)
+
+  Pendências menores:
+    - Rate limiting por usuário nos endpoints de indicators/measurements
+    - Soft delete para Indicator (campo deletedAt)
+    - Exportação de histórico em CSV/Excel
+    - Dashboard summary endpoint (GET /indicators/summary)
+    - Filtros avançados em GET /indicators (por status, categoria, frequência)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURAÇÕES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Arquivo: dataclarity-api/.env.example
+  Variáveis necessárias:
+    DATABASE_URL     — PostgreSQL connection string
+    JWT_SECRET       — Chave secreta JWT
+    JWT_EXPIRES_IN   — Expiração do token (ex: 7d)
+    MAIL_HOST        — SMTP host
+    MAIL_PORT        — SMTP port
+    MAIL_USER        — SMTP usuário
+    MAIL_PASS        — SMTP senha
+    MAIL_FROM        — Email remetente
+    FRONTEND_URL     — URL do frontend (para links nos emails)
+
+  Docker:
+    dataclarity-api/docker-compose.yml — PostgreSQL local via Docker
+
+
+  FIM DO DOCUMENTO

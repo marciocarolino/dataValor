@@ -1,0 +1,436 @@
+================================================================================
+  DATAVALOR / DATACLARITY — STATUS DO FRONTEND (dataclarity-landing)
+  Atualizado em: 10/08/2026
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STACK TECNICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Framework:       Angular 19 (standalone components)
+  Linguagem:       TypeScript
+  Estilos:         SCSS (design tokens, mixins globais)
+  Graficos:        Chart.js
+  Build tool:      Angular CLI
+  Testes:          Karma + Jasmine (unitarios)
+  Linting:         ESLint
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ESTRUTURA GERAL DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  src/app/
+  +-- core/           Servicos, guards, interceptors, modelos compartilhados
+  +-- features/       Paginas e componentes organizados por funcionalidade
+  +-- shared/         Componentes, diretivas e modelos reutilizaveis
+  +-- styles/         Tokens de design, mixins, variaveis SCSS globais
+  +-- app.routes.ts   Configuracao de rotas
+  +-- app.config.ts   Configuracao do app (providers, HTTP)
+  +-- app.ts          Componente raiz
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FEATURES IMPLEMENTADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [HOME - Landing Page]
+
+  features/home/
+    Pagina publica de apresentacao da DataClarity/DataValor.
+
+    Componentes da landing:
+      HeroComponent            Secao principal com titulo, subtitulo e CTA
+      ServicesComponent        Secao de servicos oferecidos (cards)
+      BenefitsComponent        Secao de beneficios (lista com icones)
+      ClientsComponent         Logos/depoimentos de clientes
+      FinalCtaComponent        Call-to-action final (rodape da landing)
+
+    Data files (conteudo estatico):
+      benefits.data.ts         Lista de beneficios
+      clients.data.ts          Lista de clientes/logos
+      navigation.data.ts       Itens do menu de navegacao
+      services.data.ts         Servicos principais
+      service-solutions.data.ts  Solucoes detalhadas por servico
+      site-config.data.ts      Configuracoes gerais do site
+      social-links.data.ts     Links de redes sociais
+      testimonial.data.ts      Depoimentos de clientes
+
+    Pagina: HomePageComponent
+
+
+  [AUTENTICACAO]
+
+  features/auth/ + features/login/ + features/register/
+
+    LoginPageComponent
+      - Formulario de login (email + senha)
+      - Validacao de campos
+      - Integracao com AuthService
+      - Redirecionamento apos login bem-sucedido
+
+    RegisterPageComponent
+      - Formulario de cadastro (nome, email, senha, confirmacao)
+      - Validacao de campos e confirmacao de senha
+      - Integracao com AuthService
+      - Redireciona para tela de email enviado
+
+    VerifyEmailSentComponent
+      - Tela informando que o email de verificacao foi enviado
+      - Opcao de reenvio do email
+
+    VerifyEmailComponent
+      - Tela de confirmacao apos clicar no link do email
+      - Processa token de verificacao via query param
+
+
+  [DASHBOARD - Area Logada]
+
+  features/dashboard/
+
+    DashboardPageComponent
+      - Pagina principal da area autenticada
+      - Layout com sidebar + top bar + conteudo central
+
+    Componentes internos:
+      SidebarComponent
+        - Navegacao lateral (menu principal)
+        - Links para Dashboard, Indicadores, Analises, etc.
+        - Avatar / nome do usuario logado
+
+      TopBarComponent
+        - Barra superior com titulo da pagina atual
+        - Botao de logout / menu do usuario
+
+      MetricCardComponent
+        - Card de metrica individual
+        - Exibe: valor atual, variacao percentual, status (cor)
+        - Suporte a icones e cores por status:
+            SUCCESS (verde), WARNING (amarelo), DANGER (vermelho), NEUTRAL (cinza)
+
+      RevenueChartComponent
+        - Grafico de linha/barra de receita ao longo do tempo
+        - Integracao com Chart.js
+
+      RevenueDistChartComponent
+        - Grafico de distribuicao de receita (donut/pizza)
+        - Integracao com Chart.js
+
+      AiInsightCardComponent
+        - Card de insights gerados por IA
+        - Exibe texto de analise automatica do periodo
+
+      TopClientsTableComponent
+        - Tabela de top clientes
+        - Colunas: nome, valor, percentual
+
+
+  [INDICADORES]
+
+  features/indicators/
+
+    IndicatorsPageComponent
+      - Pagina de listagem de todos os indicadores do usuario
+      - Exibe cards com currentValue, status e variacao
+      - Filtragem e ordenacao (a implementar)
+      - Integracao com IndicatorService
+
+    IndicatorChartComponent
+      - Componente de grafico para um indicador especifico
+      - Suporte a multiplos tipos de grafico (LINE, BAR, AREA)
+      - Integracao com Chart.js
+      - Exibe historico do indicador via IndicatorHistory
+
+
+  [ANALISES]
+
+  features/analysis/
+
+    AnalysisListComponent
+      - Listagem de analises salvas
+      - Integracao com AnalysisService
+
+
+  [CENTRAL DE AJUDA]
+
+  features/help-center/
+
+    HelpCenterComponent
+      - Central de ajuda com perguntas frequentes e artigos
+      - Conteudo carregado de arquivo JSON estatico
+      - Arquivo: public/help/indicators.json
+      - Integracao com HelpService (sem chamada ao backend)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CORE (Servicos, Guards, Interceptors, Modelos)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [SERVICOS]
+
+  AuthService (core/services/auth.service.ts)
+    - login(email, password) : POST /auth/login -> salva JWT no localStorage
+    - register(data)         : POST /auth/register
+    - logout()               : limpa token e redireciona para /login
+    - refreshToken()         : POST /auth/refresh
+    - isAuthenticated()      : boolean
+    - getCurrentUser()       : dados do usuario logado (decodificado do JWT)
+    - verifyEmail(token)     : GET /auth/verify-email?token=...
+    - resendVerification()   : POST /auth/resend-verification
+
+  IndicatorService (core/services/indicator.service.ts)
+    - getAll()                  : GET    /indicators
+    - getById(id)               : GET    /indicators/:id
+    - create(dto)               : POST   /indicators
+    - update(id, dto)           : PATCH  /indicators/:id
+    - delete(id)                : DELETE /indicators/:id
+    - getMeasurements(id)       : GET    /indicators/:id/measurements
+    - createMeasurement(id,dto) : POST   /indicators/:id/measurements
+    - deleteMeasurement(id,mid) : DELETE /indicators/:id/measurements/:mid
+    - getHistory(id)            : GET    /indicators/:id/history
+
+  AnalysisService (core/services/analysis.service.ts)
+    - getAll()   : GET  /analysis
+    - create(dto): POST /analysis
+
+  HelpService (core/services/help.service.ts)
+    - Carrega conteudo de /assets/help/*.json (estatico)
+    - Sem chamada ao backend
+
+  [GUARDS]
+
+  AuthGuard (core/guards/auth.guard.ts)
+    - Protege rotas que exigem autenticacao
+    - Redireciona para /login se token ausente ou expirado
+
+  GuestGuard (core/guards/guest.guard.ts)
+    - Protege rotas de visitante (login, register)
+    - Redireciona para /dashboard se usuario ja autenticado
+
+  [INTERCEPTORS]
+
+  AuthInterceptor (core/interceptors/auth.interceptor.ts)
+    - Adiciona "Authorization: Bearer <token>" em todas as requisicoes HTTP
+    - Intercepta erros 401 -> chama logout() automaticamente
+
+  [MODELOS]
+
+  indicator.model.ts
+    Interface Indicator:
+      id, name, description, category, formula, unit
+      goalValue, minimumGoalValue, maximumGoalValue, desiredDirection
+      frequency, aggregationType
+      currentValue, previousValue, variation (campos cache)
+      status, chartType, color, icon
+      startDate, endDate, daysRemaining
+      dashboardSlot, isActive, showOnDashboard
+      createdAt, updatedAt
+
+    Interface IndicatorMeasurement:
+      id, indicatorId, value, referenceDate
+      periodStart, periodEnd, source, notes
+
+    Interface IndicatorHistory:
+      id, indicatorId, periodStart, periodEnd
+      value, goalValue, previousValue, variationPercent
+      status, notes, calculatedAt
+
+    Enums: IndicatorStatus, IndicatorFrequency, AggregationType,
+           IndicatorDesiredDirection, IndicatorCategory, IndicatorChartType
+
+  analysis.model.ts
+    Interface Analysis: id, title, content, indicatorIds, createdAt, etc.
+
+  help.model.ts
+    Interface HelpArticle, HelpSection
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMPONENTES COMPARTILHADOS (shared/)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  HeaderComponent
+    - Cabecalho da landing page
+    - Menu de navegacao responsivo (mobile + desktop)
+    - Botoes: Login / Cadastrar
+
+  FooterComponent
+    - Rodape da landing page
+    - Links de navegacao, redes sociais, copyright
+
+  ServiceCardComponent
+    - Card de servico para a landing (icone, titulo, descricao, link)
+
+  BenefitItemComponent
+    - Item de beneficio (icone + texto)
+
+  TestimonialCardComponent
+    - Card de depoimento de cliente (avatar, nome, texto, empresa)
+
+  SectionTitleComponent
+    - Titulo de secao padronizado (h2 + subtitulo opcional)
+
+  CallToActionComponent
+    - Botao/bloco de chamada para acao reutilizavel
+
+  DeliverableListComponent
+    - Lista de entregaveis de um servico
+
+  [DIRETIVAS]
+
+  CurrencyBrlDirective (shared/directives/currency-brl.directive.ts)
+    - Formata valores monetarios em Real brasileiro (R$ X.XXX,XX)
+
+  [MODELOS SHARED]
+
+  benefit.model.ts       Interface Benefit
+  client.model.ts        Interface Client
+  navigation-item.model.ts Interface NavigationItem
+  service.model.ts       Interface Service
+  social-link.model.ts   Interface SocialLink
+  testimonial.model.ts   Interface Testimonial
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SISTEMA DE DESIGN (SCSS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  src/styles/
+    _tokens.scss    Design tokens (cores, fontes, espacamentos, sombras,
+                    border-radius, transicoes)
+    _mixins.scss    Mixins reutilizaveis (breakpoints responsivos,
+                    flex/grid helpers, truncate-text, etc.)
+    _base.scss      Reset e estilos base globais (box-sizing, scroll, etc.)
+
+  src/styles.scss   Arquivo principal (importa tokens, mixins, base)
+
+  Paleta de status dos indicadores:
+    --color-success:  #22c55e  (indicador no alvo - verde)
+    --color-warning:  #f59e0b  (proximo da meta - amarelo/laranja)
+    --color-danger:   #ef4444  (abaixo da meta - vermelho)
+    --color-neutral:  #9ca3af  (sem meta definida - cinza)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ROTAS CONFIGURADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Rotas publicas (sem autenticacao):
+    /                    HomePageComponent        Landing page
+    /login               LoginPageComponent       GuestGuard
+    /register            RegisterPageComponent    GuestGuard
+    /verify-email        VerifyEmailComponent     Token via query param
+    /verify-email-sent   VerifyEmailSentComponent
+
+  Rotas privadas (exigem autenticacao - AuthGuard):
+    /dashboard           DashboardPageComponent
+    /indicators          IndicatorsPageComponent
+    /analysis            AnalysisListComponent
+    /help                HelpCenterComponent
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ASSETS ESTATICOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  public/
+    favicon.ico
+    help/indicators.json     Conteudo da central de ajuda (artigos)
+    images/
+      business-meeting.svg / .webp
+      dashboard-analytics.svg
+      dashboard-preview.svg / .webp
+      data-engineering.svg / .webp
+      report-automation.svg / .webp
+      system-integration.svg / .webp
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  O QUE FALTA / PROXIMAS ETAPAS (FRONTEND)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [PAGINAS / FUNCIONALIDADES A IMPLEMENTAR]
+
+  Pagina de Indicador Individual
+    - Rota: /indicators/:id
+    - Detalhes do indicador (nome, meta, status, frequencia)
+    - Grafico historico completo (LINE / BAR / AREA com Chart.js)
+    - Tabela de medições (CRUD inline)
+    - Tabela de historico de periodos (IndicatorHistory)
+    - Botao de adicionar medicao manual
+
+  Criar / Editar Indicador
+    - Modal ou pagina de formulario
+    - Campos: nome, descricao, categoria, frequencia, aggregationType,
+              meta (goalValue, minGoal, maxGoal), desiredDirection,
+              formula (quando FORMULA), cor, icone, chartType
+    - Validacao de formula antes de salvar (preview)
+
+  Dashboard Melhorado
+    - Cards de indicadores do dashboardSlot
+    - Resumo de status (quantos SUCCESS / WARNING / DANGER / NEUTRAL)
+    - Graficos reais integrados com o backend (substituir dados mockados)
+    - Filtros por periodo
+
+  Pagina de Historico de Periodos
+    - Rota: /indicators/:id/history
+    - Tabela paginada com todos os periodos fechados
+    - Filtro por data (from/to)
+    - Exportar CSV (a implementar no backend tambem)
+
+  Notificacoes / Alertas
+    - Toast/snackbar quando um indicador muda de status
+    - Alerta de indicadores no DANGER
+
+  Configuracoes do Usuario
+    - Rota: /settings
+    - Alterar nome, email, senha
+    - Preferencias de notificacao
+
+  [MELHORIAS TECNICAS PENDENTES]
+
+  - Testes unitarios para os services e components do dashboard/indicators
+    (atualmente apenas app.spec.ts existe)
+  - Lazy loading de rotas (a maioria ja usa loadComponent mas verificar)
+  - Internacionalizacao (i18n) - atualmente todo PT-BR hardcoded
+  - Error handling global (interceptor para erros 4xx/5xx com toast)
+  - Loading states / skeleton screens nas paginas
+  - Paginacao nas listagens (indicators, analysis, history)
+  - Filtros e busca na listagem de indicadores
+  - Responsividade completa do dashboard (mobile-first)
+  - PWA (service worker para uso offline)
+  - Dark mode
+
+  [INTEGRACAO COM O BACKEND]
+
+  Campos que o frontend precisa consumir apos ETAPA 3G do backend:
+    - Indicator.currentValue  (agora atualizado automaticamente pelo backend)
+    - Indicator.status        (agora atualizado automaticamente pelo backend)
+    - IndicatorHistory[]      (historico de periodos fechados)
+
+  O IndicatorChartComponent precisa usar GET /indicators/:id/history
+  para exibir o grafico historico de periodos (valor por periodo).
+
+  O MetricCardComponent ja consome currentValue e status corretamente.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURACOES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  dataclarity-landing/src/app/app.config.ts
+    - provideRouter(routes)
+    - provideHttpClient(withInterceptors([authInterceptor]))
+    - provideAnimations()
+
+  URL do backend configurada nos services:
+    - Base URL: geralmente http://localhost:3000 em desenvolvimento
+    - Em producao: configurar environment.ts com a URL real da API
+
+  Variaveis de ambiente (Angular):
+    src/environments/environment.ts       (desenvolvimento)
+    src/environments/environment.prod.ts  (producao)
+    Variavel principal: environment.apiUrl
+
+
+  FIM DO DOCUMENTO

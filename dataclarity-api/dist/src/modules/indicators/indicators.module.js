@@ -23,6 +23,12 @@ const aggregation_engine_service_1 = require("./aggregation-engine.service");
 const indicator_period_apuration_service_1 = require("./indicator-period-apuration.service");
 const indicator_period_backfill_service_1 = require("./indicator-period-backfill.service");
 const indicator_period_closing_scheduler_1 = require("./indicator-period-closing.scheduler");
+const indicator_current_state_service_1 = require("./indicator-current-state.service");
+const formula_tokenizer_service_1 = require("./formula/formula-tokenizer.service");
+const formula_parser_service_1 = require("./formula/formula-parser.service");
+const formula_validator_service_1 = require("./formula/formula-validator.service");
+const formula_evaluator_service_1 = require("./formula/formula-evaluator.service");
+const formula_engine_service_1 = require("./formula/formula-engine.service");
 let IndicatorsModule = class IndicatorsModule {
 };
 exports.IndicatorsModule = IndicatorsModule;
@@ -42,7 +48,13 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
             indicator_period_closing_service_1.IndicatorPeriodClosingService,
+            formula_tokenizer_service_1.FormulaTokenizerService,
+            formula_parser_service_1.FormulaParserService,
+            formula_validator_service_1.FormulaValidatorService,
+            formula_evaluator_service_1.FormulaEvaluatorService,
+            formula_engine_service_1.FormulaEngineService,
             aggregation_engine_service_1.AggregationEngineService,
+            indicator_current_state_service_1.IndicatorCurrentStateService,
             indicator_period_apuration_service_1.IndicatorPeriodApurationService,
             indicator_period_backfill_service_1.IndicatorPeriodBackfillService,
             indicator_period_closing_scheduler_1.IndicatorPeriodClosingScheduler,
@@ -54,6 +66,7 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
             indicator_period_closing_service_1.IndicatorPeriodClosingService,
+            formula_engine_service_1.FormulaEngineService,
             aggregation_engine_service_1.AggregationEngineService,
             indicator_period_apuration_service_1.IndicatorPeriodApurationService,
         ],

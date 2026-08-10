@@ -4,6 +4,7 @@ import { IndicatorPeriodClosingService } from './indicator-period-closing.servic
 import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorHistoryService } from './indicator-history.service';
 import { IndicatorAnalyticsService } from './indicator-analytics.service';
+import { IndicatorCurrentStateService } from './indicator-current-state.service';
 import { IndicatorStatus } from './enums/indicator-status.enum';
 import { AggregationType } from './enums/aggregation-type.enum';
 export interface ApurationResultPeriodOpen {
@@ -62,7 +63,8 @@ export declare class IndicatorPeriodApurationService {
     private readonly aggregationEngine;
     private readonly historyService;
     private readonly analytics;
-    constructor(prisma: PrismaService, periodResolver: PeriodResolverService, periodClosing: IndicatorPeriodClosingService, aggregationEngine: AggregationEngineService, historyService: IndicatorHistoryService, analytics: IndicatorAnalyticsService);
+    private readonly currentStateService;
+    constructor(prisma: PrismaService, periodResolver: PeriodResolverService, periodClosing: IndicatorPeriodClosingService, aggregationEngine: AggregationEngineService, historyService: IndicatorHistoryService, analytics: IndicatorAnalyticsService, currentStateService: IndicatorCurrentStateService);
     closePeriod(indicatorId: string, referenceDate?: Date, timezone?: string): Promise<ApurationResult>;
     private computeVariation;
     private computeStatus;
