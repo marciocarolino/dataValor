@@ -12,6 +12,7 @@ import { PeriodResolverService } from './period-resolver.service';
 import { IndicatorPeriodClosingService } from './indicator-period-closing.service';
 import { AggregationEngineService } from './aggregation-engine.service';
 import { IndicatorPeriodApurationService } from './indicator-period-apuration.service';
+import { IndicatorPeriodClosingScheduler } from './indicator-period-closing.scheduler';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
@@ -30,6 +31,7 @@ import { IndicatorPeriodApurationService } from './indicator-period-apuration.se
     IndicatorPeriodClosingService,
     AggregationEngineService,
     IndicatorPeriodApurationService,
+    IndicatorPeriodClosingScheduler,
   ],
   exports: [
     IndicatorsService,
