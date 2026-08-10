@@ -10,6 +10,8 @@ import { MeasurementsService } from './measurements.service';
 import { MeasurementsController } from './measurements.controller';
 import { PeriodResolverService } from './period-resolver.service';
 import { IndicatorPeriodClosingService } from './indicator-period-closing.service';
+import { AggregationEngineService } from './aggregation-engine.service';
+import { IndicatorPeriodApurationService } from './indicator-period-apuration.service';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
@@ -26,6 +28,8 @@ import { IndicatorPeriodClosingService } from './indicator-period-closing.servic
     IndicatorHistoryService,
     PeriodResolverService,
     IndicatorPeriodClosingService,
+    AggregationEngineService,
+    IndicatorPeriodApurationService,
   ],
   exports: [
     IndicatorsService,
@@ -34,6 +38,8 @@ import { IndicatorPeriodClosingService } from './indicator-period-closing.servic
     IndicatorHistoryService,
     PeriodResolverService,
     IndicatorPeriodClosingService,
+    AggregationEngineService,
+    IndicatorPeriodApurationService,
   ],
 })
 export class IndicatorsModule {}

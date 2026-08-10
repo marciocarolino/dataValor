@@ -22,6 +22,8 @@ import { IndicatorHistoryService } from '../src/modules/indicators/indicator-his
 import { MeasurementsService } from '../src/modules/indicators/measurements.service';
 import { PeriodResolverService } from '../src/modules/indicators/period-resolver.service';
 import { IndicatorPeriodClosingService } from '../src/modules/indicators/indicator-period-closing.service';
+import { AggregationEngineService } from '../src/modules/indicators/aggregation-engine.service';
+import { IndicatorPeriodApurationService } from '../src/modules/indicators/indicator-period-apuration.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
 import { AggregationType } from '../src/modules/indicators/enums/aggregation-type.enum';
 import { IndicatorStatus } from '../src/modules/indicators/enums/indicator-status.enum';
@@ -163,6 +165,10 @@ describe('Indicators (e2e)', () => {
       .overrideProvider(PeriodResolverService)
       .useValue({})
       .overrideProvider(IndicatorPeriodClosingService)
+      .useValue({})
+      .overrideProvider(AggregationEngineService)
+      .useValue({})
+      .overrideProvider(IndicatorPeriodApurationService)
       .useValue({})
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: () => true })

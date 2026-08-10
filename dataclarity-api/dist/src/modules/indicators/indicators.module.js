@@ -19,6 +19,8 @@ const measurements_service_1 = require("./measurements.service");
 const measurements_controller_1 = require("./measurements.controller");
 const period_resolver_service_1 = require("./period-resolver.service");
 const indicator_period_closing_service_1 = require("./indicator-period-closing.service");
+const aggregation_engine_service_1 = require("./aggregation-engine.service");
+const indicator_period_apuration_service_1 = require("./indicator-period-apuration.service");
 let IndicatorsModule = class IndicatorsModule {
 };
 exports.IndicatorsModule = IndicatorsModule;
@@ -38,6 +40,8 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
             indicator_period_closing_service_1.IndicatorPeriodClosingService,
+            aggregation_engine_service_1.AggregationEngineService,
+            indicator_period_apuration_service_1.IndicatorPeriodApurationService,
         ],
         exports: [
             indicators_service_1.IndicatorsService,
@@ -46,6 +50,8 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             indicator_history_service_1.IndicatorHistoryService,
             period_resolver_service_1.PeriodResolverService,
             indicator_period_closing_service_1.IndicatorPeriodClosingService,
+            aggregation_engine_service_1.AggregationEngineService,
+            indicator_period_apuration_service_1.IndicatorPeriodApurationService,
         ],
     })
 ], IndicatorsModule);
