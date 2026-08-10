@@ -21,6 +21,7 @@ const period_resolver_service_1 = require("./period-resolver.service");
 const indicator_period_closing_service_1 = require("./indicator-period-closing.service");
 const aggregation_engine_service_1 = require("./aggregation-engine.service");
 const indicator_period_apuration_service_1 = require("./indicator-period-apuration.service");
+const indicator_period_backfill_service_1 = require("./indicator-period-backfill.service");
 const indicator_period_closing_scheduler_1 = require("./indicator-period-closing.scheduler");
 let IndicatorsModule = class IndicatorsModule {
 };
@@ -43,6 +44,7 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             indicator_period_closing_service_1.IndicatorPeriodClosingService,
             aggregation_engine_service_1.AggregationEngineService,
             indicator_period_apuration_service_1.IndicatorPeriodApurationService,
+            indicator_period_backfill_service_1.IndicatorPeriodBackfillService,
             indicator_period_closing_scheduler_1.IndicatorPeriodClosingScheduler,
         ],
         exports: [

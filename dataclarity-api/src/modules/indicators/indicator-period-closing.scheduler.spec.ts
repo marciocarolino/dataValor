@@ -41,6 +41,7 @@ describe('IndicatorPeriodClosingScheduler', () => {
     scheduler = new IndicatorPeriodClosingScheduler(
       mockPrisma as never,
       mockApuration as unknown as IndicatorPeriodApurationService,
+      { runBackfill: jest.fn().mockResolvedValue({}) } as never,
     );
 
     // Default: nenhum indicador

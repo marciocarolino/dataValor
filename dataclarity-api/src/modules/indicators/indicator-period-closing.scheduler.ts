@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '../../prisma/prisma.service';
 import { IndicatorPeriodApurationService } from './indicator-period-apuration.service';
+import { IndicatorPeriodBackfillService } from './indicator-period-backfill.service';
 import { BUSINESS_TIMEZONE } from './period-resolver.service';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 
@@ -73,6 +74,7 @@ export class IndicatorPeriodClosingScheduler {
   constructor(
     private readonly prisma: PrismaService,
     private readonly apuration: IndicatorPeriodApurationService,
+    private readonly backfill: IndicatorPeriodBackfillService,
   ) {}
 
   /**
@@ -243,6 +245,17 @@ export class IndicatorPeriodClosingScheduler {
           );
           // Continua processando os demais indicadores
         }
+      }
+      // Após fechar o período atual, executar backfill para recuperar
+      // períodos anteriores que possam ter ficado pendentes (downtime, restart).
+      // O backfill é idempotente: períodos já fechados retornam ALREADY_CLOSED.
+      try {
+        await this.backfill.runBackfill(referenceDate, BUSINESS_TIMEZONE);
+      } catch (error) {
+        this.logger.error(
+          '[IndicatorPeriodScheduler] Backfill failed — continuing',
+          { error: String(error) },
+        );
       }
     } finally {
       this._running = false;

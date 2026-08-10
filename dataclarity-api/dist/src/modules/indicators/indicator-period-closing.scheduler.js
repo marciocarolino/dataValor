@@ -15,16 +15,19 @@ const common_1 = require("@nestjs/common");
 const schedule_1 = require("@nestjs/schedule");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const indicator_period_apuration_service_1 = require("./indicator-period-apuration.service");
+const indicator_period_backfill_service_1 = require("./indicator-period-backfill.service");
 const period_resolver_service_1 = require("./period-resolver.service");
 const indicator_frequency_enum_1 = require("./enums/indicator-frequency.enum");
 let IndicatorPeriodClosingScheduler = IndicatorPeriodClosingScheduler_1 = class IndicatorPeriodClosingScheduler {
     prisma;
     apuration;
+    backfill;
     logger = new common_1.Logger(IndicatorPeriodClosingScheduler_1.name);
     _running = false;
-    constructor(prisma, apuration) {
+    constructor(prisma, apuration, backfill) {
         this.prisma = prisma;
         this.apuration = apuration;
+        this.backfill = backfill;
     }
     async handleCron() {
         await this.runCycle();
@@ -135,6 +138,12 @@ let IndicatorPeriodClosingScheduler = IndicatorPeriodClosingScheduler_1 = class 
                     this.logger.error(`[IndicatorPeriodScheduler] Failed to close period`, { indicatorId: indicator.id, error: String(error) });
                 }
             }
+            try {
+                await this.backfill.runBackfill(referenceDate, period_resolver_service_1.BUSINESS_TIMEZONE);
+            }
+            catch (error) {
+                this.logger.error('[IndicatorPeriodScheduler] Backfill failed — continuing', { error: String(error) });
+            }
         }
         finally {
             this._running = false;
@@ -156,6 +165,7 @@ __decorate([
 exports.IndicatorPeriodClosingScheduler = IndicatorPeriodClosingScheduler = IndicatorPeriodClosingScheduler_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        indicator_period_apuration_service_1.IndicatorPeriodApurationService])
+        indicator_period_apuration_service_1.IndicatorPeriodApurationService,
+        indicator_period_backfill_service_1.IndicatorPeriodBackfillService])
 ], IndicatorPeriodClosingScheduler);
 //# sourceMappingURL=indicator-period-closing.scheduler.js.map

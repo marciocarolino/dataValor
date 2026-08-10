@@ -135,7 +135,7 @@ describe('ETAPA 3E-A — Auditoria E2E do Fluxo Automático de Fechamento', () =
     );
 
     // Scheduler usa Prisma + Apuration
-    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration);
+    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration, { runBackfill: jest.fn().mockResolvedValue({}) } as never);
 
     // Default: mock cria histórico com ID
     prisma.indicatorHistory.create.mockImplementation(

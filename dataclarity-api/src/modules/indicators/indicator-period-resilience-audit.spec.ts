@@ -107,7 +107,7 @@ describe('ETAPA 3E-B — Auditoria de Resiliência', () => {
       historyService,
       analytics,
     );
-    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration);
+    scheduler = new IndicatorPeriodClosingScheduler(prisma as never, apuration, { runBackfill: jest.fn().mockResolvedValue({}) } as never);
   };
 
   beforeEach(() => {
@@ -229,6 +229,7 @@ describe('ETAPA 3E-B — Auditoria de Resiliência', () => {
       const scheduler2 = new IndicatorPeriodClosingScheduler(
         prisma as never,
         apuration,
+        { runBackfill: jest.fn().mockResolvedValue({}) } as never,
       );
 
       // Ambos os schedulers têm _running=false independentemente
@@ -295,6 +296,7 @@ describe('ETAPA 3E-B — Auditoria de Resiliência', () => {
       const freshScheduler = new IndicatorPeriodClosingScheduler(
         prisma as never,
         apuration,
+        { runBackfill: jest.fn().mockResolvedValue({}) } as never,
       );
       expect(
         (freshScheduler as unknown as { _running: boolean })._running,
