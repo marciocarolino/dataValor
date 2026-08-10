@@ -20,7 +20,10 @@ import { IndicatorAnalyticsService } from '../src/modules/indicators/indicator-a
 import { IndicatorCronService } from '../src/modules/indicators/indicator-cron.service';
 import { IndicatorHistoryService } from '../src/modules/indicators/indicator-history.service';
 import { MeasurementsService } from '../src/modules/indicators/measurements.service';
+import { PeriodResolverService } from '../src/modules/indicators/period-resolver.service';
+import { IndicatorPeriodClosingService } from '../src/modules/indicators/indicator-period-closing.service';
 import { JwtAuthGuard } from '../src/modules/auth/guards/jwt-auth.guard';
+import { AggregationType } from '../src/modules/indicators/enums/aggregation-type.enum';
 import { IndicatorStatus } from '../src/modules/indicators/enums/indicator-status.enum';
 import { IndicatorCategory } from '../src/modules/indicators/enums/indicator-category.enum';
 import { IndicatorChartType } from '../src/modules/indicators/enums/indicator-chart-type.enum';
@@ -46,6 +49,7 @@ const mockIndicator = {
   maximumGoalValue: null,
   desiredDirection: IndicatorDesiredDirection.HIGHER_IS_BETTER,
   frequency: IndicatorFrequency.MONTHLY,
+  aggregationType: AggregationType.SUM,
   currentValue: 1500,
   previousValue: 1000,
   previousPeriod: null,
@@ -156,6 +160,10 @@ describe('Indicators (e2e)', () => {
         findOne: jest.fn(),
         remove: jest.fn(),
       })
+      .overrideProvider(PeriodResolverService)
+      .useValue({})
+      .overrideProvider(IndicatorPeriodClosingService)
+      .useValue({})
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: () => true })
       .compile();
@@ -333,6 +341,207 @@ describe('Indicators (e2e)', () => {
         .expect(HttpStatus.CREATED);
 
       expect(res.body.status).toBe(IndicatorStatus.WARNING);
+    });
+  });
+
+  // ── POST aggregationType ──────────────────────────────────────────────────
+
+  describe('aggregationType (POST + PATCH)', () => {
+    const baseBody = {
+      name: 'Indicador Apuração',
+      category: 'FINANCIAL',
+      chartType: 'NUMBER',
+    };
+
+    it('1. criação sem aggregationType → service chamado sem aggregationType (usa default SUM)', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send(baseBody)
+        .expect(HttpStatus.CREATED);
+
+      expect(mockIndicatorsService.create).toHaveBeenCalledWith(
+        expect.not.objectContaining({ aggregationType: expect.anything() }),
+      );
+    });
+
+    it('2. criação com cada valor do enum → aceito → 201', async () => {
+      for (const agg of Object.values(AggregationType)) {
+        mockIndicatorsService.create.mockResolvedValueOnce({
+          ...mockIndicator,
+          aggregationType: agg,
+        });
+        const body =
+          agg === AggregationType.FORMULA
+            ? { ...baseBody, aggregationType: agg, formula: 'SUM(receita)' }
+            : { ...baseBody, aggregationType: agg };
+        await request(app.getHttpServer())
+          .post('/api/v1/indicators')
+          .send(body)
+          .expect(HttpStatus.CREATED);
+      }
+    });
+
+    it('3. criação com aggregationType inválido → 400', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({ ...baseBody, aggregationType: 'INVALIDO' })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it('5. FORMULA sem formula → 400 (formula obrigatória)', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({ ...baseBody, aggregationType: 'FORMULA' })
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect(mockIndicatorsService.create).not.toHaveBeenCalled();
+    });
+
+    it('6. FORMULA com formula → aceito → 201', async () => {
+      mockIndicatorsService.create.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.FORMULA,
+        formula: 'SUM(lucro) / SUM(receita) * 100',
+      });
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({
+          ...baseBody,
+          aggregationType: 'FORMULA',
+          formula: 'SUM(lucro) / SUM(receita) * 100',
+        })
+        .expect(HttpStatus.CREATED);
+    });
+
+    it('7. SUM sem formula → aceito → 201', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({ ...baseBody, aggregationType: 'SUM' })
+        .expect(HttpStatus.CREATED);
+    });
+
+    it('8. AVG sem formula → aceito → 201', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({ ...baseBody, aggregationType: 'AVG' })
+        .expect(HttpStatus.CREATED);
+    });
+
+    it('9. LAST sem formula → aceito → 201', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/indicators')
+        .send({ ...baseBody, aggregationType: 'LAST' })
+        .expect(HttpStatus.CREATED);
+    });
+
+    it('4. edição de aggregationType → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.AVG,
+      });
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'AVG' })
+        .expect(HttpStatus.OK);
+
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.objectContaining({ aggregationType: 'AVG' }),
+      );
+      expect(res.body.aggregationType).toBe(AggregationType.AVG);
+    });
+
+    it('10. GET retorna aggregationType → 200', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/api/v1/indicators/${MOCK_ID}`)
+        .expect(HttpStatus.OK);
+      expect(res.body).toHaveProperty('aggregationType', AggregationType.SUM);
+    });
+
+    it('11. alteração de aggregationType não altera isActive → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.COUNT,
+      });
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'COUNT' })
+        .expect(HttpStatus.OK);
+
+      expect(res.body.isActive).toBe(true);
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.not.objectContaining({ isActive: expect.anything() }),
+      );
+    });
+
+    it('12. alteração de aggregationType não altera status → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.MAX,
+      });
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'MAX' })
+        .expect(HttpStatus.OK);
+
+      expect(res.body.status).toBe(IndicatorStatus.SUCCESS);
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.not.objectContaining({ status: expect.anything() }),
+      );
+    });
+
+    it('13. alteração de aggregationType não altera frequency → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.MIN,
+      });
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'MIN' })
+        .expect(HttpStatus.OK);
+
+      expect(res.body.frequency).toBe(IndicatorFrequency.MONTHLY);
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.not.objectContaining({ frequency: expect.anything() }),
+      );
+    });
+
+    it('14. alteração de aggregationType não altera valores atuais → 200', async () => {
+      mockIndicatorsService.update.mockResolvedValueOnce({
+        ...mockIndicator,
+        aggregationType: AggregationType.SUM,
+      });
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'SUM' })
+        .expect(HttpStatus.OK);
+
+      expect(res.body.currentValue).toBe(mockIndicator.currentValue);
+      expect(res.body.goalValue).toBe(mockIndicator.goalValue);
+    });
+
+    it('15. fórmula existente não é apagada ao mudar aggregationType → 200', async () => {
+      const withFormula = {
+        ...mockIndicator,
+        formula: 'SUM(receita)',
+        aggregationType: AggregationType.AVG,
+      };
+      mockIndicatorsService.update.mockResolvedValueOnce(withFormula);
+      const res = await request(app.getHttpServer())
+        .patch(`/api/v1/indicators/${MOCK_ID}`)
+        .send({ aggregationType: 'AVG' })
+        .expect(HttpStatus.OK);
+
+      // O PATCH de aggregationType não envia formula junto
+      expect(mockIndicatorsService.update).toHaveBeenCalledWith(
+        MOCK_ID,
+        expect.not.objectContaining({ formula: expect.anything() }),
+      );
+      // O mock retorna com a fórmula preservada
+      expect(res.body.formula).toBe('SUM(receita)');
     });
   });
 

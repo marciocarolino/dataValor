@@ -1,3 +1,4 @@
+import { AggregationType } from '../enums/aggregation-type.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorFrequency } from '../enums/indicator-frequency.enum';
@@ -26,6 +27,7 @@ export declare class IndicatorEntity {
     isActive: boolean;
     showOnDashboard: boolean;
     dashboardSlot: string | null;
+    aggregationType: AggregationType;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -4,6 +4,7 @@ import {
   AnalyticsInput,
   IndicatorAnalyticsService,
 } from './indicator-analytics.service';
+import { AggregationType } from './enums/aggregation-type.enum';
 import { IndicatorDesiredDirection } from './enums/indicator-desired-direction.enum';
 import { IndicatorFrequency } from './enums/indicator-frequency.enum';
 import { IndicatorStatus } from './enums/indicator-status.enum';
@@ -57,6 +58,8 @@ export class IndicatorsService {
         status: dto.status ?? IndicatorStatus.NEUTRAL,
         // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado
         frequency: dto.frequency ?? IndicatorFrequency.MONTHLY,
+        // Método de Apuração — como o resultado do período é calculado
+        aggregationType: dto.aggregationType ?? AggregationType.SUM,
         previousPeriod: dto.previousPeriod ?? null,
         color: dto.color ?? null,
         icon: dto.icon ?? null,
@@ -296,6 +299,9 @@ export class IndicatorsService {
           desiredDirection: dto.desiredDirection,
         }),
         ...(dto.frequency !== undefined && { frequency: dto.frequency }),
+        ...(dto.aggregationType !== undefined && {
+          aggregationType: dto.aggregationType,
+        }),
         ...(dto.previousPeriod !== undefined && {
           previousPeriod: dto.previousPeriod,
         }),

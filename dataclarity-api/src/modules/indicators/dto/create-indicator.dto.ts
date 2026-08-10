@@ -9,8 +9,13 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  Validate,
   ValidateIf,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments,
 } from 'class-validator';
+import { AggregationType } from '../enums/aggregation-type.enum';
 import { DashboardSlot } from '../enums/dashboard-slot.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
@@ -21,6 +26,29 @@ import { IndicatorStatus } from '../enums/indicator-status.enum';
 
 const trim = ({ value }: { value: unknown }): unknown =>
   typeof value === 'string' ? value.trim() : value;
+
+/**
+ * Valida que formula está presente e não vazia quando aggregationType = FORMULA.
+ * A fórmula é tratada como dado declarativo — NUNCA é executada diretamente.
+ *
+ * O validator é aplicado no campo `aggregationType` para que seja sempre avaliado
+ * quando o campo está presente (class-validator não avalia validators de campos
+ * undefined, então colocamos a validação cruzada aqui).
+ */
+@ValidatorConstraint({ name: 'FormulaRequiredWhenFormula', async: false })
+class FormulaRequiredConstraint implements ValidatorConstraintInterface {
+  validate(
+    aggregationType: AggregationType | undefined,
+    args: ValidationArguments,
+  ): boolean {
+    if (aggregationType !== AggregationType.FORMULA) return true;
+    const obj = args.object as CreateIndicatorDto;
+    return typeof obj.formula === 'string' && obj.formula.trim().length > 0;
+  }
+  defaultMessage(): string {
+    return 'formula é obrigatório e não pode ser vazio quando aggregationType é FORMULA.';
+  }
+}
 
 export class CreateIndicatorDto {
   @ApiProperty({ example: 'Receita Total', minLength: 2, maxLength: 120 })
@@ -50,6 +78,9 @@ export class CreateIndicatorDto {
   @ApiPropertyOptional({
     example: 'SUM(receitas) - SUM(devoluções)',
     maxLength: 300,
+    description:
+      'Expressão declarativa do cálculo. Obrigatório quando aggregationType=FORMULA. ' +
+      'Tratado como dado — NUNCA é executado diretamente (sem eval/new Function).',
   })
   @IsOptional()
   @IsString()
@@ -209,4 +240,20 @@ export class CreateIndicatorDto {
   @IsOptional()
   @IsEnum(IndicatorStatus)
   status?: IndicatorStatus;
+
+  @ApiPropertyOptional({
+    enum: AggregationType,
+    example: AggregationType.SUM,
+    default: AggregationType.SUM,
+    description:
+      'Método de Apuração: define COMO o resultado do período é calculado. ' +
+      'SUM/AVG/MIN/MAX/LAST/COUNT = calculado das medições do período. ' +
+      'FORMULA = calculado pelo futuro Formula Engine usando o campo formula. ' +
+      'IMPORTANTE: a fórmula é dado declarativo — nunca é executada diretamente.',
+  })
+  @IsOptional()
+  @IsEnum(AggregationType)
+  // Quando aggregationType=FORMULA, valida que formula está presente e não vazia
+  @Validate(FormulaRequiredConstraint)
+  aggregationType?: AggregationType;
 }

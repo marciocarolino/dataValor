@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { AggregationType } from '../enums/aggregation-type.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
 import { IndicatorFrequency } from '../enums/indicator-frequency.enum';
@@ -100,6 +101,14 @@ export class IndicatorEntity {
       'Slot fixo do dashboard ao qual este indicador está vinculado: REVENUE, PROFIT, CUSTOMERS ou GROWTH. Null = não aparece em nenhum card fixo.',
   })
   dashboardSlot!: string | null;
+
+  @ApiProperty({
+    enum: AggregationType,
+    example: AggregationType.SUM,
+    description:
+      'Método de Apuração: define COMO o resultado do período é calculado.',
+  })
+  aggregationType!: AggregationType;
 
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt!: Date;

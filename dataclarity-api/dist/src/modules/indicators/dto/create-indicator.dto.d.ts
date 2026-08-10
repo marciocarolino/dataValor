@@ -1,3 +1,4 @@
+import { AggregationType } from '../enums/aggregation-type.enum';
 import { DashboardSlot } from '../enums/dashboard-slot.enum';
 import { IndicatorCategory } from '../enums/indicator-category.enum';
 import { IndicatorChartType } from '../enums/indicator-chart-type.enum';
@@ -26,4 +27,5 @@ export declare class CreateIndicatorDto {
     showOnDashboard?: boolean;
     dashboardSlot?: DashboardSlot | null;
     status?: IndicatorStatus;
+    aggregationType?: AggregationType;
 }

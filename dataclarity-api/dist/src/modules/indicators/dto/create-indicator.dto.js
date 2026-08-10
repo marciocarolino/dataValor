@@ -13,6 +13,7 @@ exports.CreateIndicatorDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const aggregation_type_enum_1 = require("../enums/aggregation-type.enum");
 const dashboard_slot_enum_1 = require("../enums/dashboard-slot.enum");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
@@ -21,6 +22,20 @@ const indicator_frequency_enum_1 = require("../enums/indicator-frequency.enum");
 const indicator_period_enum_1 = require("../enums/indicator-period.enum");
 const indicator_status_enum_1 = require("../enums/indicator-status.enum");
 const trim = ({ value }) => typeof value === 'string' ? value.trim() : value;
+let FormulaRequiredConstraint = class FormulaRequiredConstraint {
+    validate(aggregationType, args) {
+        if (aggregationType !== aggregation_type_enum_1.AggregationType.FORMULA)
+            return true;
+        const obj = args.object;
+        return typeof obj.formula === 'string' && obj.formula.trim().length > 0;
+    }
+    defaultMessage() {
+        return 'formula é obrigatório e não pode ser vazio quando aggregationType é FORMULA.';
+    }
+};
+FormulaRequiredConstraint = __decorate([
+    (0, class_validator_1.ValidatorConstraint)({ name: 'FormulaRequiredWhenFormula', async: false })
+], FormulaRequiredConstraint);
 class CreateIndicatorDto {
     name;
     description;
@@ -42,6 +57,7 @@ class CreateIndicatorDto {
     showOnDashboard;
     dashboardSlot;
     status;
+    aggregationType;
 }
 exports.CreateIndicatorDto = CreateIndicatorDto;
 __decorate([
@@ -75,6 +91,8 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         example: 'SUM(receitas) - SUM(devoluções)',
         maxLength: 300,
+        description: 'Expressão declarativa do cálculo. Obrigatório quando aggregationType=FORMULA. ' +
+            'Tratado como dado — NUNCA é executado diretamente (sem eval/new Function).',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -239,4 +257,19 @@ __decorate([
     (0, class_validator_1.IsEnum)(indicator_status_enum_1.IndicatorStatus),
     __metadata("design:type", String)
 ], CreateIndicatorDto.prototype, "status", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: aggregation_type_enum_1.AggregationType,
+        example: aggregation_type_enum_1.AggregationType.SUM,
+        default: aggregation_type_enum_1.AggregationType.SUM,
+        description: 'Método de Apuração: define COMO o resultado do período é calculado. ' +
+            'SUM/AVG/MIN/MAX/LAST/COUNT = calculado das medições do período. ' +
+            'FORMULA = calculado pelo futuro Formula Engine usando o campo formula. ' +
+            'IMPORTANTE: a fórmula é dado declarativo — nunca é executada diretamente.',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(aggregation_type_enum_1.AggregationType),
+    (0, class_validator_1.Validate)(FormulaRequiredConstraint),
+    __metadata("design:type", String)
+], CreateIndicatorDto.prototype, "aggregationType", void 0);
 //# sourceMappingURL=create-indicator.dto.js.map

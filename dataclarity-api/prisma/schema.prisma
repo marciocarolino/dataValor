@@ -75,6 +75,11 @@ model Indicator {
   // ── Periodicidade de Apuração: frequência com que o indicador gera um novo
   // resultado (não confundir com previousPeriod, que é o Período de Referência) ─
   frequency        IndicatorFrequency        @default(MONTHLY)
+  // ── Método de Apuração: como o resultado do período é calculado ─────────
+  // SUM/AVG/MIN/MAX/LAST/COUNT = calculado das medições do período
+  // FORMULA = calculado pelo futuro Formula Engine usando o campo `formula`
+  // A fórmula é dado declarativo — nunca é executada diretamente
+  aggregationType  AggregationType           @default(SUM)
   // ── Cache fields (fonte de verdade: IndicatorMeasurement) ───────────────
   currentValue     Decimal?                  @db.Decimal(18, 2)
   previousValue    Decimal?                  @db.Decimal(18, 2)
@@ -183,6 +188,17 @@ model IndicatorHistory {
   @@index([indicatorId])
   @@index([periodStart])
   @@index([indicatorId, periodStart(sort: Desc)])
+}
+
+// Método de Apuração — define COMO o resultado de um período é calculado
+enum AggregationType {
+  SUM
+  AVG
+  MIN
+  MAX
+  LAST
+  COUNT
+  FORMULA
 }
 
 // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado

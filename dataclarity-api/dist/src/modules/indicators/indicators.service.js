@@ -13,6 +13,7 @@ exports.IndicatorsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const indicator_analytics_service_1 = require("./indicator-analytics.service");
+const aggregation_type_enum_1 = require("./enums/aggregation-type.enum");
 const indicator_desired_direction_enum_1 = require("./enums/indicator-desired-direction.enum");
 const indicator_frequency_enum_1 = require("./enums/indicator-frequency.enum");
 const indicator_status_enum_1 = require("./enums/indicator-status.enum");
@@ -42,6 +43,7 @@ let IndicatorsService = class IndicatorsService {
                 variation: null,
                 status: dto.status ?? indicator_status_enum_1.IndicatorStatus.NEUTRAL,
                 frequency: dto.frequency ?? indicator_frequency_enum_1.IndicatorFrequency.MONTHLY,
+                aggregationType: dto.aggregationType ?? aggregation_type_enum_1.AggregationType.SUM,
                 previousPeriod: dto.previousPeriod ?? null,
                 color: dto.color ?? null,
                 icon: dto.icon ?? null,
@@ -246,6 +248,9 @@ let IndicatorsService = class IndicatorsService {
                     desiredDirection: dto.desiredDirection,
                 }),
                 ...(dto.frequency !== undefined && { frequency: dto.frequency }),
+                ...(dto.aggregationType !== undefined && {
+                    aggregationType: dto.aggregationType,
+                }),
                 ...(dto.previousPeriod !== undefined && {
                     previousPeriod: dto.previousPeriod,
                 }),

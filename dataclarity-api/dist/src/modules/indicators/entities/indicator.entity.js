@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IndicatorEntity = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const aggregation_type_enum_1 = require("../enums/aggregation-type.enum");
 const indicator_category_enum_1 = require("../enums/indicator-category.enum");
 const indicator_chart_type_enum_1 = require("../enums/indicator-chart-type.enum");
 const indicator_frequency_enum_1 = require("../enums/indicator-frequency.enum");
@@ -39,6 +40,7 @@ class IndicatorEntity {
     isActive;
     showOnDashboard;
     dashboardSlot;
+    aggregationType;
     createdAt;
     updatedAt;
 }
@@ -157,6 +159,14 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], IndicatorEntity.prototype, "dashboardSlot", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        enum: aggregation_type_enum_1.AggregationType,
+        example: aggregation_type_enum_1.AggregationType.SUM,
+        description: 'Método de Apuração: define COMO o resultado do período é calculado.',
+    }),
+    __metadata("design:type", String)
+], IndicatorEntity.prototype, "aggregationType", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: String, format: 'date-time' }),
     __metadata("design:type", Date)
