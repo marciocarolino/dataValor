@@ -540,6 +540,23 @@
                 }
               </select>
             </div>
+            <div class="form-group">
+              <label>Método de Apuração *</label>
+              <select formControlName="aggregationType">
+                @for (agg of aggregationTypes; track agg) {
+                  <option [value]="agg">{{ aggregationTypeLabels[agg] }}</option>
+                }
+              </select>
+              @if (form.get('aggregationType')?.value === 'FORMULA') {
+                <p class="field-hint">
+                  <span class="material-icons" style="font-size: 13px; vertical-align: middle"
+                    >info</span
+                  >
+                  O campo <strong>Fórmula</strong> abaixo será utilizado pelo motor de cálculo.
+                  Preencha-o com uma expressão declarativa (ex: <code>SUM(receita)</code>).
+                </p>
+              }
+            </div>
           </div>
 
           <!-- Row 3: Valor Atual | Meta -->
@@ -925,6 +942,12 @@
             <span class="details-field__label">Periodicidade de Apuração</span>
             <span class="details-field__value">{{
               frequencyLabels[detailsIndicator()!.frequency]
+            }}</span>
+          </div>
+          <div class="details-field">
+            <span class="details-field__label">Método de Apuração</span>
+            <span class="details-field__value">{{
+              aggregationTypeLabels[detailsIndicator()!.aggregationType]
             }}</span>
           </div>
           <div class="details-field">

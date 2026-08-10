@@ -53,6 +53,15 @@ export type IndicatorFrequency =
   | 'YEARLY'
   | 'CUSTOM';
 
+export type AggregationType =
+  | 'SUM'
+  | 'AVG'
+  | 'MIN'
+  | 'MAX'
+  | 'LAST'
+  | 'COUNT'
+  | 'FORMULA';
+
 export const INDICATOR_FREQUENCY_LABELS: Record<IndicatorFrequency, string> = {
   DAILY: 'Diário',
   WEEKLY: 'Semanal',
@@ -92,6 +101,8 @@ export interface Indicator {
   desiredDirection: IndicatorDesiredDirection;
   /** Periodicidade de Apuração: frequência com que o indicador gera um novo resultado. */
   frequency: IndicatorFrequency;
+  /** Método de Apuração: como o resultado do período é calculado. */
+  aggregationType: AggregationType;
   currentValue: number | null;
   previousValue: number | null;
   previousPeriod: IndicatorPeriod | null;
@@ -170,6 +181,8 @@ export interface CreateIndicatorPayload {
   showOnDashboard?: boolean;
   /** Slot fixo do card no Dashboard: REVENUE, PROFIT, CUSTOMERS ou GROWTH. */
   dashboardSlot?: DashboardSlot | null;
+  /** Método de Apuração: como o resultado do período é calculado. */
+  aggregationType?: AggregationType;
 }
 
 export type UpdateIndicatorPayload = Partial<CreateIndicatorPayload>;
@@ -236,4 +249,18 @@ export const INDICATOR_CHART_TYPE_LABELS: Record<IndicatorChartType, string> = {
   PIE: 'Pizza',
   GAUGE: 'Velocímetro',
   NUMBER: 'Número',
+};
+
+/**
+ * Método de Apuração — como o resultado do período é calculado.
+ * FORMULA = expressão declarativa; nunca é executada diretamente.
+ */
+export const AGGREGATION_TYPE_LABELS: Record<AggregationType, string> = {
+  SUM: 'Soma',
+  AVG: 'Média',
+  MIN: 'Mínimo',
+  MAX: 'Máximo',
+  LAST: 'Último valor',
+  COUNT: 'Contagem',
+  FORMULA: 'Fórmula',
 };

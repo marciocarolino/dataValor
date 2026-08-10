@@ -21,6 +21,7 @@ import {
   INDICATOR_CHART_TYPE_LABELS,
   INDICATOR_PERIOD_LABELS,
   INDICATOR_FREQUENCY_LABELS,
+  AGGREGATION_TYPE_LABELS,
   type Indicator,
   type IndicatorHistory,
   type PaginatedIndicatorHistory,
@@ -29,6 +30,7 @@ import {
   type IndicatorChartType,
   type IndicatorPeriod,
   type IndicatorFrequency,
+  type AggregationType,
   type IndicatorQueryParams,
   type CreateIndicatorPayload,
   type IndicatorDesiredDirection,
@@ -51,9 +53,14 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
   readonly chartTypeLabels = INDICATOR_CHART_TYPE_LABELS;
   readonly periodLabels = INDICATOR_PERIOD_LABELS;
   readonly frequencyLabels = INDICATOR_FREQUENCY_LABELS;
+  readonly aggregationTypeLabels = AGGREGATION_TYPE_LABELS;
 
   readonly categories: IndicatorCategory[] = [
     'FINANCIAL', 'COMMERCIAL', 'OPERATIONAL', 'MARKETING', 'CUSTOMER', 'CUSTOM',
+  ];
+  /** Métodos de Apuração */
+  readonly aggregationTypes: AggregationType[] = [
+    'SUM', 'AVG', 'MIN', 'MAX', 'LAST', 'COUNT', 'FORMULA',
   ];
   readonly periods: IndicatorPeriod[] = [
     'PREVIOUS_MONTH', 'PREVIOUS_QUARTER', 'PREVIOUS_SEMESTER', 'PREVIOUS_YEAR', 'CUSTOM',
@@ -178,6 +185,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     desiredDirection: ['HIGHER_IS_BETTER'],
     // Periodicidade de Apuração — frequência com que o indicador gera um novo resultado
     frequency: ['MONTHLY', Validators.required],
+    // Método de Apuração — como o resultado do período é calculado
+    aggregationType: ['SUM', Validators.required],
     // currentValue e previousValue: capturados para criar medições iniciais
     // status pode ser definido manualmente (ex: INACTIVE); variation é calculada pelo backend
     currentValue: [null],
@@ -289,7 +298,8 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     this.form.reset({
       name: '', description: '', category: 'FINANCIAL', formula: '', unit: '',
       goalValue: null, minimumGoalValue: null, maximumGoalValue: null,
-      desiredDirection: 'HIGHER_IS_BETTER', frequency: 'MONTHLY', currentValue: null, previousValue: null,
+      desiredDirection: 'HIGHER_IS_BETTER', frequency: 'MONTHLY', aggregationType: 'SUM',
+      currentValue: null, previousValue: null,
       status: 'NEUTRAL', previousPeriod: null, color: '', icon: '', chartType: 'NUMBER',
       startDate: null, endDate: null,
       isActive: true, showOnDashboard: false,
@@ -321,6 +331,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       maximumGoalValue: indicator.maximumGoalValue ?? null,
       desiredDirection: indicator.desiredDirection ?? 'HIGHER_IS_BETTER',
       frequency: indicator.frequency ?? 'MONTHLY',
+      aggregationType: indicator.aggregationType ?? 'SUM',
       // Usa analytics para currentValue/previousValue — fonte de verdade das medições
       currentValue: analyticsCurrentValue,
       previousValue: analyticsPreviousValue,
@@ -380,6 +391,7 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
       endDate: rawEndDate ? `${rawEndDate}T00:00:00.000Z` : null,
       isActive: raw['isActive'] as boolean,
       showOnDashboard: raw['showOnDashboard'] as boolean,
+      aggregationType: (raw['aggregationType'] as AggregationType) ?? undefined,
     };
 
     this.saving.set(true);
