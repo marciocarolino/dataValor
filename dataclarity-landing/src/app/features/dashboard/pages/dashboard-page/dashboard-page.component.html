@@ -9,49 +9,406 @@
 
     <!-- Content -->
     <main class="dashboard-layout__content">
-      <!-- Page Header -->
-      <div class="dashboard-page__header">
-        <h1 class="dashboard-page__title">Dashboard Overview</h1>
-        <p class="dashboard-page__subtitle">
-          Welcome back. Here is the latest overview of your business metrics.
-        </p>
+      <!-- ── Header ──────────────────────────────────────────────────────── -->
+      <div class="db-header">
+        <div class="db-header__left">
+          <h1 class="db-header__title">Painel de Gestão</h1>
+          <p class="db-header__subtitle">Visão executiva dos indicadores de desempenho</p>
+        </div>
+        <div class="db-header__actions">
+          <button
+            class="db-btn db-btn--ghost"
+            (click)="navigateTo('/indicators')"
+            title="Ver todos os indicadores"
+          >
+            <span class="material-icons">bar_chart</span>
+            Indicadores
+          </button>
+          <button class="db-btn db-btn--ghost" (click)="reload()" title="Atualizar dados">
+            <span class="material-icons">refresh</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Metric Cards -->
-      <section class="dashboard-page__metrics">
-        @for (metric of metrics(); track metric.title) {
-          <app-metric-card
-            [title]="metric.title"
-            [value]="metric.value"
-            [change]="metric.change"
-            [changePositive]="metric.changePositive"
-            [icon]="metric.icon"
-            [iconBg]="metric.iconBg"
-            [iconColor]="metric.iconColor"
-            [accentColor]="metric.accentColor ?? ''"
-          ></app-metric-card>
+      <!-- ── Error ───────────────────────────────────────────────────────── -->
+      @if (error()) {
+        <div class="db-error">
+          <span class="material-icons">error_outline</span>
+          {{ error() }}
+          <button
+            class="db-btn db-btn--ghost"
+            style="margin-left: auto; font-size: 12px; padding: 4px 10px"
+            (click)="reload()"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      }
+
+      <!-- ── Loading ─────────────────────────────────────────────────────── -->
+      @if (loading()) {
+        <div class="db-skeleton-grid">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="db-skeleton-card"></div>
+          }
+        </div>
+      }
+
+      @if (!loading()) {
+        <!-- ── Resumo Executivo ─────────────────────────────────────────── -->
+        <section class="db-section">
+          <div class="db-section__header">
+            <h2 class="db-section__title">
+              <span class="material-icons">insights</span>
+              Resumo Executivo
+            </h2>
+          </div>
+          <div class="db-summary-grid">
+            @for (card of summaryCards(); track card.title) {
+              <app-metric-card
+                [title]="card.title"
+                [value]="card.value"
+                [change]="card.change"
+                [changePositive]="card.changePositive"
+                [icon]="card.icon"
+                [iconBg]="card.iconBg"
+                [iconColor]="card.iconColor"
+                [accentColor]="card.accentColor"
+              ></app-metric-card>
+            }
+          </div>
+        </section>
+
+        <!-- ── Visão dos Indicadores ────────────────────────────────────── -->
+        @if (allIndicators().length > 0) {
+          <section class="db-section">
+            <div class="db-section__header">
+              <h2 class="db-section__title">
+                <span class="material-icons">speed</span>
+                Visão dos Indicadores
+              </h2>
+              <button class="db-link" (click)="navigateTo('/indicators')">
+                Ver todos
+                <span class="material-icons">chevron_right</span>
+              </button>
+            </div>
+
+            <div class="db-two-col">
+              <!-- Melhores performers -->
+              <div class="db-card">
+                <div class="db-card__header db-card__header--success">
+                  <span class="material-icons">trending_up</span>
+                  <span>Melhor Desempenho</span>
+                  <span class="db-card__count">{{ topPerformers().length }}</span>
+                </div>
+                @if (topPerformers().length === 0) {
+                  <div class="db-empty">
+                    <span class="material-icons">check_circle</span>
+                    <p>Nenhum indicador positivo ainda</p>
+                  </div>
+                } @else {
+                  <ul class="db-ind-list">
+                    @for (ind of topPerformers(); track ind.id) {
+                      <li
+                        class="db-ind-item"
+                        role="button"
+                        tabindex="0"
+                        (click)="navigateTo('/indicators')"
+                        (keydown.enter)="navigateTo('/indicators')"
+                      >
+                        <div
+                          class="db-ind-item__icon"
+                          [style.background]="(ind.color ?? '#3b5bdb') + '18'"
+                          [style.color]="ind.color ?? '#3b5bdb'"
+                        >
+                          <span class="material-icons">{{ ind.icon ?? 'bar_chart' }}</span>
+                        </div>
+                        <div class="db-ind-item__body">
+                          <span class="db-ind-item__name">{{ ind.name }}</span>
+                          <span class="db-ind-item__meta">
+                            {{ categoryLabels[ind.category] }} ·
+                            {{ frequencyLabels[ind.frequency] }}
+                          </span>
+                        </div>
+                        <div class="db-ind-item__right">
+                          <span class="db-ind-item__value" [style.color]="ind.color ?? '#3b5bdb'">
+                            {{ fmtValue(ind) }}
+                          </span>
+                          @if (ind.variation !== null) {
+                            <span
+                              class="db-ind-item__var"
+                              [class.positive]="(ind.variation ?? 0) >= 0"
+                              [class.negative]="(ind.variation ?? 0) < 0"
+                            >
+                              {{ fmtVariation(ind) }}
+                            </span>
+                          }
+                          <span class="db-badge" [class]="statusClass(ind.status)">
+                            {{ statusLabels[ind.status] }}
+                          </span>
+                        </div>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+
+              <!-- Precisam de atenção -->
+              <div class="db-card">
+                <div class="db-card__header db-card__header--danger">
+                  <span class="material-icons">report_problem</span>
+                  <span>Precisam de Atenção</span>
+                  <span class="db-card__count">{{ needsAttention().length }}</span>
+                </div>
+                @if (needsAttention().length === 0) {
+                  <div class="db-empty db-empty--success">
+                    <span class="material-icons">check_circle</span>
+                    <p>Todos os indicadores estão positivos!</p>
+                  </div>
+                } @else {
+                  <ul class="db-ind-list">
+                    @for (ind of needsAttention(); track ind.id) {
+                      <li
+                        class="db-ind-item"
+                        role="button"
+                        tabindex="0"
+                        (click)="navigateTo('/indicators')"
+                        (keydown.enter)="navigateTo('/indicators')"
+                      >
+                        <div
+                          class="db-ind-item__icon"
+                          [style.background]="ind.status === 'DANGER' ? '#ffe3e318' : '#fff3bf'"
+                          [style.color]="ind.status === 'DANGER' ? '#e03131' : '#e67700'"
+                        >
+                          <span class="material-icons">{{ ind.icon ?? 'bar_chart' }}</span>
+                        </div>
+                        <div class="db-ind-item__body">
+                          <span class="db-ind-item__name">{{ ind.name }}</span>
+                          <span class="db-ind-item__meta">
+                            {{ categoryLabels[ind.category] }} ·
+                            {{ frequencyLabels[ind.frequency] }}
+                          </span>
+                        </div>
+                        <div class="db-ind-item__right">
+                          <span
+                            class="db-ind-item__value"
+                            [style.color]="ind.status === 'DANGER' ? '#e03131' : '#e67700'"
+                          >
+                            {{ fmtValue(ind) }}
+                          </span>
+                          @if (ind.variation !== null) {
+                            <span
+                              class="db-ind-item__var"
+                              [class.positive]="(ind.variation ?? 0) >= 0"
+                              [class.negative]="(ind.variation ?? 0) < 0"
+                            >
+                              {{ fmtVariation(ind) }}
+                            </span>
+                          }
+                          <span class="db-badge" [class]="statusClass(ind.status)">
+                            {{ statusLabels[ind.status] }}
+                          </span>
+                        </div>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+            </div>
+          </section>
         }
-      </section>
 
-      <!-- Charts Row -->
-      <section class="dashboard-page__charts">
-        <div class="dashboard-page__chart-main">
-          <app-revenue-chart></app-revenue-chart>
-        </div>
-        <div class="dashboard-page__chart-side">
-          <app-revenue-dist-chart></app-revenue-dist-chart>
-        </div>
-      </section>
+        <!-- ── Evolução Histórica ───────────────────────────────────────── -->
+        @if (allIndicators().length > 0) {
+          <section class="db-section">
+            <div class="db-section__header">
+              <h2 class="db-section__title">
+                <span class="material-icons">show_chart</span>
+                Evolução dos Períodos
+              </h2>
+              <!-- Seletor de indicador para o gráfico -->
+              @if (allIndicators().length > 1) {
+                <div class="db-chart-selector">
+                  <span class="db-chart-selector__label">Indicador:</span>
+                  <div class="db-chart-selector__pills">
+                    @for (ind of allIndicators().slice(0, 6); track ind.id) {
+                      <button
+                        class="db-chart-pill"
+                        [class.db-chart-pill--active]="chartIndicator()?.id === ind.id"
+                        [style.--pill-color]="ind.color ?? '#3b5bdb'"
+                        (click)="selectChartIndicator(ind)"
+                        [title]="ind.name"
+                      >
+                        {{ ind.name.length > 20 ? (ind.name | slice: 0 : 18) + '…' : ind.name }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
 
-      <!-- Bottom Row: Table + AI Insight -->
-      <section class="dashboard-page__bottom">
-        <div class="dashboard-page__table">
-          <app-top-clients-table></app-top-clients-table>
-        </div>
-        <div class="dashboard-page__insight">
-          <app-ai-insight-card></app-ai-insight-card>
-        </div>
-      </section>
+            <div class="db-card db-card--chart">
+              @if (chartIndicator()) {
+                <!-- Header do indicador selecionado -->
+                <div class="db-chart-ind-header">
+                  @if (chartIndicator()!.icon) {
+                    <span
+                      class="material-icons db-chart-ind-header__icon"
+                      [style.color]="chartIndicator()!.color ?? '#3b5bdb'"
+                    >
+                      {{ chartIndicator()!.icon }}
+                    </span>
+                  }
+                  <div>
+                    <span class="db-chart-ind-header__name">{{ chartIndicator()!.name }}</span>
+                    <span class="db-chart-ind-header__meta">
+                      {{ aggregationLabels[chartIndicator()!.aggregationType] }} ·
+                      {{ frequencyLabels[chartIndicator()!.frequency] }}
+                    </span>
+                  </div>
+                  <span
+                    class="db-badge"
+                    [class]="statusClass(chartIndicator()!.status)"
+                    style="margin-left: auto"
+                  >
+                    {{ statusLabels[chartIndicator()!.status] }}
+                  </span>
+                </div>
+
+                <!-- Gráfico real de histórico -->
+                @if (chartLoading()) {
+                  <div class="db-chart-loading">
+                    <div class="db-spinner"></div>
+                    <span>Carregando histórico...</span>
+                  </div>
+                } @else if (chartError()) {
+                  <div class="db-chart-empty">
+                    <span class="material-icons">error_outline</span>
+                    <p>{{ chartError() }}</p>
+                  </div>
+                } @else if (chartHistory().length === 0) {
+                  <div class="db-chart-empty">
+                    <span class="material-icons">history</span>
+                    <p>Este indicador ainda não possui períodos fechados.</p>
+                    <p style="font-size: 12px; color: #adb5bd; margin-top: 4px">
+                      Os períodos são fechados automaticamente pelo agendador.
+                    </p>
+                  </div>
+                } @else {
+                  <app-indicator-history-chart
+                    [indicator]="chartIndicator()!"
+                    [history]="chartHistory()"
+                  ></app-indicator-history-chart>
+                }
+              }
+            </div>
+          </section>
+        }
+
+        <!-- ── Indicadores vs Meta ──────────────────────────────────────── -->
+        @if (withGoal().length > 0) {
+          <section class="db-section">
+            <div class="db-section__header">
+              <h2 class="db-section__title">
+                <span class="material-icons">track_changes</span>
+                Progresso em Relação à Meta
+              </h2>
+              <span class="db-section__subtitle"
+                >{{ withGoal().length }} indicador(es) com meta definida</span
+              >
+            </div>
+
+            <div class="db-card">
+              <ul class="db-goal-list">
+                @for (ind of withGoal(); track ind.id) {
+                  <li class="db-goal-item">
+                    <div class="db-goal-item__header">
+                      <div class="db-goal-item__name-row">
+                        @if (ind.icon) {
+                          <span
+                            class="material-icons db-goal-item__icon"
+                            [style.color]="ind.color ?? '#3b5bdb'"
+                            >{{ ind.icon }}</span
+                          >
+                        }
+                        <span class="db-goal-item__name">{{ ind.name }}</span>
+                        <span class="db-badge" [class]="statusClass(ind.status)">
+                          {{ statusLabels[ind.status] }}
+                        </span>
+                      </div>
+                      <div class="db-goal-item__values">
+                        <span class="db-goal-item__current" [style.color]="ind.color ?? '#3b5bdb'">
+                          {{ fmtValue(ind) }}
+                        </span>
+                        <span class="db-goal-item__sep">/</span>
+                        <span class="db-goal-item__goal">
+                          meta: {{ fmtNumber(ind.goalValue ?? null) }}
+                          {{ ind.unit ? ind.unit : '' }}
+                        </span>
+                        <span
+                          class="db-goal-item__pct"
+                          [class.pct--over]="goalPct(ind) >= 100"
+                          [class.pct--warn]="goalPct(ind) >= 70 && goalPct(ind) < 100"
+                          [class.pct--low]="goalPct(ind) < 70"
+                        >
+                          {{ goalPct(ind).toFixed(0) }}%
+                        </span>
+                      </div>
+                    </div>
+                    <div class="db-goal-bar">
+                      <div
+                        class="db-goal-bar__fill"
+                        [style.width.%]="Math.min(goalPct(ind), 100)"
+                        [style.background]="
+                          ind.status === 'SUCCESS'
+                            ? '#2f9e44'
+                            : ind.status === 'WARNING'
+                              ? '#e67700'
+                              : ind.status === 'DANGER'
+                                ? '#e03131'
+                                : '#adb5bd'
+                        "
+                      ></div>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+          </section>
+        }
+
+        <!-- ── Empty State ─────────────────────────────────────────────── -->
+        @if (allIndicators().length === 0 && !loading()) {
+          <section class="db-empty-full">
+            <span class="material-icons">bar_chart</span>
+            <h3>Nenhum indicador cadastrado</h3>
+            <p>Crie indicadores para começar a monitorar o desempenho do seu negócio.</p>
+            <button class="db-btn db-btn--primary" (click)="navigateTo('/indicators')">
+              <span class="material-icons">add</span>
+              Criar Indicador
+            </button>
+          </section>
+        }
+
+        <!-- ── Ações Rápidas ────────────────────────────────────────────── -->
+        <section class="db-actions">
+          <button class="db-action-btn" (click)="navigateTo('/indicators')">
+            <span class="material-icons">bar_chart</span>
+            <span>Gerenciar Indicadores</span>
+            <span class="material-icons db-action-btn__arrow">arrow_forward</span>
+          </button>
+          <button class="db-action-btn" (click)="navigateTo('/analysis')">
+            <span class="material-icons">analytics</span>
+            <span>Ver Análises</span>
+            <span class="material-icons db-action-btn__arrow">arrow_forward</span>
+          </button>
+          <button class="db-action-btn" (click)="navigateTo('/help')">
+            <span class="material-icons">help_outline</span>
+            <span>Central de Ajuda</span>
+            <span class="material-icons db-action-btn__arrow">arrow_forward</span>
+          </button>
+        </section>
+      }
     </main>
   </div>
 </div>
