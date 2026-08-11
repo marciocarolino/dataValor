@@ -24,6 +24,7 @@ const indicator_period_apuration_service_1 = require("./indicator-period-apurati
 const indicator_period_backfill_service_1 = require("./indicator-period-backfill.service");
 const indicator_period_closing_scheduler_1 = require("./indicator-period-closing.scheduler");
 const indicator_current_state_service_1 = require("./indicator-current-state.service");
+const indicator_state_reconciliation_service_1 = require("./indicator-state-reconciliation.service");
 const formula_tokenizer_service_1 = require("./formula/formula-tokenizer.service");
 const formula_parser_service_1 = require("./formula/formula-parser.service");
 const formula_validator_service_1 = require("./formula/formula-validator.service");
@@ -55,6 +56,7 @@ exports.IndicatorsModule = IndicatorsModule = __decorate([
             formula_engine_service_1.FormulaEngineService,
             aggregation_engine_service_1.AggregationEngineService,
             indicator_current_state_service_1.IndicatorCurrentStateService,
+            indicator_state_reconciliation_service_1.IndicatorStateReconciliationService,
             indicator_period_apuration_service_1.IndicatorPeriodApurationService,
             indicator_period_backfill_service_1.IndicatorPeriodBackfillService,
             indicator_period_closing_scheduler_1.IndicatorPeriodClosingScheduler,

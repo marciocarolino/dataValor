@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import type {
   Indicator,
   IndicatorHistory,
@@ -22,6 +22,24 @@ export interface CreateMeasurementPayload {
 }
 
 const API_URL = 'http://localhost:3001/api/v1';
+
+/**
+ * Normaliza um IndicatorHistory recebido da API.
+ *
+ * MOTIVO: Campos Decimal do Prisma (value, goalValue, previousValue,
+ * variationPercent) são serializados como STRING pelo JSON.stringify
+ * (ex: "1500.00"). Sem esta conversão, operações numéricas como
+ * toFixed(2) e toLocaleString() falhariam silenciosamente.
+ */
+function parseHistoryItem(raw: Record<string, unknown>): IndicatorHistory {
+  return {
+    ...(raw as unknown as IndicatorHistory),
+    value:            parseDecimal(raw['value']),
+    goalValue:        parseDecimal(raw['goalValue']),
+    previousValue:    parseDecimal(raw['previousValue']),
+    variationPercent: parseDecimal(raw['variationPercent']),
+  };
+}
 
 /** Converte campos Decimal (podem chegar como string do pg driver) para number */
 function parseDecimal(v: unknown): number | null {
@@ -170,6 +188,9 @@ export class IndicatorService {
   /**
    * Retorna o histórico de resultados consolidados por período de um indicador.
    * Ordenado por periodStart decrescente (mais recente primeiro).
+   *
+   * PARSING: aplica parseHistoryItem() para converter campos Decimal
+   * (que chegam como strings do Prisma) em números antes de entregar ao componente.
    */
   getHistory(
     indicatorId: string,
@@ -188,7 +209,15 @@ export class IndicatorService {
         `${API_URL}/indicators/${indicatorId}/history`,
         { params: httpParams },
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        map((res) => ({
+          ...res,
+          items: res.items.map((item) =>
+            parseHistoryItem(item as unknown as Record<string, unknown>),
+          ),
+        })),
+        catchError(this.handleError),
+      );
   }
 
   /** Cria um resultado histórico para o período informado. */

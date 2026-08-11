@@ -612,10 +612,26 @@ export class IndicatorsPageComponent implements OnInit, OnDestroy {
     return d.toLocaleDateString('pt-BR');
   }
 
-  /** Formata um intervalo de período: "01/08/2026 – 31/08/2026" */
+  /**
+   * Formata uma data de período usando métodos UTC para evitar deslocamento de
+   * timezone. periodStart/periodEnd chegam como "2026-08-01T03:00:00.000Z"
+   * (meia-noite BRT). Usar toLocaleDateString() pode mostrar "31/07/2026" em
+   * timezones a oeste de UTC-3.
+   */
+  formatPeriodDate(dateStr: string | null | undefined): string {
+    if (!dateStr) return '–';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '–';
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const year = d.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  /** Formata um intervalo de período usando UTC: "01/08/2026 – 01/09/2026" */
   formatPeriod(start: string | null, end: string | null): string {
-    const s = this.formatDate(start);
-    const e = this.formatDate(end);
+    const s = this.formatPeriodDate(start);
+    const e = this.formatPeriodDate(end);
     if (s === '–' && e === '–') return '–';
     return `${s} – ${e}`;
   }
